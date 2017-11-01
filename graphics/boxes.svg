@@ -1,0 +1,396 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   id="svg2"
+   sodipodi:docname="boxes.svg"
+   inkscape:export-filename="/home/paulr/Projects/string-trainer/graphics/source/marker.png"
+   viewBox="0 0 458.56 485.29"
+   inkscape:export-xdpi="78.510002"
+   version="1.1"
+   inkscape:export-ydpi="78.510002"
+   inkscape:version="0.92.2 (5c3e80d, 2017-08-06)"
+   width="100%"
+   height="100%">
+  <defs
+     id="defs4">
+    <linearGradient
+       id="linearGradient4423">
+      <stop
+         offset="0"
+         style="stop-color:#ffffff"
+         id="stop4417" />
+      <stop
+         offset=".5"
+         style="stop-color:#00855d;stop-opacity:1"
+         id="stop4419" />
+      <stop
+         offset="1"
+         style="stop-color:#003f3c;stop-opacity:1"
+         id="stop4421" />
+    </linearGradient>
+    <radialGradient
+       r="68.690002"
+       gradientTransform="matrix(1.4074,0,0,1.4074,-59.675,-93.111)"
+       cx="142.02"
+       cy="224.28"
+       gradientUnits="userSpaceOnUse"
+       id="radialGradient3920-1-6">
+      <stop
+         offset="0"
+         style="stop-color:#ffffff;stop-opacity:1;"
+         id="stop4330" />
+      <stop
+         offset="0.5"
+         style="stop-color:#ff8000;stop-opacity:1;"
+         id="stop4332" />
+      <stop
+         offset="1"
+         style="stop-color:#994c00;stop-opacity:1;"
+         id="stop4334" />
+    </radialGradient>
+    <linearGradient
+       id="linearGradient3804">
+      <stop
+         id="stop3806"
+         style="stop-color:#ffffff"
+         offset="0" />
+      <stop
+         id="stop3808"
+         style="stop-color:#00cc00"
+         offset=".5" />
+      <stop
+         id="stop3810"
+         style="stop-color:#006600"
+         offset="1" />
+    </linearGradient>
+    <linearGradient
+       id="linearGradient3855">
+      <stop
+         id="stop3857"
+         style="stop-color:#ffffff"
+         offset="0" />
+      <stop
+         id="stop3859"
+         style="stop-color:#cccc00"
+         offset=".5" />
+      <stop
+         id="stop3861"
+         style="stop-color:#666600"
+         offset="1" />
+    </linearGradient>
+    <linearGradient
+       id="linearGradient3773">
+      <stop
+         id="stop3775"
+         style="stop-color:#ffffff"
+         offset="0" />
+      <stop
+         id="stop3777"
+         style="stop-color:#0000ff"
+         offset=".5" />
+      <stop
+         id="stop3779"
+         style="stop-color:#000099"
+         offset="1" />
+    </linearGradient>
+    <radialGradient
+       id="radialGradient3066"
+       xlink:href="#linearGradient3804"
+       gradientUnits="userSpaceOnUse"
+       cy="227.17"
+       cx="158.2"
+       gradientTransform="matrix(.29876 0 0 .29876 240.7 173.35)"
+       r="68.69"
+       inkscape:collect="always" />
+    <radialGradient
+       id="radialGradient3073"
+       xlink:href="#linearGradient3773"
+       gradientUnits="userSpaceOnUse"
+       cy="211.1"
+       cx="162.82"
+       gradientTransform="matrix(.18908 0 0 .18908 331.04 190.65)"
+       r="68.69"
+       inkscape:collect="always" />
+    <radialGradient
+       id="radialGradient3080"
+       xlink:href="#linearGradient3855"
+       gradientUnits="userSpaceOnUse"
+       cy="209.76"
+       cx="144.89"
+       gradientTransform="matrix(.25332 0 0 .25332 314.86 244.45)"
+       r="68.69"
+       inkscape:collect="always" />
+    <radialGradient
+       id="radialGradient3920-1"
+       gradientUnits="userSpaceOnUse"
+       cy="224.28"
+       cx="142.02"
+       gradientTransform="matrix(1.4074,0,0,1.4074,-59.675,-93.111)"
+       r="68.690002">
+      <stop
+         id="stop3757-7"
+         style="stop-color:#ffffff;stop-opacity:1;"
+         offset="0" />
+      <stop
+         id="stop3763-4"
+         style="stop-color:#ff8000;stop-opacity:1;"
+         offset="0.5" />
+      <stop
+         id="stop3759-0"
+         style="stop-color:#994c00;stop-opacity:1;"
+         offset="1" />
+    </radialGradient>
+    <radialGradient
+       id="radialGradient3920-1-6-6"
+       gradientUnits="userSpaceOnUse"
+       cy="224.28"
+       cx="142.02"
+       gradientTransform="matrix(1.4074,0,0,1.4074,-59.675,-93.111)"
+       r="68.690002">
+      <stop
+         id="stop3757-7-7"
+         style="stop-color:#ffffff;stop-opacity:1;"
+         offset="0" />
+      <stop
+         id="stop3763-4-5"
+         style="stop-color:#843b00;stop-opacity:1"
+         offset="0.5" />
+      <stop
+         id="stop3759-0-3"
+         style="stop-color:#531c00;stop-opacity:1"
+         offset="1" />
+    </radialGradient>
+    <radialGradient
+       r="68.690002"
+       cy="224.28"
+       cx="142.02"
+       gradientTransform="matrix(1.0244465,0,0,1.0244465,178.38653,-91.849663)"
+       gradientUnits="userSpaceOnUse"
+       id="radialGradient3037-3-2"
+       xlink:href="#radialGradient3920-1-6-6-9"
+       inkscape:collect="always" />
+    <radialGradient
+       id="radialGradient3920-1-6-6-9"
+       gradientUnits="userSpaceOnUse"
+       cy="224.28"
+       cx="142.02"
+       gradientTransform="matrix(1.4074,0,0,1.4074,-59.675,-93.111)"
+       r="68.690002">
+      <stop
+         id="stop3757-7-7-1"
+         style="stop-color:#ffffff;stop-opacity:1;"
+         offset="0" />
+      <stop
+         id="stop3763-4-5-2"
+         style="stop-color:#843b00;stop-opacity:1"
+         offset="0.5" />
+      <stop
+         id="stop3759-0-3-7"
+         style="stop-color:#531c00;stop-opacity:1"
+         offset="1" />
+    </radialGradient>
+    <radialGradient
+       id="radialGradient3920-1-7"
+       gradientUnits="userSpaceOnUse"
+       cy="224.28"
+       cx="142.02"
+       gradientTransform="matrix(1.4074,0,0,1.4074,-59.675,-93.111)"
+       r="68.690002">
+      <stop
+         id="stop3757-7-5"
+         style="stop-color:#ffffff;stop-opacity:1;"
+         offset="0" />
+      <stop
+         id="stop3763-4-3"
+         style="stop-color:#9d009d;stop-opacity:1"
+         offset="0.5" />
+      <stop
+         id="stop3759-0-5"
+         style="stop-color:#53004b;stop-opacity:1"
+         offset="1" />
+    </radialGradient>
+  </defs>
+  <sodipodi:namedview
+     id="base"
+     fit-margin-left="0"
+     inkscape:zoom="2.9636253"
+     borderopacity="1.0"
+     inkscape:current-layer="layer1"
+     inkscape:cx="55.675056"
+     inkscape:cy="227.64064"
+     inkscape:window-maximized="1"
+     showgrid="true"
+     fit-margin-right="0"
+     inkscape:guide-bbox="true"
+     inkscape:snap-global="false"
+     showguides="true"
+     bordercolor="#666666"
+     inkscape:window-x="0"
+     inkscape:window-y="27"
+     fit-margin-bottom="0"
+     inkscape:window-width="1920"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     pagecolor="#ffffff"
+     inkscape:document-units="px"
+     inkscape:window-height="1029"
+     fit-margin-top="0"
+     inkscape:document-rotation="0">
+    <inkscape:grid
+       type="xygrid"
+       id="grid76" />
+  </sodipodi:namedview>
+  <g
+     id="layer1"
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     transform="translate(-134.19 -23.064)">
+    <g
+       id="g4704"
+       inkscape:export-filename="/home/paulr/Projects/string-trainer/graphics/source/chordbutton_up.png"
+       inkscape:export-xdpi="191.50632"
+       inkscape:export-ydpi="191.50632">
+      <rect
+         style="fill:#ffffff;stroke-width:1.11504209"
+         y="268.1077"
+         x="168.728"
+         height="75.245682"
+         width="39.31884"
+         id="rect3840" />
+      <rect
+         style="fill:#808080;stroke-width:0.44528809"
+         y="343.33197"
+         x="168.728"
+         height="12"
+         width="39.31884"
+         id="rect3840-3" />
+      <g
+         transform="translate(0.20948996,-12.11909)"
+         style="stroke:#4d4d4d"
+         id="g4695">
+        <path
+           style="fill:none;stroke:#4d4d4d;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+           d="m 168.59796,306.91153 19.57063,-9.11046 19.57062,10.12273"
+           id="path4662"
+           inkscape:connector-curvature="0" />
+        <path
+           style="fill:none;stroke:#4d4d4d;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+           d="m 168.59796,316.9406 19.57063,-9.11046 19.57062,10.12273"
+           id="path4662-6"
+           inkscape:connector-curvature="0" />
+        <path
+           style="fill:none;stroke:#4d4d4d;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+           d="m 168.59796,326.96966 19.57063,-9.11046 19.57062,10.12273"
+           id="path4662-7"
+           inkscape:connector-curvature="0" />
+        <path
+           style="fill:none;stroke:#4d4d4d;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+           d="m 168.59796,336.99873 19.57063,-9.11046 19.57062,10.12273"
+           id="path4662-5"
+           inkscape:connector-curvature="0" />
+      </g>
+    </g>
+    <g
+       id="g4756"
+       inkscape:export-filename="/home/paulr/Projects/string-trainer/graphics/source/chordbutton_down.png"
+       inkscape:export-xdpi="191.50632"
+       inkscape:export-ydpi="191.50632">
+      <rect
+         style="fill:#ffffff;stroke-width:1.11504209"
+         y="272.74728"
+         x="237.01569"
+         height="75.245682"
+         width="39.31884"
+         id="rect3840-5" />
+      <rect
+         style="fill:#808080;stroke-width:0.44528809"
+         y="347.97156"
+         x="237.01569"
+         height="12"
+         width="39.31884"
+         id="rect3840-3-6" />
+      <g
+         transform="matrix(1,0,0,-1,68.497186,628.21975)"
+         style="stroke:#4d4d4d"
+         id="g4695-2">
+        <path
+           style="fill:none;stroke:#4d4d4d;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+           d="m 168.59796,306.91153 19.57063,-9.11046 19.57062,10.12273"
+           id="path4662-9"
+           inkscape:connector-curvature="0" />
+        <path
+           style="fill:none;stroke:#4d4d4d;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+           d="m 168.59796,316.9406 19.57063,-9.11046 19.57062,10.12273"
+           id="path4662-6-1"
+           inkscape:connector-curvature="0" />
+        <path
+           style="fill:none;stroke:#4d4d4d;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+           d="m 168.59796,326.96966 19.57063,-9.11046 19.57062,10.12273"
+           id="path4662-7-2"
+           inkscape:connector-curvature="0" />
+        <path
+           style="fill:none;stroke:#4d4d4d;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+           d="m 168.59796,336.99873 19.57063,-9.11046 19.57062,10.12273"
+           id="path4662-5-7"
+           inkscape:connector-curvature="0" />
+      </g>
+    </g>
+  </g>
+  <metadata
+     id="metadata58">
+    <rdf:RDF>
+      <cc:Work>
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <cc:license
+           rdf:resource="http://creativecommons.org/publicdomain/zero/1.0/" />
+        <dc:publisher>
+          <cc:Agent
+             rdf:about="http://openclipart.org/">
+            <dc:title>Openclipart</dc:title>
+          </cc:Agent>
+        </dc:publisher>
+        <dc:title>Spheres</dc:title>
+        <dc:date>2011-02-15T00:42:49</dc:date>
+        <dc:description>There are 4 spheres with light an opaque one.</dc:description>
+        <dc:source>https://openclipart.org/detail/118369/spheres-by-liquidsnake</dc:source>
+        <dc:creator>
+          <cc:Agent>
+            <dc:title>LiquidSnake</dc:title>
+          </cc:Agent>
+        </dc:creator>
+        <dc:subject>
+          <rdf:Bag>
+            <rdf:li>ball</rdf:li>
+            <rdf:li>balls</rdf:li>
+            <rdf:li>colorful</rdf:li>
+            <rdf:li>inkscape</rdf:li>
+            <rdf:li>light</rdf:li>
+            <rdf:li>shadow</rdf:li>
+            <rdf:li>sphere</rdf:li>
+            <rdf:li>spheres</rdf:li>
+          </rdf:Bag>
+        </dc:subject>
+      </cc:Work>
+      <cc:License
+         rdf:about="http://creativecommons.org/publicdomain/zero/1.0/">
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Reproduction" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Distribution" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
+      </cc:License>
+    </rdf:RDF>
+  </metadata>
+</svg>
