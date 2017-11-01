@@ -3,10 +3,10 @@
 #
 from PIL import Image,ImageDraw
 
-widthGroup = [ 50,100,150,200,250,300 ]
 height = 50
 roundWidth = 40
 y3d = 8
+widthGroup = [ 0,10,25,40,66,75,100,150,200,250,300 ]
 
 for width in widthGroup:
 	for offset3D in range(0,2):
