@@ -1,0 +1,16 @@
+{
+"beats":"4",
+"capo":"0",
+"composer":"unknown",
+"string0":"g4",
+"string1":"c4",
+"string2":"e4",
+"string3":"a4",
+"strings":"4",
+"tempo":"100",
+"title":"test.usong",
+"version":"1",
+"bars":[
+    "---i02;--f-02;---g02;--i-02;---f04;--d-02;--e-02",
+    "--f-02;---d02;---a02;--b-06;cdbd04"
+]}
