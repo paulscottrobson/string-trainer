@@ -9,7 +9,7 @@ y3d = 8
 widthGroup = [ 0,10,25,40,66,75,100,150,200,250,300 ]
 
 for width in widthGroup:
-	for offset3D in range(0,2):
+	for offset3D in range(1,2):
 		xl = 100+roundWidth/2
 		xr = xl + width
 		yc = 100

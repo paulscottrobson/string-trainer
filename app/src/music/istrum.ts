@@ -69,5 +69,11 @@ interface IStrum {
      * @memberof IStrum
      */
     destroy():void;
-    
+    /**
+     * True if a down strum
+     * 
+     * @returns {boolean} 
+     * @memberof IStrum
+     */
+    isChordDownStrum():boolean;
 }

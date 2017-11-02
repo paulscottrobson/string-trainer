@@ -26,7 +26,7 @@ class Music implements IMusic {
         for (var n = 0;n < this.stringCount;n++) {
             this.stringBaseNote[n] = this.json["string"+n];
         }
-        console.log(this.stringBaseNote);
+        //console.log(this.stringBaseNote);
         this.bar = [];
         for (var n = 0;n < this.json["bars"].length;n++) {
             this.bar.push(new Bar(this.json["bars"][n],this));

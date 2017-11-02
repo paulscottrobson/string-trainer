@@ -225,7 +225,7 @@
      inkscape:zoom="2.9636253"
      borderopacity="1.0"
      inkscape:current-layer="layer1"
-     inkscape:cx="151.27538"
+     inkscape:cx="38.575572"
      inkscape:cy="246.19899"
      inkscape:window-maximized="1"
      showgrid="true"
@@ -255,27 +255,26 @@
      inkscape:groupmode="layer"
      transform="translate(-134.19 -23.064)">
     <g
-       id="g4704"
+       id="g889"
        inkscape:export-filename="/home/paulr/Projects/string-trainer/graphics/source/chordbutton_up.png"
-       inkscape:export-xdpi="191.50632"
-       inkscape:export-ydpi="191.50632"
-       transform="translate(1.3496983,9.7853126)">
+       inkscape:export-xdpi="78.510002"
+       inkscape:export-ydpi="78.510002">
       <rect
          style="fill:#ffffff;stroke-width:1.11504209"
-         y="268.1077"
-         x="168.728"
+         y="277.89301"
+         x="170.0777"
          height="75.245682"
          width="39.31884"
          id="rect3840" />
       <rect
-         style="fill:#808080;stroke-width:0.44528809"
-         y="343.33197"
-         x="168.728"
-         height="12"
+         style="fill:#808080;stroke-width:0.29457271"
+         y="353.11728"
+         x="170.0777"
+         height="5.2515087"
          width="39.31884"
          id="rect3840-3" />
       <g
-         transform="translate(0.20948996,-12.11909)"
+         transform="translate(1.5591883,-2.3337774)"
          style="stroke:#4d4d4d"
          id="g4695">
         <path
@@ -301,27 +300,26 @@
       </g>
     </g>
     <g
-       id="g4756"
+       id="g905"
        inkscape:export-filename="/home/paulr/Projects/string-trainer/graphics/source/chordbutton_down.png"
-       inkscape:export-xdpi="191.50632"
-       inkscape:export-ydpi="191.50632"
-       transform="translate(1.3496983,9.7853126)">
+       inkscape:export-xdpi="78.510002"
+       inkscape:export-ydpi="78.510002">
       <rect
          style="fill:#ffffff;stroke-width:1.11504209"
-         y="272.74728"
-         x="237.01569"
+         y="282.53259"
+         x="238.36539"
          height="75.245682"
          width="39.31884"
          id="rect3840-5" />
       <rect
-         style="fill:#808080;stroke-width:0.44528809"
-         y="347.97156"
-         x="237.01569"
-         height="12"
+         style="fill:#808080;stroke-width:0.30388895"
+         y="357.75687"
+         x="238.36539"
+         height="5.588933"
          width="39.31884"
          id="rect3840-3-6" />
       <g
-         transform="matrix(1,0,0,-1,68.497186,628.21975)"
+         transform="matrix(1,0,0,-1,69.846884,638.00506)"
          style="stroke:#4d4d4d"
          id="g4695-2">
         <path
@@ -347,12 +345,15 @@
       </g>
     </g>
     <rect
-       style="fill:#ffffff;fill-opacity:1;stroke:none"
+       style="fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.55446124"
        id="rect869"
-       width="59.724148"
-       height="41.503223"
+       width="32.730183"
+       height="23.282297"
        x="306.61395"
-       y="313.3226" />
+       y="313.3226"
+       inkscape:export-filename="/home/paulr/Projects/string-trainer/graphics/source/rectangle.png"
+       inkscape:export-xdpi="78.510002"
+       inkscape:export-ydpi="78.510002" />
     <g
        id="g932"
        inkscape:export-filename="/home/paulr/Projects/string-trainer/graphics/source/string.png"

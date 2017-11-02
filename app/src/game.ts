@@ -7,12 +7,19 @@ class MainState extends Phaser.State {
     public music:IMusic;
 
     create() {
-        // Set up the background
-        var bgr:Phaser.Image = this.game.add.image(0,0,"sprites","background");
-        bgr.width = this.game.width;bgr.height = this.game.height;
         // Create music object
         var musicJson:any = this.game.cache.getJSON("music");
         this.music = new Music(musicJson);
+        // Set up the display
+        Configurator.setup(this.game,this.music.getStringCount());
+        var bgr:Background = new Background(this.game);
+
+        var r:Renderer = new Renderer(this.game,this.music.getBar(0));
+        r.moveTo(100);
+        var r2:Renderer = new Renderer(this.game,this.music.getBar(1));
+        r2.moveTo(100+Configurator.barWidth);
+
+        //r.destroy();
     }
 
     destroy() : void {

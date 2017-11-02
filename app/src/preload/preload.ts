@@ -25,6 +25,7 @@ class PreloadState extends Phaser.State {
         this.game.load.setPreloadSprite(loader);
 
         this.game.load.json("music","music.json");
+        this.game.load.json("sprites","assets/sprites/sprites.json")    
         // Load the sprite atlas.
         this.game.load.atlas("sprites","assets/sprites/sprites.png",
                                        "assets/sprites/sprites.json");

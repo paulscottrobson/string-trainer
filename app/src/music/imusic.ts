@@ -65,4 +65,10 @@ interface IMusic {
      * @memberof IMusic
      */
     getBar(bar:number):IBar;
+    /**
+     * Destroy object
+     * 
+     * @memberof IMusic
+     */
+    destroy():void;
 }

@@ -70,4 +70,7 @@ class Strum implements IStrum {
     getChordName():string {
         return this.chordName;
     }
+    isChordDownStrum():boolean {
+        return (this.startTime % 4) < 2
+    }    
 }
