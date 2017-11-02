@@ -1,8 +1,13 @@
 /// <reference path="../../lib/phaser.comments.d.ts"/>
 
-class StrumButton extends Phaser.Group implements IButton {
-
-    private button:Phaser.Image;
+/**
+ * Strum Button.
+ * 
+ * @class StrumButton
+ * @extends {BaseButton}
+ * @implements {IButton}
+ */
+class StrumButton extends BaseButton implements IButton {
 
     constructor(game:Phaser.Game,width:number,name:string,isDownStrum:boolean,colourBase:number) {
         super(game);        
@@ -12,15 +17,8 @@ class StrumButton extends Phaser.Group implements IButton {
         this.button.width = width;this.button.height = reqHeight;
         this.button.anchor.x = 0;this.button.anchor.y = 0.5;
         this.button.tint = FingerButton.getColour(colourBase);
-    }
-    
-    destroy(): void {
-        super.destroy();
-        this.button = null;
-    }
-
-    moveTo(x: number): void {
-        this.button.x = x;
-        this.button.y = Configurator.yTop + Configurator.stringMargin + Configurator.stringGap/2;
+        this.yPos = Configurator.yTop + Configurator.stringMargin + Configurator.stringGap/2;
+        name = name.substr(0,1).toUpperCase()+name.substr(1).toLowerCase();
+        this.label(name);
     }
 }

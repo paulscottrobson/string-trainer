@@ -66,6 +66,14 @@ interface IMusic {
      */
     getBar(bar:number):IBar;
     /**
+     * Get the number of the chord with the given name (used to colour chords)
+     * 
+     * @param {string} name 
+     * @returns {number} 
+     * @memberof IMusic
+     */
+    getChordNumber(name:string):number;
+    /**
      * Destroy object
      * 
      * @memberof IMusic

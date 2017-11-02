@@ -12,7 +12,7 @@ class Music implements IMusic {
     private stringCount:number;
     private stringBaseNote:string[];
     private bar:IBar[];
-
+    private chordNumbers;any;
     /**
      * Create a new music object
      * 
@@ -30,6 +30,21 @@ class Music implements IMusic {
         this.bar = [];
         for (var n = 0;n < this.json["bars"].length;n++) {
             this.bar.push(new Bar(this.json["bars"][n],this));
+        }
+
+        this.chordNumbers = {}
+        var chordCount:number = 0;
+        for (var bar of this.bar) {
+            for (var n = 0;n < bar.getStrumCount();n++) {
+                var strum:IStrum = bar.getStrum(n);
+                if (strum.isChord()) {
+                    var name:string = strum.getChordName().toLowerCase();
+                    if (this.chordNumbers[name] == null) {
+                        this.chordNumbers[name] = chordCount;
+                        chordCount = chordCount + 1;
+                    }
+                }
+            }
         }
     }
 
@@ -61,5 +76,7 @@ class Music implements IMusic {
     getBar(bar: number): IBar {
         return this.bar[bar];
     }
-    
+    getChordNumber(name:string) {
+        return this.chordNumbers[name.toLowerCase()];
+    }    
 }

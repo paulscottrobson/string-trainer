@@ -76,7 +76,8 @@ class Renderer extends Phaser.Group {
             var w:number = Configurator.barWidth / this.beats * (strum.getLength() / 4);
             if (strum.isChord()) {
                 var btn:IButton;
-                btn = new StrumButton(this.game,w-2,strum.getChordName(),strum.isChordDownStrum(),0);                
+                var cn:number = this.bar.getMusic().getChordNumber(strum.getChordName());
+                btn = new StrumButton(this.game,w-2,strum.getChordName(),strum.isChordDownStrum(),cn);                
                 this.buttons[sn].push(btn);
             } else {
                 var sCount:number = this.bar.getMusic().getStringCount();

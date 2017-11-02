@@ -28,6 +28,15 @@ class Bar implements IBar {
             qbTime = s.getEndTime();
             this.strums.push(s);
         }
+        // Is a padding rest required ?
+        var remain:number = music.getBeats()*4 - qbTime;
+        if (remain > 0) {
+            var rest:string = "--------".substring(0,music.getStringCount());
+            var time:string = "00"+remain.toString();
+            time = time.substring(time.length-2);
+            var s:IStrum = new Strum(rest+time,this,qbTime);
+            this.strums.push(s);
+        }
     }
 
     destroy(): void {

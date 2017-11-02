@@ -1,9 +1,14 @@
 /// <reference path="../../lib/phaser.comments.d.ts"/>
 
-class FingerButton extends Phaser.Group implements IButton {
+/**
+ * Fingerpick button.
+ * 
+ * @class FingerButton
+ * @extends {BaseButton}
+ * @implements {IButton}
+ */
+class FingerButton extends BaseButton implements IButton {
 
-    private yPos:number;
-    private button:Phaser.Image;
     private static buttonInfo:any;
 
     constructor(game:Phaser.Game,stringID:number,fretting:number,pixWidth:number) {
@@ -18,17 +23,9 @@ class FingerButton extends Phaser.Group implements IButton {
         this.button.anchor.x = 0;this.button.anchor.y = 0.5;
         this.button.tint = FingerButton.getColour(fretting);
         this.yPos = Configurator.getStringY(stringID);
+        this.label(fretting.toString())
     }
     
-    destroy(): void {
-        super.destroy();
-        this.button = null;
-    }
-    
-    moveTo(x: number): void {
-        this.button.x = x;this.button.y = this.yPos;    
-    }
-
     loadButtonInfo(): void {
         FingerButton.buttonInfo = {};
         var json:any = this.game.cache.getJSON("sprites")["frames"];
@@ -54,12 +51,5 @@ class FingerButton extends Phaser.Group implements IButton {
         return best;        
     }
 
-    private static colours:number[] = [
-        0xFF0000,0x00FF00,0x0000FF,0xFFFF00,0xFF8000,0xFFFF00,0xFF00FF,
-        0x00FFFF,0xFF8000,0x0080FF,0x008000,0x808000,0x008080,0x8B3413
-    ];
 
-    public static getColour(n:number) : number {
-        return FingerButton.colours[n % FingerButton.colours.length];
-    }
 }

@@ -73,6 +73,14 @@ class Configurator {
      */
 
     private static stringCount:number;
+    /**
+     * Space allocated at the bottom for the positioning bar.
+     * 
+     * @static
+     * @type {number}
+     * @memberof Configurator
+     */
+    public static scrollBarHeight:number;
 
     public static setup(game:Phaser.Game,stringCount:number) : void {
         Configurator.stringGap = game.height / 4;
@@ -81,8 +89,10 @@ class Configurator {
         Configurator.barWidth = game.width / 3;
         Configurator.isFlipped = false;
         Configurator.xOrigin = game.width * 0.15;
+        Configurator.scrollBarHeight = game.height / 10;
         Configurator.yTop = game.height - Configurator.stringGap - 
-                Configurator.stringMargin * 2 - Configurator.ledgeHeight;
+                Configurator.stringMargin * 2 - Configurator.ledgeHeight -
+                Configurator.scrollBarHeight;
         Configurator.stringCount = stringCount;                
     }
 

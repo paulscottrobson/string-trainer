@@ -15,9 +15,9 @@ class MainState extends Phaser.State {
         var bgr:Background = new Background(this.game);
 
         var r:Renderer = new Renderer(this.game,this.music.getBar(0));
-        r.moveTo(100);
+        r.moveTo(Configurator.xOrigin);
         var r2:Renderer = new Renderer(this.game,this.music.getBar(1));
-        r2.moveTo(100+Configurator.barWidth);
+        r2.moveTo(Configurator.xOrigin+Configurator.barWidth);
 
         //r.destroy();
     }

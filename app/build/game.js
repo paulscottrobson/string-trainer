@@ -18,8 +18,10 @@ var Configurator = (function () {
         Configurator.barWidth = game.width / 3;
         Configurator.isFlipped = false;
         Configurator.xOrigin = game.width * 0.15;
+        Configurator.scrollBarHeight = game.height / 10;
         Configurator.yTop = game.height - Configurator.stringGap -
-            Configurator.stringMargin * 2 - Configurator.ledgeHeight;
+            Configurator.stringMargin * 2 - Configurator.ledgeHeight -
+            Configurator.scrollBarHeight;
         Configurator.stringCount = stringCount;
     };
     Configurator.getStringCount = function () {
@@ -47,9 +49,9 @@ var MainState = (function (_super) {
         Configurator.setup(this.game, this.music.getStringCount());
         var bgr = new Background(this.game);
         var r = new Renderer(this.game, this.music.getBar(0));
-        r.moveTo(100);
+        r.moveTo(Configurator.xOrigin);
         var r2 = new Renderer(this.game, this.music.getBar(1));
-        r2.moveTo(100 + Configurator.barWidth);
+        r2.moveTo(Configurator.xOrigin + Configurator.barWidth);
     };
     MainState.prototype.destroy = function () {
     };
@@ -83,6 +85,49 @@ var Background = (function (_super) {
     }
     return Background;
 }(Phaser.Group));
+var BaseButton = (function (_super) {
+    __extends(BaseButton, _super);
+    function BaseButton() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    BaseButton.prototype.destroy = function () {
+        _super.prototype.destroy.call(this);
+        this.buttonText = this.button = null;
+    };
+    BaseButton.prototype.moveTo = function (x) {
+        this.button.x = x;
+        this.button.y = this.yPos;
+        this.button.alpha = 1.0;
+        if (x < Configurator.xOrigin) {
+            this.button.alpha = Math.max(0.3, 1 - (Configurator.xOrigin - x) / Configurator.barWidth);
+        }
+        if (this.buttonText != null) {
+            this.buttonText.x = x + this.button.width / 2;
+            this.buttonText.y = this.button.y - this.button.height / 2 + this.buttonText.height / 3;
+            this.buttonText.alpha = this.button.alpha;
+        }
+    };
+    BaseButton.prototype.label = function (lbl) {
+        var size = Configurator.stringGap /
+            (Configurator.getStringCount() - 1) * 0.6;
+        if (this.button.width * 2 < this.button.height) {
+            size = size * 0.7;
+        }
+        var txt = this.game.add.bitmapText(0, 0, "font", lbl, size, this);
+        txt.anchor.x = 0.5;
+        txt.anchor.y = 0;
+        txt.tint = 0x000000;
+        this.buttonText = txt;
+    };
+    BaseButton.getColour = function (n) {
+        return BaseButton.colours[n % BaseButton.colours.length];
+    };
+    BaseButton.colours = [
+        0xFF0000, 0x00FF00, 0x0000FF, 0xFFFF00, 0xFF8000, 0xFFFF00, 0xFF00FF,
+        0x00FFFF, 0xFF8000, 0x0080FF, 0x008000, 0x808000, 0x008080, 0x8B3413
+    ];
+    return BaseButton;
+}(Phaser.Group));
 var FingerButton = (function (_super) {
     __extends(FingerButton, _super);
     function FingerButton(game, stringID, fretting, pixWidth) {
@@ -99,16 +144,9 @@ var FingerButton = (function (_super) {
         _this.button.anchor.y = 0.5;
         _this.button.tint = FingerButton.getColour(fretting);
         _this.yPos = Configurator.getStringY(stringID);
+        _this.label(fretting.toString());
         return _this;
     }
-    FingerButton.prototype.destroy = function () {
-        _super.prototype.destroy.call(this);
-        this.button = null;
-    };
-    FingerButton.prototype.moveTo = function (x) {
-        this.button.x = x;
-        this.button.y = this.yPos;
-    };
     FingerButton.prototype.loadButtonInfo = function () {
         FingerButton.buttonInfo = {};
         var json = this.game.cache.getJSON("sprites")["frames"];
@@ -132,15 +170,8 @@ var FingerButton = (function (_super) {
         }
         return best;
     };
-    FingerButton.getColour = function (n) {
-        return FingerButton.colours[n % FingerButton.colours.length];
-    };
-    FingerButton.colours = [
-        0xFF0000, 0x00FF00, 0x0000FF, 0xFFFF00, 0xFF8000, 0xFFFF00, 0xFF00FF,
-        0x00FFFF, 0xFF8000, 0x0080FF, 0x008000, 0x808000, 0x008080, 0x8B3413
-    ];
     return FingerButton;
-}(Phaser.Group));
+}(BaseButton));
 var Renderer = (function (_super) {
     __extends(Renderer, _super);
     function Renderer(game, bar) {
@@ -197,7 +228,8 @@ var Renderer = (function (_super) {
             var w = Configurator.barWidth / this.beats * (strum.getLength() / 4);
             if (strum.isChord()) {
                 var btn;
-                btn = new StrumButton(this.game, w - 2, strum.getChordName(), strum.isChordDownStrum(), 0);
+                var cn = this.bar.getMusic().getChordNumber(strum.getChordName());
+                btn = new StrumButton(this.game, w - 2, strum.getChordName(), strum.isChordDownStrum(), cn);
                 this.buttons[sn].push(btn);
             }
             else {
@@ -261,18 +293,13 @@ var StrumButton = (function (_super) {
         _this.button.anchor.x = 0;
         _this.button.anchor.y = 0.5;
         _this.button.tint = FingerButton.getColour(colourBase);
+        _this.yPos = Configurator.yTop + Configurator.stringMargin + Configurator.stringGap / 2;
+        name = name.substr(0, 1).toUpperCase() + name.substr(1).toLowerCase();
+        _this.label(name);
         return _this;
     }
-    StrumButton.prototype.destroy = function () {
-        _super.prototype.destroy.call(this);
-        this.button = null;
-    };
-    StrumButton.prototype.moveTo = function (x) {
-        this.button.x = x;
-        this.button.y = Configurator.yTop + Configurator.stringMargin + Configurator.stringGap / 2;
-    };
     return StrumButton;
-}(Phaser.Group));
+}(BaseButton));
 var Bar = (function () {
     function Bar(def, music) {
         this.music = music;
@@ -283,6 +310,14 @@ var Bar = (function () {
             var d = defs_1[_i];
             var s = new Strum(d, this, qbTime);
             qbTime = s.getEndTime();
+            this.strums.push(s);
+        }
+        var remain = music.getBeats() * 4 - qbTime;
+        if (remain > 0) {
+            var rest = "--------".substring(0, music.getStringCount());
+            var time = "00" + remain.toString();
+            time = time.substring(time.length - 2);
+            var s = new Strum(rest + time, this, qbTime);
             this.strums.push(s);
         }
     }
@@ -316,6 +351,21 @@ var Music = (function () {
         for (var n = 0; n < this.json["bars"].length; n++) {
             this.bar.push(new Bar(this.json["bars"][n], this));
         }
+        this.chordNumbers = {};
+        var chordCount = 0;
+        for (var _i = 0, _a = this.bar; _i < _a.length; _i++) {
+            var bar = _a[_i];
+            for (var n = 0; n < bar.getStrumCount(); n++) {
+                var strum = bar.getStrum(n);
+                if (strum.isChord()) {
+                    var name = strum.getChordName().toLowerCase();
+                    if (this.chordNumbers[name] == null) {
+                        this.chordNumbers[name] = chordCount;
+                        chordCount = chordCount + 1;
+                    }
+                }
+            }
+        }
     }
     Music.prototype.destroy = function () {
         for (var _i = 0, _a = this.bar; _i < _a.length; _i++) {
@@ -347,6 +397,9 @@ var Music = (function () {
     };
     Music.prototype.getBar = function (bar) {
         return this.bar[bar];
+    };
+    Music.prototype.getChordNumber = function (name) {
+        return this.chordNumbers[name.toLowerCase()];
     };
     return Music;
 }());
