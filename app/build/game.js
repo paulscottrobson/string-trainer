@@ -17,6 +17,8 @@ var MainState = (function (_super) {
         var bgr = this.game.add.image(0, 0, "sprites", "background");
         bgr.width = this.game.width;
         bgr.height = this.game.height;
+        var musicJson = this.game.cache.getJSON("music");
+        this.music = new Music(musicJson);
     };
     MainState.prototype.destroy = function () {
     };
@@ -25,6 +27,133 @@ var MainState = (function (_super) {
     MainState.VERSION = "0.01 02Nov17 Phaser-CE 2.8.7";
     return MainState;
 }(Phaser.State));
+var Bar = (function () {
+    function Bar(def, music) {
+        this.music = music;
+        this.strums = [];
+        var defs = def.split(";");
+        var qbTime = 0;
+        for (var _i = 0, defs_1 = defs; _i < defs_1.length; _i++) {
+            var d = defs_1[_i];
+            var s = new Strum(d, this, qbTime);
+            qbTime = s.getEndTime();
+            this.strums.push(s);
+        }
+    }
+    Bar.prototype.destroy = function () {
+        for (var _i = 0, _a = this.strums; _i < _a.length; _i++) {
+            var s = _a[_i];
+            s.destroy();
+        }
+        this.music = this.strums = null;
+    };
+    Bar.prototype.getStrumCount = function () {
+        return this.strums.length;
+    };
+    Bar.prototype.getStrum = function (strum) {
+        return this.strums[strum];
+    };
+    Bar.prototype.getMusic = function () {
+        return this.music;
+    };
+    return Bar;
+}());
+var Music = (function () {
+    function Music(musicJson) {
+        this.json = musicJson;
+        this.stringCount = parseInt(this.json["strings"], 10);
+        this.stringBaseNote = [];
+        for (var n = 0; n < this.stringCount; n++) {
+            this.stringBaseNote[n] = this.json["string" + n];
+        }
+        console.log(this.stringBaseNote);
+        this.bar = [];
+        for (var n = 0; n < this.json["bars"].length; n++) {
+            this.bar.push(new Bar(this.json["bars"][n], this));
+        }
+    }
+    Music.prototype.destroy = function () {
+        for (var _i = 0, _a = this.bar; _i < _a.length; _i++) {
+            var b = _a[_i];
+            b.destroy();
+        }
+        this.bar = this.stringBaseNote = this.json = null;
+    };
+    Music.prototype.getBeats = function () {
+        return parseInt(this.json["beats"], 10);
+    };
+    Music.prototype.getTempo = function () {
+        return parseInt(this.json["tempo"], 10);
+    };
+    Music.prototype.getCapo = function () {
+        return parseInt(this.json["capo"], 10);
+    };
+    Music.prototype.getStringCount = function () {
+        return this.stringCount;
+    };
+    Music.prototype.getStringBaseNote = function (str) {
+        return this.stringBaseNote[str];
+    };
+    Music.prototype.getInformation = function (key) {
+        return this.json[key.toLowerCase()];
+    };
+    Music.prototype.getBarCount = function () {
+        return this.bar.length;
+    };
+    Music.prototype.getBar = function (bar) {
+        return this.bar[bar];
+    };
+    return Music;
+}());
+var Strum = (function () {
+    function Strum(def, bar, startTime) {
+        this.bar = bar;
+        this.fretPos = [];
+        this.startTime = startTime;
+        this.chordName = "";
+        for (var n = 0; n < this.bar.getMusic().getStringCount(); n++) {
+            var c = def.charCodeAt(n) - 97;
+            if (def.charAt(n) == "-") {
+                c = Strum.NOSTRUM;
+            }
+            this.fretPos[n] = c;
+        }
+        this.length = parseInt(def.substr(def.length - 2));
+        var p1 = def.indexOf("(");
+        if (p1 >= 0) {
+            this.chordName = def.substr(p1 + 1, def.lastIndexOf(")") - p1 - 1);
+        }
+    }
+    Strum.prototype.destroy = function () {
+        this.bar = this.fretPos = null;
+    };
+    Strum.prototype.getBar = function () {
+        return this.bar;
+    };
+    Strum.prototype.getStringCount = function () {
+        return this.fretPos.length;
+    };
+    Strum.prototype.getStartTime = function () {
+        return this.startTime;
+    };
+    Strum.prototype.getEndTime = function () {
+        return this.startTime + this.length;
+    };
+    Strum.prototype.getLength = function () {
+        return this.length;
+    };
+    Strum.prototype.getStringFret = function (str) {
+        return this.fretPos[str];
+    };
+    Strum.prototype.isChord = function () {
+        return this.chordName != "";
+    };
+    Strum.prototype.getChordName = function () {
+        return this.chordName;
+    };
+    Strum.NOSTRUM = -1;
+    return Strum;
+}());
 window.onload = function () {
     var game = new StringTrainerApplication();
 };
@@ -82,6 +211,7 @@ var PreloadState = (function (_super) {
         loader.height = this.game.height / 8;
         loader.anchor.setTo(0.5);
         this.game.load.setPreloadSprite(loader);
+        this.game.load.json("music", "music.json");
         this.game.load.atlas("sprites", "assets/sprites/sprites.png", "assets/sprites/sprites.json");
         for (var _i = 0, _a = ["font"]; _i < _a.length; _i++) {
             var fontName = _a[_i];
