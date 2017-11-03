@@ -4,7 +4,7 @@
 from PIL import Image,ImageDraw
 import math
 
-height = 80
+height = 120
 widthGroup = [ 30,60,90,120,150 ]
 xOrigin = 200
 yOrigin = 200
@@ -18,8 +18,8 @@ for width in widthGroup:
 		for p in points:
 			x = xOrigin + p 
 			y = yOrigin - math.sin(p * 3.14159 / width) * height
-			r = 3
-			draw.ellipse((x-r,y-r,x+r,y+r),fill = 0xFFFFFFFF,outline = 0xFF000000)
+			r = 6
+			draw.ellipse((x-r,y-r,x+r,y+r),fill = 0xFF00FFFF,outline = 0xFF000000)
 			#draw.ellipse((x-1,y-1,x+1,y+1),fill = 0xFFFFFFFF)
 #		if (offset3D != 0):
 #			c1 = 0xFF808080

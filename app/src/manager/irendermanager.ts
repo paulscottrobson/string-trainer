@@ -25,9 +25,10 @@ interface IRenderManager {
      * Add an event handler which is called whenever a strum is due
      * (e.g. the move is forward, small, and encompasses a strum.).
      * 
-     * @param {Function} method Method that accepts an IStrum parameter
+     * @param {Function} method Method that accepts a boolean and an 
+     * IStrum parameter. Boolean is true for begin strum, false for end strum.
      * @param {*} context Context in which it should be called.
      * @memberof IRenderManager
      */
-    addStrumEvenHandler(method:Function,context:any):void;
+    addStrumEventHandler(method:Function,context:any):void;
 }

@@ -15,9 +15,10 @@ var Configurator = (function () {
         Configurator.stringGap = game.height / 4;
         Configurator.stringMargin = game.height / 16;
         Configurator.ledgeHeight = game.height / 20;
-        Configurator.barWidth = game.width / 3;
+        Configurator.barWidth = Math.round(game.width / 3);
         Configurator.isFlipped = false;
-        Configurator.xOrigin = game.width * 0.15;
+        Configurator.xOrigin = Math.round(game.width * 0.22);
+        Configurator.bounceHeight = game.height / 6;
         Configurator.scrollBarHeight = game.height / 10;
         Configurator.yTop = game.height - Configurator.stringGap -
             Configurator.stringMargin * 2 - Configurator.ledgeHeight -
@@ -48,14 +49,20 @@ var MainState = (function (_super) {
         this.music = new Music(musicJson);
         Configurator.setup(this.game, this.music.getStringCount());
         var bgr = new Background(this.game);
-        var r = new Renderer(this.game, this.music.getBar(0));
-        r.moveTo(Configurator.xOrigin);
-        var r2 = new Renderer(this.game, this.music.getBar(1));
-        r2.moveTo(Configurator.xOrigin + Configurator.barWidth);
+        this.position = 0;
+        this.renderManager = new RenderManager(this.game, this.music);
+        this.renderManager.addStrumEventHandler(this.play, this);
+    };
+    MainState.prototype.play = function (isPlay, strum) {
+        console.log(isPlay, strum);
     };
     MainState.prototype.destroy = function () {
+        this.renderManager.destroy();
+        this.music = this.renderManager = null;
     };
     MainState.prototype.update = function () {
+        this.position += 0.005;
+        this.renderManager.moveTo(this.position);
     };
     MainState.VERSION = "0.01 02Nov17 Phaser-CE 2.8.7";
     return MainState;
@@ -87,11 +94,15 @@ var Background = (function (_super) {
 }(Phaser.Group));
 var Renderer = (function (_super) {
     __extends(Renderer, _super);
-    function Renderer(game, bar) {
+    function Renderer(game, bar, index) {
         var _this = _super.call(this, game) || this;
         _this.bar = bar;
         _this.isRendered = false;
+        _this.index = index;
         _this.beats = _this.bar.getMusic().getBeats();
+        if (Renderer.sineCurveInfo == null) {
+            Renderer.loadSineCurveInfo(game);
+        }
         return _this;
     }
     Renderer.prototype.destroy = function () {
@@ -157,13 +168,23 @@ var Renderer = (function (_super) {
                 }
             }
         }
+        this.sineCurves = [];
+        for (var sn = 0; sn < this.bar.getStrumCount(); sn++) {
+            var strum = this.bar.getStrum(sn);
+            var w = Configurator.barWidth / this.beats * (strum.getLength() / 4);
+            var name = this.getBestSineCurve(w);
+            this.sineCurves[sn] = this.game.add.image(0, 0, "sprites", name, this);
+            this.sineCurves[sn].width = w;
+            this.sineCurves[sn].height = Configurator.bounceHeight;
+            this.sineCurves[sn].anchor.y = 1;
+        }
     };
     Renderer.prototype.moveTo = function (x) {
         if (x > this.game.width || x + Configurator.barWidth < 0) {
             if (this.isRendered) {
                 this.deleteRender();
-                return;
             }
+            return;
         }
         if (!this.isRendered) {
             this.createRender();
@@ -183,13 +204,39 @@ var Renderer = (function (_super) {
                 var bt = _a[_i];
                 bt.moveTo(x1);
             }
+            this.sineCurves[sn].x = x1;
+            this.sineCurves[sn].y = Configurator.yTop;
         }
     };
     Renderer.prototype.deleteRender = function () {
         if (!this.isRendered)
             return;
         this.isRendered = false;
-        this.buttons = this.beatLines = this.debugRect = null;
+        this.removeChildren();
+        this.sineCurves = this.buttons = this.beatLines = this.debugRect = null;
+    };
+    Renderer.prototype.getBestSineCurve = function (wReq) {
+        var bestWidth = 99999;
+        var result = "?????";
+        for (var names in Renderer.sineCurveInfo) {
+            var diff = Math.abs(Renderer.sineCurveInfo[names] - wReq);
+            if (diff < bestWidth) {
+                bestWidth = diff;
+                result = names;
+            }
+        }
+        return result;
+    };
+    Renderer.loadSineCurveInfo = function (game) {
+        Renderer.sineCurveInfo = {};
+        var json = game.cache.getJSON("sprites")["frames"];
+        for (var spr in json) {
+            if (spr.substr(0, 9) == "sinecurve") {
+                var frame = json[spr]["frame"];
+                var wReq = frame["w"];
+                Renderer.sineCurveInfo[spr] = wReq;
+            }
+        }
     };
     Renderer.DEBUG = false;
     return Renderer;
@@ -209,6 +256,9 @@ var BaseButton = (function (_super) {
         this.button.alpha = 1.0;
         if (x < Configurator.xOrigin) {
             this.button.alpha = Math.max(0.3, 1 - (Configurator.xOrigin - x) / Configurator.barWidth);
+        }
+        if (x <= Configurator.xOrigin && x + this.button.width >= Configurator.xOrigin) {
+            this.button.y += 4;
         }
         if (this.buttonText != null) {
             this.buttonText.x = x + this.button.width / 2;
@@ -300,6 +350,56 @@ var StrumButton = (function (_super) {
     }
     return StrumButton;
 }(BaseButton));
+var RenderManager = (function () {
+    function RenderManager(game, music) {
+        this.music = music;
+        this.renderers = [];
+        this.lastBar = -1;
+        this.lastQuarterBeat = -1;
+        for (var n = 0; n < music.getBarCount(); n++) {
+            this.renderers[n] = new Renderer(game, music.getBar(n), n);
+        }
+        this.noteEvent = new Phaser.Signal();
+        this.moveTo(0);
+    }
+    RenderManager.prototype.destroy = function () {
+        for (var _i = 0, _a = this.renderers; _i < _a.length; _i++) {
+            var renderer = _a[_i];
+            renderer.destroy();
+        }
+        this.noteEvent = this.renderers = this.music = null;
+    };
+    RenderManager.prototype.moveTo = function (bar) {
+        var x = Math.round(Configurator.xOrigin - bar * Configurator.barWidth);
+        for (var _i = 0, _a = this.renderers; _i < _a.length; _i++) {
+            var renderer = _a[_i];
+            renderer.moveTo(x);
+            x = x + Configurator.barWidth;
+        }
+        var newBar = Math.floor(bar);
+        var newBeat = Math.floor((bar - newBar) * 4 * this.music.getBeats());
+        if (newBar != this.lastBar || newBeat != this.lastQuarterBeat) {
+            this.lastBar = newBar;
+            this.lastQuarterBeat = newBeat;
+            if (newBar >= 0 && newBar < this.music.getBarCount()) {
+                var rbar = this.music.getBar(newBar);
+                for (var strn = 0; strn < rbar.getStrumCount(); strn++) {
+                    var strum = rbar.getStrum(strn);
+                    if (newBeat == strum.getEndTime()) {
+                        this.noteEvent.dispatch(false, strum);
+                    }
+                    if (newBeat == strum.getStartTime()) {
+                        this.noteEvent.dispatch(true, strum);
+                    }
+                }
+            }
+        }
+    };
+    RenderManager.prototype.addStrumEventHandler = function (method, context) {
+        this.noteEvent.add(method, context);
+    };
+    return RenderManager;
+}());
 var Bar = (function () {
     function Bar(def, music) {
         this.music = music;

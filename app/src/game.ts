@@ -5,6 +5,8 @@ class MainState extends Phaser.State {
     private static VERSION:string="0.01 02Nov17 Phaser-CE 2.8.7";
 
     public music:IMusic;
+    public position:number;
+    public renderManager:IRenderManager;
 
     create() {
         // Create music object
@@ -14,17 +16,22 @@ class MainState extends Phaser.State {
         Configurator.setup(this.game,this.music.getStringCount());
         var bgr:Background = new Background(this.game);
 
-        var r:Renderer = new Renderer(this.game,this.music.getBar(0));
-        r.moveTo(Configurator.xOrigin);
-        var r2:Renderer = new Renderer(this.game,this.music.getBar(1));
-        r2.moveTo(Configurator.xOrigin+Configurator.barWidth);
-
-        //r.destroy();
+        this.position = 0;
+        this.renderManager = new RenderManager(this.game,this.music);
+        this.renderManager.addStrumEventHandler(this.play,this);
     }
 
+    play(isPlay:boolean,strum:IStrum) : void {
+        console.log(isPlay,strum);
+    }
+    
     destroy() : void {
+        this.renderManager.destroy();
+        this.music = this.renderManager = null;
     }
 
     update() : void {
+        this.position += 0.005;
+        this.renderManager.moveTo(this.position);
     }
 }    

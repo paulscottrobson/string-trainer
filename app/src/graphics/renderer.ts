@@ -10,18 +10,26 @@ class Renderer extends Phaser.Group implements IRenderer {
 
     private static DEBUG:boolean = false;
 
+    private static sineCurveInfo:any;
+
     private isRendered:boolean;
     private debugRect:Phaser.Image;
     private bar:IBar;
     private beats:number;
     private beatLines:Phaser.Image[];
     private buttons:IButton[][];
+    private sineCurves:Phaser.Image[];
+    private index:number;
 
-    constructor(game:Phaser.Game,bar:IBar) {
+    constructor(game:Phaser.Game,bar:IBar,index:number) {
         super(game);
         this.bar = bar;
         this.isRendered = false;
+        this.index = index;
         this.beats = this.bar.getMusic().getBeats();
+        if (Renderer.sineCurveInfo == null) {
+            Renderer.loadSineCurveInfo(game);
+        }
     }
 
     destroy() : void {
@@ -68,7 +76,7 @@ class Renderer extends Phaser.Group implements IRenderer {
             this.beatLines[b].anchor.x = 0.5;
             this.beatLines[b].anchor.y = 1.0;
         }
-        // Buttons.
+        // Buttons
         this.buttons = [];
         for (var sn:number = 0;sn < this.bar.getStrumCount();sn++) {
             this.buttons[sn] = [];
@@ -91,6 +99,17 @@ class Renderer extends Phaser.Group implements IRenderer {
                 }
             }
         }
+        // Sine curves
+        this.sineCurves = [];
+        for (var sn:number = 0;sn < this.bar.getStrumCount();sn++) {
+            var strum:IStrum = this.bar.getStrum(sn);
+            var w:number = Configurator.barWidth / this.beats * (strum.getLength() / 4);
+            var name:string = this.getBestSineCurve(w);
+            this.sineCurves[sn] = this.game.add.image(0,0,"sprites",name,this);
+            this.sineCurves[sn].width = w;
+            this.sineCurves[sn].height = Configurator.bounceHeight;
+            this.sineCurves[sn].anchor.y = 1;
+        }
     }
 
     /**
@@ -106,8 +125,8 @@ class Renderer extends Phaser.Group implements IRenderer {
         if (x > this.game.width || x + Configurator.barWidth < 0) {
             if (this.isRendered) { 
                 this.deleteRender();
-                return;
             }
+            return;
         }
         if (!this.isRendered) {
             this.createRender();
@@ -122,13 +141,15 @@ class Renderer extends Phaser.Group implements IRenderer {
             this.beatLines[b].x = x + b * Configurator.barWidth / this.beats;
             this.beatLines[b].y = Configurator.yTop + Configurator.stringMargin * 2 + Configurator.stringGap;
         }
-        // Buttons
+        // Buttons & curves
         for (var sn:number = 0;sn < this.bar.getStrumCount();sn++) {
             var strum:IStrum = this.bar.getStrum(sn);
             var x1:number = x + strum.getStartTime()/4 * Configurator.barWidth / this.beats;
             for (var bt of this.buttons[sn]) {
                 bt.moveTo(x1);
             }            
+            this.sineCurves[sn].x = x1;
+            this.sineCurves[sn].y = Configurator.yTop;
         }
     }
 
@@ -142,6 +163,47 @@ class Renderer extends Phaser.Group implements IRenderer {
     private deleteRender(): void {
         if (!this.isRendered) return;
         this.isRendered = false;
-        this.buttons = this.beatLines = this.debugRect = null;
+        this.removeChildren();
+        this.sineCurves = this.buttons = this.beatLines = this.debugRect = null;
+    }
+
+    /**
+     * Get the name of the sine curve to use to best show a given
+     * width.
+     * 
+     * @private
+     * @param {number} wReq required width
+     * @returns sprite name
+     * @memberof Renderer
+     */
+    private getBestSineCurve(wReq:number) {
+        var bestWidth:number = 99999;
+        var result:string = "?????";
+        for (var names in Renderer.sineCurveInfo) {
+            var diff:number = Math.abs(Renderer.sineCurveInfo[names] - wReq);
+            if (diff < bestWidth) {
+                bestWidth = diff;
+                result = names;
+            }
+        }
+        return result;
+    }
+    /**
+     * Load in information about sine curves.
+     * 
+     * @private
+     * @static
+     * @memberof Renderer
+     */
+    private static loadSineCurveInfo(game:Phaser.Game):void {
+        Renderer.sineCurveInfo = {};
+        var json:any = game.cache.getJSON("sprites")["frames"];
+        for (var spr in json) {
+            if (spr.substr(0,9) == "sinecurve") {
+                var frame:any = json[spr]["frame"]
+                var wReq = frame["w"];
+                Renderer.sineCurveInfo[spr] = wReq;
+            }
+        }
     }
 }
