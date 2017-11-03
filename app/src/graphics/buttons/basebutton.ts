@@ -1,5 +1,12 @@
-/// <reference path="../../lib/phaser.comments.d.ts"/>
+/// <reference path="../../../lib/phaser.comments.d.ts"/>
 
+/**
+ * Base button class from which the buttons shown on the tab derives
+ * 
+ * @class BaseButton
+ * @extends {Phaser.Group}
+ * @implements {IButton}
+ */
 class BaseButton extends Phaser.Group implements IButton {
     
     protected button:Phaser.Image;
@@ -28,9 +35,16 @@ class BaseButton extends Phaser.Group implements IButton {
         }
     }
     
+    /**
+     * Add a label to the button
+     * 
+     * @param {string} lbl 
+     * @memberof BaseButton
+     */
     label(lbl:string): void {
         var size:number = Configurator.stringGap / 
                     (Configurator.getStringCount()-1) * 0.6;
+        // Makes the strums smaller text.
         if (this.button.width * 2 < this.button.height) {
             size = size * 0.7;
         }
@@ -40,11 +54,28 @@ class BaseButton extends Phaser.Group implements IButton {
         this.buttonText = txt;
     }
 
+    /**
+     * Colour list which is used to differentiate buttons
+     * 
+     * @private
+     * @static
+     * @type {number[]}
+     * @memberof BaseButton
+     */
     private static colours:number[] = [
         0xFF0000,0x00FF00,0x0000FF,0xFFFF00,0xFF8000,0xFFFF00,0xFF00FF,
         0x00FFFF,0xFF8000,0x0080FF,0x008000,0x808000,0x008080,0x8B3413
     ];
 
+    /**
+     * Get a colour for a given index, it reuses numbers that have
+     * been used if insufficient in table.
+     * 
+     * @static
+     * @param {number} n 
+     * @returns {number} 
+     * @memberof BaseButton
+     */
     public static getColour(n:number) : number {
         return BaseButton.colours[n % BaseButton.colours.length];
     }

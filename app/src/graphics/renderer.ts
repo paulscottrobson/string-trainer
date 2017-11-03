@@ -6,7 +6,7 @@
  * @class Renderer
  * @extends {Phaser.Group}
  */
-class Renderer extends Phaser.Group {
+class Renderer extends Phaser.Group implements IRenderer {
 
     private static DEBUG:boolean = false;
 
@@ -101,7 +101,7 @@ class Renderer extends Phaser.Group {
      * @returns 
      * @memberof Renderer
      */
-    public moveTo(x:number) {
+    public moveTo(x:number):void {
         // Handle off screen.
         if (x > this.game.width || x + Configurator.barWidth < 0) {
             if (this.isRendered) { 

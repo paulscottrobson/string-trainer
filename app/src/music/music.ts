@@ -76,7 +76,7 @@ class Music implements IMusic {
     getBar(bar: number): IBar {
         return this.bar[bar];
     }
-    getChordNumber(name:string) {
+    getChordNumber(name:string):number {
         return this.chordNumbers[name.toLowerCase()];
     }    
 }

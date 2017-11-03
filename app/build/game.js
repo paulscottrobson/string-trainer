@@ -85,93 +85,6 @@ var Background = (function (_super) {
     }
     return Background;
 }(Phaser.Group));
-var BaseButton = (function (_super) {
-    __extends(BaseButton, _super);
-    function BaseButton() {
-        return _super !== null && _super.apply(this, arguments) || this;
-    }
-    BaseButton.prototype.destroy = function () {
-        _super.prototype.destroy.call(this);
-        this.buttonText = this.button = null;
-    };
-    BaseButton.prototype.moveTo = function (x) {
-        this.button.x = x;
-        this.button.y = this.yPos;
-        this.button.alpha = 1.0;
-        if (x < Configurator.xOrigin) {
-            this.button.alpha = Math.max(0.3, 1 - (Configurator.xOrigin - x) / Configurator.barWidth);
-        }
-        if (this.buttonText != null) {
-            this.buttonText.x = x + this.button.width / 2;
-            this.buttonText.y = this.button.y - this.button.height / 2 + this.buttonText.height / 3;
-            this.buttonText.alpha = this.button.alpha;
-        }
-    };
-    BaseButton.prototype.label = function (lbl) {
-        var size = Configurator.stringGap /
-            (Configurator.getStringCount() - 1) * 0.6;
-        if (this.button.width * 2 < this.button.height) {
-            size = size * 0.7;
-        }
-        var txt = this.game.add.bitmapText(0, 0, "font", lbl, size, this);
-        txt.anchor.x = 0.5;
-        txt.anchor.y = 0;
-        txt.tint = 0x000000;
-        this.buttonText = txt;
-    };
-    BaseButton.getColour = function (n) {
-        return BaseButton.colours[n % BaseButton.colours.length];
-    };
-    BaseButton.colours = [
-        0xFF0000, 0x00FF00, 0x0000FF, 0xFFFF00, 0xFF8000, 0xFFFF00, 0xFF00FF,
-        0x00FFFF, 0xFF8000, 0x0080FF, 0x008000, 0x808000, 0x008080, 0x8B3413
-    ];
-    return BaseButton;
-}(Phaser.Group));
-var FingerButton = (function (_super) {
-    __extends(FingerButton, _super);
-    function FingerButton(game, stringID, fretting, pixWidth) {
-        var _this = _super.call(this, game) || this;
-        if (FingerButton.buttonInfo == null) {
-            _this.loadButtonInfo();
-        }
-        var reqHeight = Configurator.stringGap / (Configurator.getStringCount() - 1) * 0.98;
-        var gName = _this.identifyGraphics(pixWidth);
-        _this.button = _this.game.add.image(0, 0, "sprites", gName, _this);
-        _this.button.width = pixWidth;
-        _this.button.height = reqHeight;
-        _this.button.anchor.x = 0;
-        _this.button.anchor.y = 0.5;
-        _this.button.tint = FingerButton.getColour(fretting);
-        _this.yPos = Configurator.getStringY(stringID);
-        _this.label(fretting.toString());
-        return _this;
-    }
-    FingerButton.prototype.loadButtonInfo = function () {
-        FingerButton.buttonInfo = {};
-        var json = this.game.cache.getJSON("sprites")["frames"];
-        for (var spr in json) {
-            if (spr.substr(0, 13) == "notebutton_up") {
-                var frame = json[spr]["frame"];
-                var wReq = frame["w"];
-                FingerButton.buttonInfo[spr] = wReq;
-            }
-        }
-    };
-    FingerButton.prototype.identifyGraphics = function (width) {
-        var best = "";
-        var rDiff = 9999;
-        for (var spr in FingerButton.buttonInfo) {
-            var newv = Math.abs(width - FingerButton.buttonInfo[spr]);
-            if (newv < rDiff) {
-                best = spr;
-                rDiff = newv;
-            }
-        }
-        return best;
-    };
-    return FingerButton;
-}(BaseButton));
 var Renderer = (function (_super) {
     __extends(Renderer, _super);
     function Renderer(game, bar) {
@@ -281,6 +194,93 @@ var Renderer = (function (_super) {
     Renderer.DEBUG = false;
     return Renderer;
 }(Phaser.Group));
+var BaseButton = (function (_super) {
+    __extends(BaseButton, _super);
+    function BaseButton() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    BaseButton.prototype.destroy = function () {
+        _super.prototype.destroy.call(this);
+        this.buttonText = this.button = null;
+    };
+    BaseButton.prototype.moveTo = function (x) {
+        this.button.x = x;
+        this.button.y = this.yPos;
+        this.button.alpha = 1.0;
+        if (x < Configurator.xOrigin) {
+            this.button.alpha = Math.max(0.3, 1 - (Configurator.xOrigin - x) / Configurator.barWidth);
+        }
+        if (this.buttonText != null) {
+            this.buttonText.x = x + this.button.width / 2;
+            this.buttonText.y = this.button.y - this.button.height / 2 + this.buttonText.height / 3;
+            this.buttonText.alpha = this.button.alpha;
+        }
+    };
+    BaseButton.prototype.label = function (lbl) {
+        var size = Configurator.stringGap /
+            (Configurator.getStringCount() - 1) * 0.6;
+        if (this.button.width * 2 < this.button.height) {
+            size = size * 0.7;
+        }
+        var txt = this.game.add.bitmapText(0, 0, "font", lbl, size, this);
+        txt.anchor.x = 0.5;
+        txt.anchor.y = 0;
+        txt.tint = 0x000000;
+        this.buttonText = txt;
+    };
+    BaseButton.getColour = function (n) {
+        return BaseButton.colours[n % BaseButton.colours.length];
+    };
+    BaseButton.colours = [
+        0xFF0000, 0x00FF00, 0x0000FF, 0xFFFF00, 0xFF8000, 0xFFFF00, 0xFF00FF,
+        0x00FFFF, 0xFF8000, 0x0080FF, 0x008000, 0x808000, 0x008080, 0x8B3413
+    ];
+    return BaseButton;
+}(Phaser.Group));
+var FingerButton = (function (_super) {
+    __extends(FingerButton, _super);
+    function FingerButton(game, stringID, fretting, pixWidth) {
+        var _this = _super.call(this, game) || this;
+        if (FingerButton.buttonInfo == null) {
+            _this.loadButtonInfo();
+        }
+        var reqHeight = Configurator.stringGap / (Configurator.getStringCount() - 1) * 0.98;
+        var gName = _this.identifyGraphics(pixWidth);
+        _this.button = _this.game.add.image(0, 0, "sprites", gName, _this);
+        _this.button.width = pixWidth;
+        _this.button.height = reqHeight;
+        _this.button.anchor.x = 0;
+        _this.button.anchor.y = 0.5;
+        _this.button.tint = FingerButton.getColour(fretting);
+        _this.yPos = Configurator.getStringY(stringID);
+        _this.label(fretting.toString());
+        return _this;
+    }
+    FingerButton.prototype.loadButtonInfo = function () {
+        FingerButton.buttonInfo = {};
+        var json = this.game.cache.getJSON("sprites")["frames"];
+        for (var spr in json) {
+            if (spr.substr(0, 13) == "notebutton_up") {
+                var frame = json[spr]["frame"];
+                var wReq = frame["w"];
+                FingerButton.buttonInfo[spr] = wReq;
+            }
+        }
+    };
+    FingerButton.prototype.identifyGraphics = function (width) {
+        var best = "";
+        var rDiff = 9999;
+        for (var spr in FingerButton.buttonInfo) {
+            var newv = Math.abs(width - FingerButton.buttonInfo[spr]);
+            if (newv < rDiff) {
+                best = spr;
+                rDiff = newv;
+            }
+        }
+        return best;
+    };
+    return FingerButton;
+}(BaseButton));
 var StrumButton = (function (_super) {
     __extends(StrumButton, _super);
     function StrumButton(game, width, name, isDownStrum, colourBase) {

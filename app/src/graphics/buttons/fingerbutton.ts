@@ -1,4 +1,4 @@
-/// <reference path="../../lib/phaser.comments.d.ts"/>
+/// <reference path="../../../lib/phaser.comments.d.ts"/>
 
 /**
  * Fingerpick button.

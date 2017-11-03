@@ -4,7 +4,9 @@
 echo "Making Graphics"
 cd graphics
 rm source/notebutton*.png
+rm source/sinecurve*.png
 python makeframes.py
+python makecurves.py
 python makeatlas.py
 
 echo "Copying to assets"
