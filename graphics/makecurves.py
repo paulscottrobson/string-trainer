@@ -4,7 +4,6 @@
 from PIL import Image,ImageDraw
 import math
 
-height = 120
 widthGroup = [ 30,60,90,120,150 ]
 xOrigin = 200
 yOrigin = 200
@@ -12,13 +11,14 @@ yOrigin = 200
 for width in widthGroup:
 		im = Image.new("RGBA",(600,300),0x00000000)
 		draw = ImageDraw.Draw(im)
-		points = range(0,width,int(width/15))
+		points = [x for x in range(0,width,7)]
 		points.append(width)
+		height = width
 
 		for p in points:
 			x = xOrigin + p 
 			y = yOrigin - math.sin(p * 3.14159 / width) * height
-			r = 6
+			r = 3
 			draw.ellipse((x-r,y-r,x+r,y+r),fill = 0xFF00FFFF,outline = 0xFF000000)
 			#draw.ellipse((x-1,y-1,x+1,y+1),fill = 0xFFFFFFFF)
 #		if (offset3D != 0):

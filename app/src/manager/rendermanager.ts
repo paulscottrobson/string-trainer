@@ -13,6 +13,7 @@ class RenderManager implements IRenderManager {
     private lastBar:number;
     private lastQuarterBeat:number;
     private noteEvent:Phaser.Signal;
+    private ball:Phaser.Image;
 
     constructor(game:Phaser.Game,music:IMusic) {
         this.music = music;
@@ -23,6 +24,10 @@ class RenderManager implements IRenderManager {
             this.renderers[n] = new Renderer(game,music.getBar(n),n);
         }
         this.noteEvent = new Phaser.Signal();
+        this.ball = game.add.image(Configurator.xOrigin,Configurator.yTop,
+                                            "sprites","sphere_red");
+        this.ball.anchor.x = 0.5;this.ball.anchor.y = 1.0;
+        this.ball.width = this.ball.height = Configurator.barWidth/12;                                            
         this.moveTo(0);
     }
 
@@ -30,6 +35,7 @@ class RenderManager implements IRenderManager {
         for (var renderer of this.renderers) {
             renderer.destroy();
         }
+        this.ball.destroy();this.ball = null;
         this.noteEvent = this.renderers = this.music = null;
     }
 
@@ -39,6 +45,7 @@ class RenderManager implements IRenderManager {
             renderer.moveTo(x);
             x = x + Configurator.barWidth;
         }
+        // Work out if music event.
         var newBar:number = Math.floor(bar);
         var newBeat:number = Math.floor((bar - newBar) * 4 * this.music.getBeats());
         if (newBar != this.lastBar || newBeat != this.lastQuarterBeat) {
@@ -56,7 +63,23 @@ class RenderManager implements IRenderManager {
                     }
                 }
             }
-        }        
+        }
+        if (newBar < this.music.getBarCount()) {
+            var sbar:IBar = this.music.getBar(newBar);
+            var fracBeat = (bar-newBar) * 4 * this.music.getBeats();
+            for (var s:number = 0;s < sbar.getStrumCount();s++) {
+                var strum:IStrum = sbar.getStrum(s);
+                if (fracBeat >= strum.getStartTime() &&
+                    fracBeat < strum.getEndTime()) {
+                        var prop:number = (fracBeat - strum.getStartTime()) / strum.getLength();
+                        prop = Math.sin(prop * Math.PI);
+                        prop = prop * this.renderers[newBar].getSineCurveHeight(s);
+                        this.ball.y = Configurator.yTop - prop;
+                    }
+            }
+        } else {
+            this.ball.y = Configurator.yTop;
+        }
     }
 
     addStrumEventHandler(method: Function, context: any): void {

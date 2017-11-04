@@ -83,22 +83,22 @@ class Configurator {
     public static scrollBarHeight:number;
 
     /**
-     * Height of bounce on sine curve
+     * Scalar for height of bounce on sine curve
      * 
      * @static
      * @type {number}
      * @memberof Configurator
      */
-    public static bounceHeight:number;
+    public static bounceHeightScale:number;
 
     public static setup(game:Phaser.Game,stringCount:number) : void {
-        Configurator.stringGap = game.height / 4;
+        Configurator.stringGap = game.height / 3.5;
         Configurator.stringMargin = game.height / 16;
         Configurator.ledgeHeight = game.height / 20;
-        Configurator.barWidth = Math.round(game.width / 3);
+        Configurator.barWidth = Math.round(game.width / 2.5);
         Configurator.isFlipped = false;
         Configurator.xOrigin = Math.round(game.width * 0.22);
-        Configurator.bounceHeight = game.height / 6;
+        Configurator.bounceHeightScale = 1;
         Configurator.scrollBarHeight = game.height / 10;
         Configurator.yTop = game.height - Configurator.stringGap - 
                 Configurator.stringMargin * 2 - Configurator.ledgeHeight -

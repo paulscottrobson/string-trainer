@@ -12,13 +12,13 @@ var Configurator = (function () {
     function Configurator() {
     }
     Configurator.setup = function (game, stringCount) {
-        Configurator.stringGap = game.height / 4;
+        Configurator.stringGap = game.height / 3.5;
         Configurator.stringMargin = game.height / 16;
         Configurator.ledgeHeight = game.height / 20;
-        Configurator.barWidth = Math.round(game.width / 3);
+        Configurator.barWidth = Math.round(game.width / 2.5);
         Configurator.isFlipped = false;
         Configurator.xOrigin = Math.round(game.width * 0.22);
-        Configurator.bounceHeight = game.height / 6;
+        Configurator.bounceHeightScale = 1;
         Configurator.scrollBarHeight = game.height / 10;
         Configurator.yTop = game.height - Configurator.stringGap -
             Configurator.stringMargin * 2 - Configurator.ledgeHeight -
@@ -51,10 +51,6 @@ var MainState = (function (_super) {
         var bgr = new Background(this.game);
         this.position = 0;
         this.renderManager = new RenderManager(this.game, this.music);
-        this.renderManager.addStrumEventHandler(this.play, this);
-    };
-    MainState.prototype.play = function (isPlay, strum) {
-        console.log(isPlay, strum);
     };
     MainState.prototype.destroy = function () {
         this.renderManager.destroy();
@@ -169,15 +165,20 @@ var Renderer = (function (_super) {
             }
         }
         this.sineCurves = [];
+        this.sineCurveHeight = [];
         for (var sn = 0; sn < this.bar.getStrumCount(); sn++) {
             var strum = this.bar.getStrum(sn);
             var w = Configurator.barWidth / this.beats * (strum.getLength() / 4);
             var name = this.getBestSineCurve(w);
             this.sineCurves[sn] = this.game.add.image(0, 0, "sprites", name, this);
             this.sineCurves[sn].width = w;
-            this.sineCurves[sn].height = Configurator.bounceHeight;
+            this.sineCurves[sn].height = this.sineCurves[sn].height * Configurator.bounceHeightScale;
             this.sineCurves[sn].anchor.y = 1;
+            this.sineCurveHeight[sn] = this.sineCurves[sn].height;
         }
+    };
+    Renderer.prototype.getSineCurveHeight = function (strumID) {
+        return this.sineCurveHeight[strumID];
     };
     Renderer.prototype.moveTo = function (x) {
         if (x > this.game.width || x + Configurator.barWidth < 0) {
@@ -213,7 +214,8 @@ var Renderer = (function (_super) {
             return;
         this.isRendered = false;
         this.removeChildren();
-        this.sineCurves = this.buttons = this.beatLines = this.debugRect = null;
+        this.sineCurves = this.buttons = this.beatLines = null;
+        this.sineCurveHeight = this.debugRect = null;
     };
     Renderer.prototype.getBestSineCurve = function (wReq) {
         var bestWidth = 99999;
@@ -258,7 +260,11 @@ var BaseButton = (function (_super) {
             this.button.alpha = Math.max(0.3, 1 - (Configurator.xOrigin - x) / Configurator.barWidth);
         }
         if (x <= Configurator.xOrigin && x + this.button.width >= Configurator.xOrigin) {
-            this.button.y += 4;
+            var prop = (Configurator.xOrigin - x) / Configurator.barWidth * 100;
+            if (prop > 50) {
+                prop = 100 - prop;
+            }
+            this.button.y += Math.min(prop / 1.5, 7);
         }
         if (this.buttonText != null) {
             this.buttonText.x = x + this.button.width / 2;
@@ -360,6 +366,10 @@ var RenderManager = (function () {
             this.renderers[n] = new Renderer(game, music.getBar(n), n);
         }
         this.noteEvent = new Phaser.Signal();
+        this.ball = game.add.image(Configurator.xOrigin, Configurator.yTop, "sprites", "sphere_red");
+        this.ball.anchor.x = 0.5;
+        this.ball.anchor.y = 1.0;
+        this.ball.width = this.ball.height = Configurator.barWidth / 12;
         this.moveTo(0);
     }
     RenderManager.prototype.destroy = function () {
@@ -367,6 +377,8 @@ var RenderManager = (function () {
             var renderer = _a[_i];
             renderer.destroy();
         }
+        this.ball.destroy();
+        this.ball = null;
         this.noteEvent = this.renderers = this.music = null;
     };
     RenderManager.prototype.moveTo = function (bar) {
@@ -393,6 +405,23 @@ var RenderManager = (function () {
                     }
                 }
             }
+        }
+        if (newBar < this.music.getBarCount()) {
+            var sbar = this.music.getBar(newBar);
+            var fracBeat = (bar - newBar) * 4 * this.music.getBeats();
+            for (var s = 0; s < sbar.getStrumCount(); s++) {
+                var strum = sbar.getStrum(s);
+                if (fracBeat >= strum.getStartTime() &&
+                    fracBeat < strum.getEndTime()) {
+                    var prop = (fracBeat - strum.getStartTime()) / strum.getLength();
+                    prop = Math.sin(prop * Math.PI);
+                    prop = prop * this.renderers[newBar].getSineCurveHeight(s);
+                    this.ball.y = Configurator.yTop - prop;
+                }
+            }
+        }
+        else {
+            this.ball.y = Configurator.yTop;
         }
     };
     RenderManager.prototype.addStrumEventHandler = function (method, context) {

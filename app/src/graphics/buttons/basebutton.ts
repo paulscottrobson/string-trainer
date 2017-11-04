@@ -29,7 +29,9 @@ class BaseButton extends Phaser.Group implements IButton {
         }
         // Dip to the right
         if (x <= Configurator.xOrigin && x+this.button.width >= Configurator.xOrigin) {
-            this.button.y += 4;            
+            var prop:number = (Configurator.xOrigin - x) / Configurator.barWidth * 100;
+            if (prop > 50) { prop = 100-prop; }
+            this.button.y += Math.min(prop/1.5,7);            
         }
         // Update button logo.
         if (this.buttonText != null) {

@@ -8,4 +8,5 @@
 interface IRenderer {
     destroy() : void;
     moveTo(x:number):void;
+    getSineCurveHeight(strumID:number) : number;
 }

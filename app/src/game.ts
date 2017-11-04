@@ -18,11 +18,7 @@ class MainState extends Phaser.State {
 
         this.position = 0;
         this.renderManager = new RenderManager(this.game,this.music);
-        this.renderManager.addStrumEventHandler(this.play,this);
-    }
-
-    play(isPlay:boolean,strum:IStrum) : void {
-        console.log(isPlay,strum);
+        //this.renderManager.addStrumEventHandler(this.play,this);
     }
     
     destroy() : void {

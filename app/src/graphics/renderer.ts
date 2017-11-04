@@ -19,6 +19,7 @@ class Renderer extends Phaser.Group implements IRenderer {
     private beatLines:Phaser.Image[];
     private buttons:IButton[][];
     private sineCurves:Phaser.Image[];
+    private sineCurveHeight:number[];
     private index:number;
 
     constructor(game:Phaser.Game,bar:IBar,index:number) {
@@ -101,15 +102,21 @@ class Renderer extends Phaser.Group implements IRenderer {
         }
         // Sine curves
         this.sineCurves = [];
+        this.sineCurveHeight = [];
         for (var sn:number = 0;sn < this.bar.getStrumCount();sn++) {
             var strum:IStrum = this.bar.getStrum(sn);
             var w:number = Configurator.barWidth / this.beats * (strum.getLength() / 4);
             var name:string = this.getBestSineCurve(w);
             this.sineCurves[sn] = this.game.add.image(0,0,"sprites",name,this);
             this.sineCurves[sn].width = w;
-            this.sineCurves[sn].height = Configurator.bounceHeight;
+            this.sineCurves[sn].height = this.sineCurves[sn].height * Configurator.bounceHeightScale;
             this.sineCurves[sn].anchor.y = 1;
+            this.sineCurveHeight[sn] = this.sineCurves[sn].height;
         }
+    }
+
+    getSineCurveHeight(strumID:number) : number {
+        return this.sineCurveHeight[strumID];
     }
 
     /**
@@ -164,7 +171,8 @@ class Renderer extends Phaser.Group implements IRenderer {
         if (!this.isRendered) return;
         this.isRendered = false;
         this.removeChildren();
-        this.sineCurves = this.buttons = this.beatLines = this.debugRect = null;
+        this.sineCurves = this.buttons = this.beatLines = null;
+        this.sineCurveHeight = this.debugRect = null;
     }
 
     /**
