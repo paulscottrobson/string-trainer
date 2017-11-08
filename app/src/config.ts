@@ -95,10 +95,10 @@ class Configurator {
      * Translates chromatic offset to display value.
      * 
      * @static
-     * @type {ITranslator}
+     * @type {IModifiers}
      * @memberof Configurator
      */
-    public static translator:ITranslator
+    public static modifier:IModifiers
 
     public static setup(game:Phaser.Game,stringCount:number) : void {
         Configurator.stringGap = game.height / 3.5;
@@ -113,21 +113,21 @@ class Configurator {
                 Configurator.stringMargin * 2 - Configurator.ledgeHeight -
                 Configurator.scrollBarHeight;
         Configurator.stringCount = stringCount;   
-        Configurator.translator = new DefaultTranslator();        
+        Configurator.modifier = new DefaultModifier();        
         var options = StringTrainerApplication.getURLName("options","").toLowerCase().split(";")
         for (var op of options) {
             if (op == "flip") { 
                 Configurator.isFlipped = !Configurator.isFlipped; 
             }
             if (op == "dulcimer") {
-                Configurator.translator = new DulcimerTranslator();
+                Configurator.modifier = new DulcimerModifier();
                 Configurator.isFlipped = !Configurator.isFlipped; 
             }
             if (op == "merlin") {
-                Configurator.translator = new MerlinTranslator();
+                Configurator.modifier = new MerlinModifier();
             }
             if (op == "strumstick") {
-                Configurator.translator = new StrumstickTranslator();
+                Configurator.modifier = new StrumstickModifier();
             }
         }        
     }

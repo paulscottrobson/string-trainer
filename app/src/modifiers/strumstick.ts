@@ -1,9 +1,9 @@
 /// <reference path="../../lib/phaser.comments.d.ts"/>
 
-class StrumstickTranslator implements ITranslator {
+class StrumstickModifier extends DefaultModifier implements IModifiers {
     
     convert(cOffset: number): string {
-        return DefaultTranslator.convertDiatonic(cOffset,StrumstickTranslator.octave,8);
+        return DefaultModifier.convertDiatonic(cOffset,StrumstickModifier.octave,8);
     }
 
     private static octave:number[] = [

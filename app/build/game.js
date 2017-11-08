@@ -24,7 +24,7 @@ var Configurator = (function () {
             Configurator.stringMargin * 2 - Configurator.ledgeHeight -
             Configurator.scrollBarHeight;
         Configurator.stringCount = stringCount;
-        Configurator.translator = new DefaultTranslator();
+        Configurator.modifier = new DefaultModifier();
         var options = StringTrainerApplication.getURLName("options", "").toLowerCase().split(";");
         for (var _i = 0, options_1 = options; _i < options_1.length; _i++) {
             var op = options_1[_i];
@@ -32,14 +32,14 @@ var Configurator = (function () {
                 Configurator.isFlipped = !Configurator.isFlipped;
             }
             if (op == "dulcimer") {
-                Configurator.translator = new DulcimerTranslator();
+                Configurator.modifier = new DulcimerModifier();
                 Configurator.isFlipped = !Configurator.isFlipped;
             }
             if (op == "merlin") {
-                Configurator.translator = new MerlinTranslator();
+                Configurator.modifier = new MerlinModifier();
             }
             if (op == "strumstick") {
-                Configurator.translator = new StrumstickTranslator();
+                Configurator.modifier = new StrumstickModifier();
             }
         }
     };
@@ -103,9 +103,14 @@ var Background = (function (_super) {
         ledge.height = Configurator.ledgeHeight;
         ledge.tint = 0x282828;
         for (var n = 0; n < Configurator.getStringCount(); n++) {
-            var string = game.add.image(0, Configurator.getStringY(n), "sprites", "string", _this);
+            var isDouble = Configurator.modifier.isDoubleString(n);
+            var gr = isDouble ? "dstring" : "string";
+            var string = game.add.image(0, Configurator.getStringY(n), "sprites", gr, _this);
             string.width = _this.game.width;
             string.height = Math.round(_this.game.height / 64 * (1 - n / 10));
+            if (isDouble) {
+                string.height *= 2;
+            }
             string.anchor.y = 0.5;
         }
         return _this;
@@ -329,7 +334,7 @@ var FingerButton = (function (_super) {
         _this.button.anchor.y = 0.5;
         _this.button.tint = FingerButton.getColour(fretting);
         _this.yPos = Configurator.getStringY(stringID);
-        _this.label(Configurator.translator.convert(fretting));
+        _this.label(Configurator.modifier.convert(fretting));
         return _this;
     }
     FingerButton.prototype.loadButtonInfo = function () {
@@ -448,6 +453,74 @@ var RenderManager = (function () {
     };
     return RenderManager;
 }());
+var DefaultModifier = (function () {
+    function DefaultModifier() {
+    }
+    DefaultModifier.prototype.convert = function (cOffset) {
+        return cOffset.toString();
+    };
+    DefaultModifier.prototype.isDoubleString = function (str) {
+        return false;
+    };
+    DefaultModifier.convertDiatonic = function (cOffset, noteMap, scalar) {
+        var octave = Math.floor(cOffset / 12);
+        cOffset = cOffset % 12;
+        var note = (octave * scalar + Math.floor(noteMap[cOffset])).toString();
+        var frac = noteMap[cOffset] - Math.floor(noteMap[cOffset]);
+        frac = Math.round(frac * 10);
+        if (frac == 1)
+            note = note + "^";
+        if (frac == 5)
+            note = note + "+";
+        return note;
+    };
+    return DefaultModifier;
+}());
+var DulcimerModifier = (function (_super) {
+    __extends(DulcimerModifier, _super);
+    function DulcimerModifier() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    DulcimerModifier.prototype.convert = function (cOffset) {
+        return DefaultModifier.convertDiatonic(cOffset, DulcimerModifier.octave, 7);
+    };
+    DulcimerModifier.prototype.isDoubleString = function (str) {
+        return (str == 2);
+    };
+    DulcimerModifier.octave = [
+        0, 0.1, 1, 1.1, 2, 3, 3.1, 4, 4.1, 5, 6, 6.5
+    ];
+    return DulcimerModifier;
+}(DefaultModifier));
+var MerlinModifier = (function (_super) {
+    __extends(MerlinModifier, _super);
+    function MerlinModifier() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    MerlinModifier.prototype.convert = function (cOffset) {
+        return DefaultModifier.convertDiatonic(cOffset, MerlinModifier.octave, 7);
+    };
+    MerlinModifier.prototype.isDoubleString = function (str) {
+        return (str == 2);
+    };
+    MerlinModifier.octave = [
+        0, 0.1, 1, 1.1, 2, 3, 3.1, 4, 4.1, 5, 5.1, 6
+    ];
+    return MerlinModifier;
+}(DefaultModifier));
+var StrumstickModifier = (function (_super) {
+    __extends(StrumstickModifier, _super);
+    function StrumstickModifier() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    StrumstickModifier.prototype.convert = function (cOffset) {
+        return DefaultModifier.convertDiatonic(cOffset, StrumstickModifier.octave, 8);
+    };
+    StrumstickModifier.octave = [
+        0, 0.1, 1, 1.1, 2, 3, 3.1, 4, 4.1, 5, 6, 7
+    ];
+    return StrumstickModifier;
+}(DefaultModifier));
 var Bar = (function () {
     function Bar(def, music) {
         this.music = music;
@@ -738,56 +811,3 @@ var PreloadState = (function (_super) {
     };
     return PreloadState;
 }(Phaser.State));
-var DulcimerTranslator = (function () {
-    function DulcimerTranslator() {
-    }
-    DulcimerTranslator.prototype.convert = function (cOffset) {
-        return DefaultTranslator.convertDiatonic(cOffset, DulcimerTranslator.octave, 7);
-    };
-    DulcimerTranslator.octave = [
-        0, 0.1, 1, 1.1, 2, 3, 3.1, 4, 4.1, 5, 6, 6.5
-    ];
-    return DulcimerTranslator;
-}());
-var DefaultTranslator = (function () {
-    function DefaultTranslator() {
-    }
-    DefaultTranslator.prototype.convert = function (cOffset) {
-        return cOffset.toString();
-    };
-    DefaultTranslator.convertDiatonic = function (cOffset, noteMap, scalar) {
-        var octave = Math.floor(cOffset / 12);
-        cOffset = cOffset % 12;
-        var note = (octave * scalar + Math.floor(noteMap[cOffset])).toString();
-        var frac = noteMap[cOffset] - Math.floor(noteMap[cOffset]);
-        frac = Math.round(frac * 10);
-        if (frac == 1)
-            note = note + "^";
-        if (frac == 5)
-            note = note + "+";
-        return note;
-    };
-    return DefaultTranslator;
-}());
-var MerlinTranslator = (function () {
-    function MerlinTranslator() {
-    }
-    MerlinTranslator.prototype.convert = function (cOffset) {
-        return DefaultTranslator.convertDiatonic(cOffset, MerlinTranslator.octave, 7);
-    };
-    MerlinTranslator.octave = [
-        0, 0.1, 1, 1.1, 2, 3, 3.1, 4, 4.1, 5, 5.1, 6
-    ];
-    return MerlinTranslator;
-}());
-var StrumstickTranslator = (function () {
-    function StrumstickTranslator() {
-    }
-    StrumstickTranslator.prototype.convert = function (cOffset) {
-        return DefaultTranslator.convertDiatonic(cOffset, StrumstickTranslator.octave, 8);
-    };
-    StrumstickTranslator.octave = [
-        0, 0.1, 1, 1.1, 2, 3, 3.1, 4, 4.1, 5, 6, 7
-    ];
-    return StrumstickTranslator;
-}());

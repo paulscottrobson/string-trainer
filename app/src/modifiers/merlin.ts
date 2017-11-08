@@ -1,10 +1,14 @@
 /// <reference path="../../lib/phaser.comments.d.ts"/>
 
-class MerlinTranslator implements ITranslator {
+class MerlinModifier extends DefaultModifier implements IModifiers {
     
     convert(cOffset: number): string {
-        return DefaultTranslator.convertDiatonic(cOffset,MerlinTranslator.octave,7);
+        return DefaultModifier.convertDiatonic(cOffset,MerlinModifier.octave,7);
     }
+
+    isDoubleString(str:number):boolean {
+        return (str == 2);
+    }    
 
     private static octave:number[] = [
         //  D   D#  E   F   F#  G   G#  A   A#  B   C   C#

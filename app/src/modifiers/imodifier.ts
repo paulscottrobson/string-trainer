@@ -1,6 +1,6 @@
 /// <reference path="../../lib/phaser.comments.d.ts"/>
 
-interface ITranslator {
+interface IModifiers {
     /**
      * Translate a chromatic offset to display format
      * 
@@ -9,12 +9,26 @@ interface ITranslator {
      * @memberof ITranslator
      */
     convert(cOffset:number): string;
+
+    /**
+     * Is a given string a double-string ?
+     * 
+     * @param {number} str 
+     * @returns {boolean} 
+     * @memberof IModifiers
+     */
+    isDoubleString(str:number):boolean;
 }
 
-class DefaultTranslator implements ITranslator {
+class DefaultModifier implements IModifiers {
+
     convert(cOffset: number): string {
         return cOffset.toString();
     }    
+
+    isDoubleString(str:number):boolean {
+        return false;
+    }
 
     static convertDiatonic(cOffset:number,noteMap:number[],scalar:number):string {
         var octave:number = Math.floor(cOffset / 12);

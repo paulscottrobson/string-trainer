@@ -119,6 +119,13 @@
             "spriteSourceSize":{ "x":0,"y":0,"w":244,"h":62 },
             "sourceSize":{ "w":244,"h":62 }
         },
+        "dstring": {
+            "frame":{ "x":796,"y":132,"w":143,"h":25 },
+            "rotated":false,
+            "trimmed":false,
+            "spriteSourceSize":{ "x":0,"y":0,"w":143,"h":25 },
+            "sourceSize":{ "w":143,"h":25 }
+        },
         "i_faster": {
             "frame":{ "x":264,"y":484,"w":128,"h":128 },
             "rotated":false,

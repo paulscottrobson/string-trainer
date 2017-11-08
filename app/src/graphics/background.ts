@@ -28,10 +28,13 @@ class Background extends Phaser.Group {
         ledge.tint = 0x282828;
         
         for (var n:number = 0;n < Configurator.getStringCount();n++) {
+            var isDouble:boolean = Configurator.modifier.isDoubleString(n);
+            var gr:string = isDouble ? "dstring":"string";
             var string:Phaser.Image = game.add.image(0,Configurator.getStringY(n),
-                                                        "sprites","string",this);
+                                                        "sprites",gr,this);
             string.width = this.game.width;
             string.height = Math.round(this.game.height / 64 * (1-n/10));
+            if (isDouble) { string.height *= 2; }
             string.anchor.y = 0.5;
         }
     }

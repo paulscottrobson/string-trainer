@@ -1,9 +1,15 @@
 /// <reference path="../../lib/phaser.comments.d.ts"/>
+/// <reference path="imodifier.ts"/>
 
-class DulcimerTranslator implements ITranslator {
+class DulcimerModifier extends DefaultModifier implements IModifiers {
     
     convert(cOffset: number): string {
-        return DefaultTranslator.convertDiatonic(cOffset,DulcimerTranslator.octave,7);
+        return DefaultModifier.convertDiatonic(cOffset,DulcimerModifier.octave,7);
+    }
+
+
+    isDoubleString(str:number):boolean {
+        return (str == 2);
     }
 
     private static octave:number[] = [
