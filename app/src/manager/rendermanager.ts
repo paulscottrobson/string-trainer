@@ -28,7 +28,6 @@ class RenderManager implements IRenderManager {
                                             "sprites","sphere_red");
         this.ball.anchor.x = 0.5;this.ball.anchor.y = 1.0;
         this.ball.width = this.ball.height = Configurator.barWidth/12;                                            
-        this.moveTo(0);
     }
 
     destroy(): void {

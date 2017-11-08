@@ -36,13 +36,18 @@ class Compiler:
 		notes = [self.compileNote(x) for x in notes]
 		return ";".join(notes)
 
+	def convertNote(self,note):
+		if note >= "0" and note <= "9":
+			return chr(int(note)+97)
+		return chr(ord(note)-ord('a')+10+97)
+
 	def compileNote(self,nDef):
-		m = re.match("^([0-9x]+)([\-\o\.\=]*)$",nDef)
+		m = re.match("^([0-9a-nx]+)([\-o\.\=]*)$",nDef)
 		assert m is not None,"Note unknown "+nDef
 		# reverse, justify, split up
 		notes = [x for x in ("xxxx"+(m.group(1)[::-1]))[-4:]]
 		# convert from x digit to - letter format
-		notes = ["-" if x == "x" else chr(int(x)+97) for x in notes]
+		notes = ["-" if x == "x" else self.convertNote(x) for x in notes]
 		# work out note length in quarterbeats
 		qb = 4
 		for mod in m.group(2):

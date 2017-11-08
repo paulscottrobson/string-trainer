@@ -23,7 +23,7 @@ class FingerButton extends BaseButton implements IButton {
         this.button.anchor.x = 0;this.button.anchor.y = 0.5;
         this.button.tint = FingerButton.getColour(fretting);
         this.yPos = Configurator.getStringY(stringID);
-        this.label(fretting.toString())
+        this.label(Configurator.translator.convert(fretting));
     }
     
     loadButtonInfo(): void {

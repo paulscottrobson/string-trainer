@@ -91,6 +91,15 @@ class Configurator {
      */
     public static bounceHeightScale:number;
 
+    /**
+     * Translates chromatic offset to display value.
+     * 
+     * @static
+     * @type {ITranslator}
+     * @memberof Configurator
+     */
+    public static translator:ITranslator
+
     public static setup(game:Phaser.Game,stringCount:number) : void {
         Configurator.stringGap = game.height / 3.5;
         Configurator.stringMargin = game.height / 16;
@@ -103,7 +112,24 @@ class Configurator {
         Configurator.yTop = game.height - Configurator.stringGap - 
                 Configurator.stringMargin * 2 - Configurator.ledgeHeight -
                 Configurator.scrollBarHeight;
-        Configurator.stringCount = stringCount;                
+        Configurator.stringCount = stringCount;   
+        Configurator.translator = new DefaultTranslator();        
+        var options = StringTrainerApplication.getURLName("options","").toLowerCase().split(";")
+        for (var op of options) {
+            if (op == "flip") { 
+                Configurator.isFlipped = !Configurator.isFlipped; 
+            }
+            if (op == "dulcimer") {
+                Configurator.translator = new DulcimerTranslator();
+                Configurator.isFlipped = !Configurator.isFlipped; 
+            }
+            if (op == "merlin") {
+                Configurator.translator = new MerlinTranslator();
+            }
+            if (op == "strumstick") {
+                Configurator.translator = new StrumstickTranslator();
+            }
+        }        
     }
 
     public static getStringCount(): number {

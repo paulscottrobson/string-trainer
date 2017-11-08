@@ -24,6 +24,24 @@ var Configurator = (function () {
             Configurator.stringMargin * 2 - Configurator.ledgeHeight -
             Configurator.scrollBarHeight;
         Configurator.stringCount = stringCount;
+        Configurator.translator = new DefaultTranslator();
+        var options = StringTrainerApplication.getURLName("options", "").toLowerCase().split(";");
+        for (var _i = 0, options_1 = options; _i < options_1.length; _i++) {
+            var op = options_1[_i];
+            if (op == "flip") {
+                Configurator.isFlipped = !Configurator.isFlipped;
+            }
+            if (op == "dulcimer") {
+                Configurator.translator = new DulcimerTranslator();
+                Configurator.isFlipped = !Configurator.isFlipped;
+            }
+            if (op == "merlin") {
+                Configurator.translator = new MerlinTranslator();
+            }
+            if (op == "strumstick") {
+                Configurator.translator = new StrumstickTranslator();
+            }
+        }
     };
     Configurator.getStringCount = function () {
         return Configurator.stringCount;
@@ -48,16 +66,22 @@ var MainState = (function (_super) {
         var musicJson = this.game.cache.getJSON("music");
         this.music = new Music(musicJson);
         Configurator.setup(this.game, this.music.getStringCount());
+        this.player = new MusicPlayer(this.game, this.music.getStringCount(), this.music.getTuning());
         var bgr = new Background(this.game);
         this.position = 0;
         this.renderManager = new RenderManager(this.game, this.music);
+        this.renderManager.addStrumEventHandler(this.player.strum, this.player);
     };
     MainState.prototype.destroy = function () {
         this.renderManager.destroy();
         this.music = this.renderManager = null;
     };
     MainState.prototype.update = function () {
-        this.position += 0.005;
+        var elapsed = this.game.time.elapsedMS;
+        elapsed = elapsed / 1000;
+        var bpms = this.music.getTempo() / 60;
+        this.position = this.position + bpms * elapsed
+            / this.music.getBeats();
         this.renderManager.moveTo(this.position);
     };
     MainState.VERSION = "0.01 02Nov17 Phaser-CE 2.8.7";
@@ -260,21 +284,17 @@ var BaseButton = (function (_super) {
             this.button.alpha = Math.max(0.3, 1 - (Configurator.xOrigin - x) / Configurator.barWidth);
         }
         if (x <= Configurator.xOrigin && x + this.button.width >= Configurator.xOrigin) {
-            var prop = (Configurator.xOrigin - x) / Configurator.barWidth * 100;
-            if (prop > 50) {
-                prop = 100 - prop;
-            }
-            this.button.y += Math.min(prop / 1.5, 7);
+            this.button.y += 8;
         }
         if (this.buttonText != null) {
             this.buttonText.x = x + this.button.width / 2;
-            this.buttonText.y = this.button.y - this.button.height / 2 + this.buttonText.height / 3;
+            this.buttonText.y = this.button.y - this.button.height / 2 + this.buttonText.height * 0.5;
             this.buttonText.alpha = this.button.alpha;
         }
     };
     BaseButton.prototype.label = function (lbl) {
         var size = Configurator.stringGap /
-            (Configurator.getStringCount() - 1) * 0.6;
+            (Configurator.getStringCount() - 1) * 0.5;
         if (this.button.width * 2 < this.button.height) {
             size = size * 0.7;
         }
@@ -309,7 +329,7 @@ var FingerButton = (function (_super) {
         _this.button.anchor.y = 0.5;
         _this.button.tint = FingerButton.getColour(fretting);
         _this.yPos = Configurator.getStringY(stringID);
-        _this.label(fretting.toString());
+        _this.label(Configurator.translator.convert(fretting));
         return _this;
     }
     FingerButton.prototype.loadButtonInfo = function () {
@@ -370,7 +390,6 @@ var RenderManager = (function () {
         this.ball.anchor.x = 0.5;
         this.ball.anchor.y = 1.0;
         this.ball.width = this.ball.height = Configurator.barWidth / 12;
-        this.moveTo(0);
     }
     RenderManager.prototype.destroy = function () {
         for (var _i = 0, _a = this.renderers; _i < _a.length; _i++) {
@@ -515,8 +534,8 @@ var Music = (function () {
     Music.prototype.getStringCount = function () {
         return this.stringCount;
     };
-    Music.prototype.getStringBaseNote = function (str) {
-        return this.stringBaseNote[str];
+    Music.prototype.getTuning = function () {
+        return this.stringBaseNote;
     };
     Music.prototype.getInformation = function (key) {
         return this.json[key.toLowerCase()];
@@ -584,6 +603,72 @@ var Strum = (function () {
     Strum.NOSTRUM = -1;
     return Strum;
 }());
+var MusicPlayer = (function () {
+    function MusicPlayer(game, channels, tuning) {
+        this.game = game;
+        this.sounds = [];
+        for (var n = 1; n <= MusicPlayer.noteCount; n++) {
+            this.sounds[n] = this.game.add.sound(n.toString());
+            this.sounds[n].allowMultiple = true;
+        }
+        this.baseNoteID = MusicPlayer.toNoteID(MusicPlayer.baseNote);
+        this.baseStringID = [];
+        for (var n = 0; n < tuning.length; n++) {
+            this.baseStringID[n] = MusicPlayer.toNoteID(tuning[n]) -
+                this.baseNoteID + 1;
+        }
+        this.channelSoundID = [];
+        for (var n = 0; n < channels; n++) {
+            this.channelSoundID[n] = null;
+        }
+    }
+    MusicPlayer.prototype.strum = function (isStart, strum) {
+        if (isStart) {
+            for (var n = 0; n < strum.getStringCount(); n++) {
+                var fret = strum.getStringFret(n);
+                if (fret != Strum.NOSTRUM) {
+                    this.soundOn(n, fret);
+                }
+            }
+        }
+    };
+    MusicPlayer.prototype.soundOn = function (channel, fret) {
+        this.soundOff(channel);
+        var note = this.baseStringID[channel] + fret;
+        this.channelSoundID[channel] = this.sounds[note].play();
+    };
+    MusicPlayer.prototype.silence = function () {
+        for (var n = 0; n < this.channelSoundID.length; n++) {
+            this.soundOff(n);
+        }
+    };
+    MusicPlayer.prototype.soundOff = function (channel) {
+        if (this.channelSoundID[channel] != null) {
+            this.channelSoundID[channel].stop();
+            this.channelSoundID[channel] = null;
+        }
+    };
+    MusicPlayer.preload = function (game, noteCount, baseNote) {
+        MusicPlayer.noteCount = noteCount;
+        MusicPlayer.baseNote = baseNote.toLowerCase();
+        for (var n = 1; n <= MusicPlayer.noteCount; n++) {
+            var ns = n.toString();
+            game.load.audio(ns, ["assets/sounds/" + ns + ".mp3",
+                "assets/sounds/" + ns + ".ogg"]);
+        }
+    };
+    MusicPlayer.toNoteID = function (str) {
+        var note = (parseInt(str.substr(str.length - 1), 10) - 1) * 12;
+        var st = MusicPlayer.noteConvert[str.substr(0, str.length - 1)];
+        return note + st;
+    };
+    MusicPlayer.noteConvert = {
+        "c": 0, "c#": 1, "d": 2, "d#": 3, "e": 4, "f": 5, "f#": 6, "g": 7, "g#": 8,
+        "a": 9, "a#": 10, "b": 11,
+        "db": 1, "eb": 3, "gb": 6, "ab": 8, "bb": 10
+    };
+    return MusicPlayer;
+}());
 window.onload = function () {
     var game = new StringTrainerApplication();
 };
@@ -648,7 +733,61 @@ var PreloadState = (function (_super) {
             var fontName = _a[_i];
             this.game.load.bitmapFont(fontName, "assets/fonts/" + fontName + ".png", "assets/fonts/" + fontName + ".fnt");
         }
+        MusicPlayer.preload(this.game, 48, "C3");
         this.game.load.onLoadComplete.add(function () { _this.game.state.start("Main", true, false, 1); }, this);
     };
     return PreloadState;
 }(Phaser.State));
+var DulcimerTranslator = (function () {
+    function DulcimerTranslator() {
+    }
+    DulcimerTranslator.prototype.convert = function (cOffset) {
+        return DefaultTranslator.convertDiatonic(cOffset, DulcimerTranslator.octave, 7);
+    };
+    DulcimerTranslator.octave = [
+        0, 0.1, 1, 1.1, 2, 3, 3.1, 4, 4.1, 5, 6, 6.5
+    ];
+    return DulcimerTranslator;
+}());
+var DefaultTranslator = (function () {
+    function DefaultTranslator() {
+    }
+    DefaultTranslator.prototype.convert = function (cOffset) {
+        return cOffset.toString();
+    };
+    DefaultTranslator.convertDiatonic = function (cOffset, noteMap, scalar) {
+        var octave = Math.floor(cOffset / 12);
+        cOffset = cOffset % 12;
+        var note = (octave * scalar + Math.floor(noteMap[cOffset])).toString();
+        var frac = noteMap[cOffset] - Math.floor(noteMap[cOffset]);
+        frac = Math.round(frac * 10);
+        if (frac == 1)
+            note = note + "^";
+        if (frac == 5)
+            note = note + "+";
+        return note;
+    };
+    return DefaultTranslator;
+}());
+var MerlinTranslator = (function () {
+    function MerlinTranslator() {
+    }
+    MerlinTranslator.prototype.convert = function (cOffset) {
+        return DefaultTranslator.convertDiatonic(cOffset, MerlinTranslator.octave, 7);
+    };
+    MerlinTranslator.octave = [
+        0, 0.1, 1, 1.1, 2, 3, 3.1, 4, 4.1, 5, 5.1, 6
+    ];
+    return MerlinTranslator;
+}());
+var StrumstickTranslator = (function () {
+    function StrumstickTranslator() {
+    }
+    StrumstickTranslator.prototype.convert = function (cOffset) {
+        return DefaultTranslator.convertDiatonic(cOffset, StrumstickTranslator.octave, 8);
+    };
+    StrumstickTranslator.octave = [
+        0, 0.1, 1, 1.1, 2, 3, 3.1, 4, 4.1, 5, 6, 7
+    ];
+    return StrumstickTranslator;
+}());

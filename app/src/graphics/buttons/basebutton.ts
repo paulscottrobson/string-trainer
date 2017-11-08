@@ -29,14 +29,12 @@ class BaseButton extends Phaser.Group implements IButton {
         }
         // Dip to the right
         if (x <= Configurator.xOrigin && x+this.button.width >= Configurator.xOrigin) {
-            var prop:number = (Configurator.xOrigin - x) / Configurator.barWidth * 100;
-            if (prop > 50) { prop = 100-prop; }
-            this.button.y += Math.min(prop/1.5,7);            
+            this.button.y += 8;
         }
         // Update button logo.
         if (this.buttonText != null) {
             this.buttonText.x = x+this.button.width / 2;
-            this.buttonText.y = this.button.y - this.button.height / 2 + this.buttonText.height / 3;
+            this.buttonText.y = this.button.y - this.button.height / 2 + this.buttonText.height * 0.5;
             this.buttonText.alpha = this.button.alpha;
         }
     }
@@ -49,7 +47,7 @@ class BaseButton extends Phaser.Group implements IButton {
      */
     label(lbl:string): void {
         var size:number = Configurator.stringGap / 
-                    (Configurator.getStringCount()-1) * 0.6;
+                    (Configurator.getStringCount()-1) * 0.5;
         // Makes the strums smaller text.
         if (this.button.width * 2 < this.button.height) {
             size = size * 0.7;

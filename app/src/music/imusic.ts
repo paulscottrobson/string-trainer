@@ -35,13 +35,13 @@ interface IMusic {
      */
     getStringCount():number;
     /**
-     * Get the base (e.g. unfretted) note of the given string
+     * Get the base (e.g. unfretted) notes of the string
      * 
      * @param {number} str 
-     * @returns {string} 
+     * @returns {string[]} 
      * @memberof IMusic
      */
-    getStringBaseNote(str:number):string;
+    getTuning():string[];
     /**
      * Access information key.
      * 

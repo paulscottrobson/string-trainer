@@ -35,6 +35,7 @@ class PreloadState extends Phaser.State {
                                                "assets/fonts/"+fontName+".fnt");
         }
 
+        MusicPlayer.preload(this.game,48,"C3");
         // Load metronome sounds
         //this.game.load.audio("metronome",["assets/sounds/metronome.mp3",
         //                                  "assets/sounds/metronome.ogg"]);        

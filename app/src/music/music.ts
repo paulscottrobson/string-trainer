@@ -64,8 +64,8 @@ class Music implements IMusic {
     getStringCount(): number {
         return this.stringCount;
     }
-    getStringBaseNote(str: number): string {
-        return this.stringBaseNote[str];
+    getTuning(): string[] {
+        return this.stringBaseNote;
     }
     getInformation(key: string): string {
         return this.json[key.toLowerCase()];
