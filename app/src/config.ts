@@ -114,8 +114,8 @@ class Configurator {
                 Configurator.scrollBarHeight;
         Configurator.stringCount = stringCount;   
         Configurator.modifier = new DefaultModifier();        
-        var options = StringTrainerApplication.getURLName("options","").toLowerCase().split(";")
-        for (var op of options) {
+        var options:string = StringTrainerApplication.getURLName("options","").toLowerCase();
+        for (var op of options.toLowerCase().split(";")) {
             if (op == "flip") { 
                 Configurator.isFlipped = !Configurator.isFlipped; 
             }
@@ -125,6 +125,9 @@ class Configurator {
             }
             if (op == "merlin") {
                 Configurator.modifier = new MerlinModifier();
+            }
+            if (op == "mandolin") {
+                Configurator.modifier = new MandolinModifier();
             }
             if (op == "strumstick") {
                 Configurator.modifier = new StrumstickModifier();

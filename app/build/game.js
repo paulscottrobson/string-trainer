@@ -25,9 +25,9 @@ var Configurator = (function () {
             Configurator.scrollBarHeight;
         Configurator.stringCount = stringCount;
         Configurator.modifier = new DefaultModifier();
-        var options = StringTrainerApplication.getURLName("options", "").toLowerCase().split(";");
-        for (var _i = 0, options_1 = options; _i < options_1.length; _i++) {
-            var op = options_1[_i];
+        var options = StringTrainerApplication.getURLName("options", "").toLowerCase();
+        for (var _i = 0, _a = options.toLowerCase().split(";"); _i < _a.length; _i++) {
+            var op = _a[_i];
             if (op == "flip") {
                 Configurator.isFlipped = !Configurator.isFlipped;
             }
@@ -37,6 +37,9 @@ var Configurator = (function () {
             }
             if (op == "merlin") {
                 Configurator.modifier = new MerlinModifier();
+            }
+            if (op == "mandolin") {
+                Configurator.modifier = new MandolinModifier();
             }
             if (op == "strumstick") {
                 Configurator.modifier = new StrumstickModifier();
@@ -68,6 +71,7 @@ var MainState = (function (_super) {
         Configurator.setup(this.game, this.music.getStringCount());
         this.player = new MusicPlayer(this.game, this.music.getStringCount(), this.music.getTuning());
         var bgr = new Background(this.game);
+        this.metronome = new Metronome(this.game, this.music);
         this.position = 0;
         this.renderManager = new RenderManager(this.game, this.music);
         this.renderManager.addStrumEventHandler(this.player.strum, this.player);
@@ -83,6 +87,7 @@ var MainState = (function (_super) {
         this.position = this.position + bpms * elapsed
             / this.music.getBeats();
         this.renderManager.moveTo(this.position);
+        this.metronome.moveTo(this.position);
     };
     MainState.VERSION = "0.01 02Nov17 Phaser-CE 2.8.7";
     return MainState;
@@ -492,6 +497,16 @@ var DulcimerModifier = (function (_super) {
     ];
     return DulcimerModifier;
 }(DefaultModifier));
+var MandolinModifier = (function (_super) {
+    __extends(MandolinModifier, _super);
+    function MandolinModifier() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    MandolinModifier.prototype.isDoubleString = function (str) {
+        return true;
+    };
+    return MandolinModifier;
+}(DefaultModifier));
 var MerlinModifier = (function (_super) {
     __extends(MerlinModifier, _super);
     function MerlinModifier() {
@@ -676,9 +691,32 @@ var Strum = (function () {
     Strum.NOSTRUM = -1;
     return Strum;
 }());
+var Metronome = (function () {
+    function Metronome(game, music) {
+        this.tick = game.add.audio("metronome");
+        this.lastBar = this.lastBeats = -1;
+        this.barCount = music.getBarCount();
+        this.beats = music.getBeats();
+        this.isOn = true;
+    }
+    Metronome.prototype.moveTo = function (pos) {
+        var bar = Math.floor(pos);
+        var beats = Math.floor((pos - bar) * this.beats);
+        if (bar != this.lastBar || beats != this.lastBeats) {
+            if (bar < this.barCount) {
+                this.lastBar = bar;
+                this.lastBeats = beats;
+                if (this.isOn)
+                    this.tick.play();
+            }
+        }
+    };
+    return Metronome;
+}());
 var MusicPlayer = (function () {
     function MusicPlayer(game, channels, tuning) {
         this.game = game;
+        this.isOn = true;
         this.sounds = [];
         for (var n = 1; n <= MusicPlayer.noteCount; n++) {
             this.sounds[n] = this.game.add.sound(n.toString());
@@ -708,7 +746,8 @@ var MusicPlayer = (function () {
     MusicPlayer.prototype.soundOn = function (channel, fret) {
         this.soundOff(channel);
         var note = this.baseStringID[channel] + fret;
-        this.channelSoundID[channel] = this.sounds[note].play();
+        if (this.isOn)
+            this.channelSoundID[channel] = this.sounds[note].play();
     };
     MusicPlayer.prototype.silence = function () {
         for (var n = 0; n < this.channelSoundID.length; n++) {
@@ -807,6 +846,8 @@ var PreloadState = (function (_super) {
             this.game.load.bitmapFont(fontName, "assets/fonts/" + fontName + ".png", "assets/fonts/" + fontName + ".fnt");
         }
         MusicPlayer.preload(this.game, 48, "C3");
+        this.game.load.audio("metronome", ["assets/sounds/metronome.mp3",
+            "assets/sounds/metronome.ogg"]);
         this.game.load.onLoadComplete.add(function () { _this.game.state.start("Main", true, false, 1); }, this);
     };
     return PreloadState;

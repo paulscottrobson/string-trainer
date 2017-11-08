@@ -6,6 +6,7 @@ class MainState extends Phaser.State {
 
     public music:IMusic;
     public player:MusicPlayer;
+    public metronome:Metronome;
     public position:number;
     public renderManager:IRenderManager;
 
@@ -20,11 +21,13 @@ class MainState extends Phaser.State {
                         this.music.getStringCount(),this.music.getTuning())
         // Set up the display
         var bgr:Background = new Background(this.game);
-
+        // Set up metronome.
+        this.metronome = new Metronome(this.game,this.music);
+        // Set up Render Manager
         this.position = 0;
         this.renderManager = new RenderManager(this.game,this.music);
         this.renderManager.addStrumEventHandler(this.player.strum,this.player);
-        //this.renderManager.addStrumEventHandler(this.play,this);
+
     }
     
     destroy() : void {
@@ -41,6 +44,8 @@ class MainState extends Phaser.State {
         var bpms:number = this.music.getTempo() / 60;
         this.position = this.position + bpms * elapsed 
                                         / this.music.getBeats();
+        // Update positions etc.                                        
         this.renderManager.moveTo(this.position);
+        this.metronome.moveTo(this.position);
     }
 }    

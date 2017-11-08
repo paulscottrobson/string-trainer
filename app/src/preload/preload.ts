@@ -34,11 +34,11 @@ class PreloadState extends Phaser.State {
             this.game.load.bitmapFont(fontName,"assets/fonts/"+fontName+".png",
                                                "assets/fonts/"+fontName+".fnt");
         }
-
+        // Load notes
         MusicPlayer.preload(this.game,48,"C3");
         // Load metronome sounds
-        //this.game.load.audio("metronome",["assets/sounds/metronome.mp3",
-        //                                  "assets/sounds/metronome.ogg"]);        
+        this.game.load.audio("metronome",["assets/sounds/metronome.mp3",
+                                          "assets/sounds/metronome.ogg"]);        
 
         // Switch to game state when load complete.        
         this.game.load.onLoadComplete.add(() => { this.game.state.start("Main",true,false,1); },this);

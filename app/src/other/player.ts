@@ -15,6 +15,7 @@ class MusicPlayer {
     private baseNoteID:number;
     private baseStringID:number[];
     private channelSoundID:Phaser.Sound[];
+    private isOn:boolean;
 
     /**
      * Creates the audio objects
@@ -23,6 +24,7 @@ class MusicPlayer {
      */
     constructor(game:Phaser.Game,channels:number,tuning:string[]) {
         this.game = game;
+        this.isOn = true;
         this.sounds = [];
         for (var n = 1;n <= MusicPlayer.noteCount;n++) {
             this.sounds[n] = this.game.add.sound(n.toString());
@@ -56,7 +58,7 @@ class MusicPlayer {
         this.soundOff(channel);
         var note:number = this.baseStringID[channel] + fret;
         //console.log(note);  
-        this.channelSoundID[channel] = this.sounds[note].play();
+        if (this.isOn) this.channelSoundID[channel] = this.sounds[note].play();
     }
     /**
      * All current sound off
