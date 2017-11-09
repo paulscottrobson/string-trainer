@@ -186,7 +186,7 @@ var Renderer = (function (_super) {
         for (var sn = 0; sn < this.bar.getStrumCount(); sn++) {
             this.buttons[sn] = [];
             var strum = this.bar.getStrum(sn);
-            var w = Configurator.barWidth / this.beats * (strum.getLength() / 4);
+            var w = Configurator.barWidth / this.beats * (strum.getLength() / 12);
             if (strum.isChord()) {
                 var btn;
                 var cn = this.bar.getMusic().getChordNumber(strum.getChordName());
@@ -209,7 +209,7 @@ var Renderer = (function (_super) {
         this.sineCurveHeight = [];
         for (var sn = 0; sn < this.bar.getStrumCount(); sn++) {
             var strum = this.bar.getStrum(sn);
-            var w = Configurator.barWidth / this.beats * (strum.getLength() / 4);
+            var w = Configurator.barWidth / this.beats * (strum.getLength() / 12);
             var name = this.getBestSineCurve(w);
             this.sineCurves[sn] = this.game.add.image(0, 0, "sprites", name, this);
             this.sineCurves[sn].width = w;
@@ -241,7 +241,7 @@ var Renderer = (function (_super) {
         }
         for (var sn = 0; sn < this.bar.getStrumCount(); sn++) {
             var strum = this.bar.getStrum(sn);
-            var x1 = x + strum.getStartTime() / 4 * Configurator.barWidth / this.beats;
+            var x1 = x + strum.getStartTime() / 12 * Configurator.barWidth / this.beats;
             for (var _i = 0, _a = this.buttons[sn]; _i < _a.length; _i++) {
                 var bt = _a[_i];
                 bt.moveTo(x1);
@@ -485,7 +485,7 @@ var RenderManager = (function () {
             x = x + Configurator.barWidth;
         }
         var newBar = Math.floor(bar);
-        var newBeat = Math.floor((bar - newBar) * 4 * this.music.getBeats());
+        var newBeat = Math.floor((bar - newBar) * 12 * this.music.getBeats());
         if (newBar != this.lastBar || newBeat != this.lastQuarterBeat) {
             this.lastBar = newBar;
             this.lastQuarterBeat = newBeat;
@@ -504,7 +504,7 @@ var RenderManager = (function () {
         }
         if (newBar < this.music.getBarCount()) {
             var sbar = this.music.getBar(newBar);
-            var fracBeat = (bar - newBar) * 4 * this.music.getBeats();
+            var fracBeat = (bar - newBar) * 12 * this.music.getBeats();
             for (var s = 0; s < sbar.getStrumCount(); s++) {
                 var strum = sbar.getStrum(s);
                 if (fracBeat >= strum.getStartTime() &&
@@ -608,19 +608,19 @@ var Bar = (function () {
         this.music = music;
         this.strums = [];
         var defs = def.split(";");
-        var qbTime = 0;
+        var twbTime = 0;
         for (var _i = 0, defs_1 = defs; _i < defs_1.length; _i++) {
             var d = defs_1[_i];
-            var s = new Strum(d, this, qbTime);
-            qbTime = s.getEndTime();
+            var s = new Strum(d, this, twbTime);
+            twbTime = s.getEndTime();
             this.strums.push(s);
         }
-        var remain = music.getBeats() * 4 - qbTime;
+        var remain = music.getBeats() * 12 - twbTime;
         if (remain > 0) {
             var rest = "--------".substring(0, music.getStringCount());
             var time = "00" + remain.toString();
             time = time.substring(time.length - 2);
-            var s = new Strum(rest + time, this, qbTime);
+            var s = new Strum(rest + time, this, twbTime);
             this.strums.push(s);
         }
     }
@@ -753,7 +753,7 @@ var Strum = (function () {
         return this.chordName;
     };
     Strum.prototype.isChordDownStrum = function () {
-        return (this.startTime % 4) < 2;
+        return (this.startTime % 12) < 6;
     };
     Strum.NOSTRUM = -1;
     return Strum;

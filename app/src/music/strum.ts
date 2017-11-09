@@ -21,7 +21,7 @@ class Strum implements IStrum {
      * 
      * @param {string} def definition in --ab(C7)08 format
      * @param {IBar} bar bar strum is in
-     * @param {number} startTime quartbeat start time.
+     * @param {number} startTime twelfthbeat start time.
      * @memberof Strum
      */
     constructor(def:string,bar:IBar,startTime:number) {
@@ -71,6 +71,6 @@ class Strum implements IStrum {
         return this.chordName;
     }
     isChordDownStrum():boolean {
-        return (this.startTime % 4) < 2
+        return (this.startTime % 12) < 6
     }    
 }

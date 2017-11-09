@@ -82,7 +82,7 @@ class Renderer extends Phaser.Group implements IRenderer {
         for (var sn:number = 0;sn < this.bar.getStrumCount();sn++) {
             this.buttons[sn] = [];
             var strum:IStrum = this.bar.getStrum(sn);
-            var w:number = Configurator.barWidth / this.beats * (strum.getLength() / 4);
+            var w:number = Configurator.barWidth / this.beats * (strum.getLength() / 12);
             if (strum.isChord()) {
                 var btn:IButton;
                 var cn:number = this.bar.getMusic().getChordNumber(strum.getChordName());
@@ -105,7 +105,7 @@ class Renderer extends Phaser.Group implements IRenderer {
         this.sineCurveHeight = [];
         for (var sn:number = 0;sn < this.bar.getStrumCount();sn++) {
             var strum:IStrum = this.bar.getStrum(sn);
-            var w:number = Configurator.barWidth / this.beats * (strum.getLength() / 4);
+            var w:number = Configurator.barWidth / this.beats * (strum.getLength() / 12);
             var name:string = this.getBestSineCurve(w);
             this.sineCurves[sn] = this.game.add.image(0,0,"sprites",name,this);
             this.sineCurves[sn].width = w;
@@ -151,7 +151,7 @@ class Renderer extends Phaser.Group implements IRenderer {
         // Buttons & curves
         for (var sn:number = 0;sn < this.bar.getStrumCount();sn++) {
             var strum:IStrum = this.bar.getStrum(sn);
-            var x1:number = x + strum.getStartTime()/4 * Configurator.barWidth / this.beats;
+            var x1:number = x + strum.getStartTime()/12 * Configurator.barWidth / this.beats;
             for (var bt of this.buttons[sn]) {
                 bt.moveTo(x1);
             }            

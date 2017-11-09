@@ -22,19 +22,19 @@ class Bar implements IBar {
         this.music = music;
         this.strums = [];
         var defs:string[] = def.split(";")
-        var qbTime:number = 0;
+        var twbTime:number = 0;
         for (var d of defs) {
-            var s:IStrum = new Strum(d,this,qbTime);
-            qbTime = s.getEndTime();
+            var s:IStrum = new Strum(d,this,twbTime);
+            twbTime = s.getEndTime();
             this.strums.push(s);
         }
         // Is a padding rest required ?
-        var remain:number = music.getBeats()*4 - qbTime;
+        var remain:number = music.getBeats()*12 - twbTime;
         if (remain > 0) {
             var rest:string = "--------".substring(0,music.getStringCount());
             var time:string = "00"+remain.toString();
             time = time.substring(time.length-2);
-            var s:IStrum = new Strum(rest+time,this,qbTime);
+            var s:IStrum = new Strum(rest+time,this,twbTime);
             this.strums.push(s);
         }
     }

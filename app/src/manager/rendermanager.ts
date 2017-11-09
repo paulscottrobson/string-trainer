@@ -46,7 +46,7 @@ class RenderManager implements IRenderManager {
         }
         // Work out if music event.
         var newBar:number = Math.floor(bar);
-        var newBeat:number = Math.floor((bar - newBar) * 4 * this.music.getBeats());
+        var newBeat:number = Math.floor((bar - newBar) * 12 * this.music.getBeats());
         if (newBar != this.lastBar || newBeat != this.lastQuarterBeat) {
             this.lastBar = newBar;
             this.lastQuarterBeat = newBeat;
@@ -65,7 +65,7 @@ class RenderManager implements IRenderManager {
         }
         if (newBar < this.music.getBarCount()) {
             var sbar:IBar = this.music.getBar(newBar);
-            var fracBeat = (bar-newBar) * 4 * this.music.getBeats();
+            var fracBeat = (bar-newBar) * 12 * this.music.getBeats();
             for (var s:number = 0;s < sbar.getStrumCount();s++) {
                 var strum:IStrum = sbar.getStrum(s);
                 if (fracBeat >= strum.getStartTime() &&

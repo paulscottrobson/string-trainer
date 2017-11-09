@@ -21,21 +21,21 @@ interface IStrum {
      */
     getStringCount():number;
     /**
-     * Get the start time in quarterbeats
+     * Get the start time in twelfthbeats
      * 
      * @returns {number} 
      * @memberof IStrum
      */
     getStartTime():number;
     /**
-     * Get the end time in quarterbeats
+     * Get the end time in twelfthbeats
      * 
      * @returns {number} 
      * @memberof IStrum
      */
     getEndTime():number;
     /**
-     * Get the length in quarterbeats
+     * Get the length in twelfthbeats
      * 
      * @returns {number} 
      * @memberof IStrum
