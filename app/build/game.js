@@ -75,6 +75,13 @@ var MainState = (function (_super) {
         this.position = 0;
         this.renderManager = new RenderManager(this.game, this.music);
         this.renderManager.addStrumEventHandler(this.player.strum, this.player);
+        var btn = new PushButton(this.game, "i_faster", ButtonMessage.SlowSpeed, this);
+        btn.x = btn.y = 70;
+        var btn2 = new ToggleButton(this.game, "i_music", ButtonMessage.FastSpeed, this);
+        btn2.x = btn2.y = 140;
+    };
+    MainState.prototype.click = function (msg, sender) {
+        console.log(msg, sender);
     };
     MainState.prototype.destroy = function () {
         this.renderManager.destroy();
@@ -386,6 +393,66 @@ var StrumButton = (function (_super) {
     }
     return StrumButton;
 }(BaseButton));
+var ButtonMessage;
+(function (ButtonMessage) {
+    ButtonMessage[ButtonMessage["NormalSpeed"] = 0] = "NormalSpeed";
+    ButtonMessage[ButtonMessage["FastSpeed"] = 1] = "FastSpeed";
+    ButtonMessage[ButtonMessage["SlowSpeed"] = 2] = "SlowSpeed";
+    ButtonMessage[ButtonMessage["Restart"] = 3] = "Restart";
+    ButtonMessage[ButtonMessage["RunMusic"] = 4] = "RunMusic";
+    ButtonMessage[ButtonMessage["MusicAudible"] = 5] = "MusicAudible";
+    ButtonMessage[ButtonMessage["MetronomeAudible"] = 6] = "MetronomeAudible";
+})(ButtonMessage || (ButtonMessage = {}));
+var PushButton = (function (_super) {
+    __extends(PushButton, _super);
+    function PushButton(game, image, identifier, listener, size) {
+        if (size === void 0) { size = 0; }
+        var _this = _super.call(this, game) || this;
+        if (size == 0) {
+            size = _this.game.width / 12;
+        }
+        var img = _this.game.add.image(0, 0, "sprites", "roundbutton", _this);
+        img.anchor.x = img.anchor.y = 0.5;
+        img.width = img.height = size;
+        img.inputEnabled = true;
+        img.events.onInputDown.add(_this.clickHandler, _this);
+        _this.buttonImage = _this.game.add.image(0, 0, "sprites", image, _this);
+        _this.buttonImage.anchor.x = _this.buttonImage.anchor.y = 0.5;
+        _this.buttonImage.width = _this.buttonImage.height = size * 0.7;
+        _this.listener = listener;
+        _this.message = identifier;
+        return _this;
+    }
+    PushButton.prototype.destroy = function () {
+        _super.prototype.destroy.call(this);
+        this.listener = this.buttonImage = null;
+    };
+    PushButton.prototype.clickHandler = function () {
+        this.listener.click(this.message, this);
+    };
+    return PushButton;
+}(Phaser.Group));
+var ToggleButton = (function (_super) {
+    __extends(ToggleButton, _super);
+    function ToggleButton(game, image, identifier, listener, size) {
+        if (size === void 0) { size = 0; }
+        var _this = _super.call(this, game, image + "_off", identifier, listener, size) || this;
+        _this.baseImage = image;
+        _this.isOn = true;
+        return _this;
+    }
+    ToggleButton.prototype.clickHandler = function () {
+        _super.prototype.clickHandler.call(this);
+        this.isOn = !this.isOn;
+        var w = this.buttonImage.width;
+        this.buttonImage.loadTexture("sprites", this.baseImage + ((this.isOn) ? "_off" : "_on"));
+        this.buttonImage.width = this.buttonImage.height = w;
+    };
+    ToggleButton.prototype.isButtonOn = function () {
+        return this.isOn;
+    };
+    return ToggleButton;
+}(PushButton));
 var RenderManager = (function () {
     function RenderManager(game, music) {
         this.music = music;

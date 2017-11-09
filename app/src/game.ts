@@ -1,6 +1,6 @@
 /// <reference path="../lib/phaser.comments.d.ts"/>
 
-class MainState extends Phaser.State {
+class MainState extends Phaser.State implements IButtonListener {
 
     private static VERSION:string="0.01 02Nov17 Phaser-CE 2.8.7";
 
@@ -28,8 +28,17 @@ class MainState extends Phaser.State {
         this.renderManager = new RenderManager(this.game,this.music);
         this.renderManager.addStrumEventHandler(this.player.strum,this.player);
 
+        var btn:PushButton = new PushButton(this.game,"i_faster",
+                ButtonMessage.SlowSpeed,this);
+        btn.x = btn.y = 70;        
+        var btn2:ToggleButton = new ToggleButton(this.game,"i_music",
+        ButtonMessage.FastSpeed,this);
+        btn2.x = btn2.y = 140;                
     }
     
+    click(msg:ButtonMessage,sender:any):void {
+        console.log(msg,sender);
+    }
     destroy() : void {
         this.renderManager.destroy();
         this.music = this.renderManager = null;
