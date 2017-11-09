@@ -16,7 +16,7 @@ class FingerButton extends BaseButton implements IButton {
         if (FingerButton.buttonInfo == null) {
             this.loadButtonInfo();
         }
-        var reqHeight:number = Configurator.stringGap/(Configurator.getStringCount()-1) * 0.98;
+        var reqHeight:number = Configurator.stringGap/(Configurator.getStringCount()-1) * 0.95;
         var gName:string = this.identifyGraphics(pixWidth);
         this.button = this.game.add.image(0,0,"sprites",gName,this);
         this.button.width = pixWidth;this.button.height = reqHeight;

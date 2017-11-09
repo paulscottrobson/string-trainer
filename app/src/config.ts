@@ -100,7 +100,7 @@ class Configurator {
      */
     public static modifier:IModifiers
 
-    public static setup(game:Phaser.Game,stringCount:number) : void {
+    public static setup(game:Phaser.Game,stringCount:number,musicOptions:string) : void {
         Configurator.stringGap = game.height / 3.5;
         Configurator.stringMargin = game.height / 16;
         Configurator.ledgeHeight = game.height / 20;
@@ -115,6 +115,7 @@ class Configurator {
         Configurator.stringCount = stringCount;   
         Configurator.modifier = new DefaultModifier();        
         var options:string = StringTrainerApplication.getURLName("options","").toLowerCase();
+        options = musicOptions + ";" + options
         for (var op of options.toLowerCase().split(";")) {
             if (op == "flip") { 
                 Configurator.isFlipped = !Configurator.isFlipped; 

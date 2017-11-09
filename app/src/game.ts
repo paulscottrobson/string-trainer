@@ -15,7 +15,8 @@ class MainState extends Phaser.State implements IButtonListener {
         var musicJson:any = this.game.cache.getJSON("music");
         this.music = new Music(musicJson);
         // Create configuration
-        Configurator.setup(this.game,this.music.getStringCount());
+        Configurator.setup(this.game,this.music.getStringCount(),
+                this.music.getInformation("options"));
         // Create player
         this.player = new MusicPlayer(this.game,
                         this.music.getStringCount(),this.music.getTuning())

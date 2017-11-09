@@ -4,7 +4,7 @@
 from PIL import Image,ImageDraw
 import math
 
-widthGroup = [ 30,60,90,120,150 ]
+widthGroup = [ 30,60,90,120,150,200,250,300 ]
 xOrigin = 200
 yOrigin = 200
 
@@ -13,7 +13,7 @@ for width in widthGroup:
 		draw = ImageDraw.Draw(im)
 		points = [x for x in range(0,width,7)]
 		points.append(width)
-		height = width
+		height = min(width,150)
 
 		for p in points:
 			x = xOrigin + p 

@@ -11,7 +11,7 @@ var __extends = (this && this.__extends) || (function () {
 var Configurator = (function () {
     function Configurator() {
     }
-    Configurator.setup = function (game, stringCount) {
+    Configurator.setup = function (game, stringCount, musicOptions) {
         Configurator.stringGap = game.height / 3.5;
         Configurator.stringMargin = game.height / 16;
         Configurator.ledgeHeight = game.height / 20;
@@ -26,6 +26,7 @@ var Configurator = (function () {
         Configurator.stringCount = stringCount;
         Configurator.modifier = new DefaultModifier();
         var options = StringTrainerApplication.getURLName("options", "").toLowerCase();
+        options = musicOptions + ";" + options;
         for (var _i = 0, _a = options.toLowerCase().split(";"); _i < _a.length; _i++) {
             var op = _a[_i];
             if (op == "flip") {
@@ -68,7 +69,7 @@ var MainState = (function (_super) {
     MainState.prototype.create = function () {
         var musicJson = this.game.cache.getJSON("music");
         this.music = new Music(musicJson);
-        Configurator.setup(this.game, this.music.getStringCount());
+        Configurator.setup(this.game, this.music.getStringCount(), this.music.getInformation("options"));
         this.player = new MusicPlayer(this.game, this.music.getStringCount(), this.music.getTuning());
         var bgr = new Background(this.game);
         this.metronome = new Metronome(this.game, this.music);
@@ -337,7 +338,7 @@ var FingerButton = (function (_super) {
         if (FingerButton.buttonInfo == null) {
             _this.loadButtonInfo();
         }
-        var reqHeight = Configurator.stringGap / (Configurator.getStringCount() - 1) * 0.98;
+        var reqHeight = Configurator.stringGap / (Configurator.getStringCount() - 1) * 0.95;
         var gName = _this.identifyGraphics(pixWidth);
         _this.button = _this.game.add.image(0, 0, "sprites", gName, _this);
         _this.button.width = pixWidth;
