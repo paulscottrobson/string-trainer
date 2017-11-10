@@ -9,11 +9,11 @@ beats := 3
 
 // tuning := c3,g3,c4 you can override the tuning like this. Merlin default is d3,a3,d4
 
-//	& is a rest, fretting is low to high, not required to put in all notes, so 1 is top string
-//	1x middle and 1xx bottom, they are equivalent to xx1 x1x and 1xx respectively.
+//	& is a rest, fretting is high to low, not required to put in all notes, so 1 is top string
+//	x1 middle and xx1 bottom, they are equivalent to xx1 x1x and xx1 respectively.
 //
 //	lengths are beats, - converts to half beat, = converts to quarter beat, . increases by 50%
 //
-& & 0x- 0x- |1x 0x 0 | 2xo 0x- 0x-
-1x 0x 1 | 0o 0x- 0x- | 4 2 0
-2x 1x 3- 3- | 2 0 1 | 000oo
+& & x0- x0- |x1 x0 0 | x2o x0- x0-
+x1 x0 1 | 0o x0- x0- | 4 2 0
+x2 x1 3- 3- | 2 0 1 | 000oo

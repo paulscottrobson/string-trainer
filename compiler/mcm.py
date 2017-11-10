@@ -30,7 +30,7 @@ class Strum:
 		# rests to x
 		strumDef = "x" if strumDef == "&" else strumDef
 		# validate format
-		m = re.match("^([0-7x]+)([o\.\-\=]*)$",strumDef)
+		m = re.match("^(["+Strum.fretID+"x]+)([o\.\-\=]*)$",strumDef)
 		if m is None:
 			raise CompilerException("Unknown strum '"+strumDef+"'")
 		# convert
@@ -40,8 +40,9 @@ class Strum:
 
 	def createStrums(self,strums):
 		# pad with x
-		strums = ("xxxxxxx"+strums)[-self.compiler.getStringCount():]
-		strums = [None if x == "x" else int(x) for x in strums]
+		strums = (strums+"xxxxxxx")[:self.compiler.getStringCount()]
+		strums = [None if x == "x" else Strum.fretID.find(x) for x in strums]
+		strums.reverse()
 		return strums
 
 	def getLength(self):
@@ -67,6 +68,9 @@ class Strum:
 
 	def fretRender(self,s):
 		return "-" if s is None else chr(self.compiler.mapFret(s)+97)
+
+Strum.fretID = "0123456789tlwhuisv"				# represent frets 0-17
+
 
 # ****************************************************************************************
 #									  Bar object
@@ -164,7 +168,21 @@ class MerlinCompiler(BaseCompiler):
 		self.infoKeys = { "string0": "d3", "string1":"a3","string2":"d4", \
 						  "beats":"4","tempo":"100","composer":"unknown", \
 						  "version":"1","capo":"0","options":"merlin" }		
+
 MerlinCompiler.fretMapping = [	0, 	2,	4,	5,	7,	9,	11,	12 ]
 #								D 	E 	F# 	G 	A 	B 	C# 	D
 
+class UkuleleCompiler(BaseCompiler):
+	def getStringCount(self):
+		return 4
+	def mapFret(self,fret):
+		return fret
+	def defaultKeys(self):
+		# set up default keys.
+		self.infoKeys = { "string0": "g4", "string1":"c4","string2":"e4","string3":"a4",
+						  "beats":"4","tempo":"100","composer":"unknown", \
+						  "version":"1","capo":"0","options":"ukulele" }		
+
+
 c = MerlinCompiler("./happy_birthday.merlin","../app/music.json")
+c = UkuleleCompiler("./test.ukulele","../app/music.json")
