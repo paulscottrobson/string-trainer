@@ -73,7 +73,7 @@ class RenderManager implements IRenderManager {
                         var prop:number = (fracBeat - strum.getStartTime()) / strum.getLength();
                         prop = Math.sin(prop * Math.PI);
                         prop = prop * this.renderers[newBar].getSineCurveHeight(s);
-                        this.ball.y = Configurator.yTop - prop;
+                        this.ball.y = Configurator.yTop - prop - 4;
                     }
             }
         } else {

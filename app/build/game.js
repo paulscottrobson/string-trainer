@@ -487,10 +487,10 @@ var ControlPanel = (function (_super) {
     return ControlPanel;
 }(Phaser.Group));
 var DraggableSphere = (function () {
-    function DraggableSphere(game, owner, xStart, yStart, colour) {
+    function DraggableSphere(game, owner, xStart, yStart, colour, reduce) {
         this.sphere = game.add.image(xStart, yStart, "sprites", "sphere_" + colour, owner);
         this.sphere.anchor.x = this.sphere.anchor.y = 0.5;
-        this.sphere.height = this.sphere.width = 80;
+        this.sphere.height = this.sphere.width = 80 + reduce;
         this.sphere.inputEnabled = true;
         this.sphere.input.enableDrag();
         this.sphere.input.setDragLock(true, false);
@@ -529,9 +529,9 @@ var PositionBar = (function (_super) {
         _this.yPos = y;
         _this.music = music;
         _this.spheres = [];
-        _this.spheres.push(new DraggableSphere(game, _this, xLeft, y, "red"));
-        _this.spheres.push(new DraggableSphere(game, _this, xRight, y, "green"));
-        _this.spheres.push(new DraggableSphere(game, _this, (xLeft + xRight) / 2, y, "yellow"));
+        _this.spheres.push(new DraggableSphere(game, _this, xLeft, y, "red", 0));
+        _this.spheres.push(new DraggableSphere(game, _this, xRight, y, "green", 0));
+        _this.spheres.push(new DraggableSphere(game, _this, (xLeft + xRight) / 2, y, "yellow", -16));
         for (var _i = 0, _a = _this.spheres; _i < _a.length; _i++) {
             var sphere = _a[_i];
             sphere.setBounds(xLeft, xRight, y);
@@ -684,7 +684,7 @@ var RenderManager = (function () {
                     var prop = (fracBeat - strum.getStartTime()) / strum.getLength();
                     prop = Math.sin(prop * Math.PI);
                     prop = prop * this.renderers[newBar].getSineCurveHeight(s);
-                    this.ball.y = Configurator.yTop - prop;
+                    this.ball.y = Configurator.yTop - prop - 4;
                 }
             }
         }

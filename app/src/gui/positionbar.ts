@@ -9,10 +9,10 @@ class DraggableSphere {
 
     private sphere:Phaser.Image;
     
-    constructor (game:Phaser.Game,owner:PositionBar,xStart:number,yStart:number,colour:string) {
+    constructor (game:Phaser.Game,owner:PositionBar,xStart:number,yStart:number,colour:string,reduce:number) {
         this.sphere = game.add.image(xStart,yStart,"sprites","sphere_"+colour,owner);
         this.sphere.anchor.x = this.sphere.anchor.y = 0.5;
-        this.sphere.height = this.sphere.width = 80;
+        this.sphere.height = this.sphere.width = 80+reduce;
         this.sphere.inputEnabled = true;
         this.sphere.input.enableDrag();
         this.sphere.input.setDragLock(true,false);
@@ -65,9 +65,9 @@ class PositionBar extends Phaser.Group implements IPositionBar {
         this.xLeft = xLeft;this.xRight = xRight;this.yPos = y;this.music = music;
         // Create spheres
         this.spheres = [];
-        this.spheres.push(new DraggableSphere(game,this,xLeft,y,"red"));
-        this.spheres.push(new DraggableSphere(game,this,xRight,y,"green"));
-        this.spheres.push(new DraggableSphere(game,this,(xLeft+xRight)/2,y,"yellow"));
+        this.spheres.push(new DraggableSphere(game,this,xLeft,y,"red",0));
+        this.spheres.push(new DraggableSphere(game,this,xRight,y,"green",0));
+        this.spheres.push(new DraggableSphere(game,this,(xLeft+xRight)/2,y,"yellow",-16));
         // Set sphere boundaries
         for (var sphere of this.spheres) {
             sphere.setBounds(xLeft,xRight,y);            
