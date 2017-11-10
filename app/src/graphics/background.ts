@@ -27,6 +27,12 @@ class Background extends Phaser.Group {
         ledge.height = Configurator.ledgeHeight;
         ledge.tint = 0x282828;
         
+        var info:Phaser.BitmapText = 
+            game.add.bitmapText(this.game.width/2,this.game.height,
+                                            "font",MainState.VERSION,24,this);
+        info.anchor.x = 0.5;info.anchor.y = 1.0;                       
+        info.tint = 0;                         
+
         for (var n:number = 0;n < Configurator.getStringCount();n++) {
             var isDouble:boolean = Configurator.modifier.isDoubleString(n);
             var gr:string = isDouble ? "dstring":"string";

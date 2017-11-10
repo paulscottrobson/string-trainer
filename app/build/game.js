@@ -19,7 +19,7 @@ var Configurator = (function () {
         Configurator.isFlipped = false;
         Configurator.xOrigin = Math.round(game.width * 0.22);
         Configurator.bounceHeightScale = 1;
-        Configurator.scrollBarHeight = game.height / 10;
+        Configurator.scrollBarHeight = game.height / 10 + 16;
         Configurator.yTop = game.height - Configurator.stringGap -
             Configurator.stringMargin * 2 - Configurator.ledgeHeight -
             Configurator.scrollBarHeight;
@@ -78,6 +78,8 @@ var MainState = (function (_super) {
         this.renderManager.addStrumEventHandler(this.player.strum, this.player);
         this.cpanel = new ControlPanel(this.game);
         this.cpanel.addSignalListener(this.buttonClicked, this);
+        var y = this.game.height - Configurator.scrollBarHeight / 2;
+        this.posBar = new PositionBar(this.game, this.music, 64, this.game.width - 64, y);
     };
     MainState.prototype.buttonClicked = function (msg) {
         if (msg == ButtonMessage.Restart) {
@@ -96,12 +98,13 @@ var MainState = (function (_super) {
         var bpms = this.music.getTempo() / 60;
         this.position = this.position + bpms * elapsed
             / this.music.getBeats();
+        this.position = this.posBar.updatePosition(this.position);
         this.renderManager.moveTo(this.position);
         this.metronome.moveTo(this.position);
         this.metronome.setAudible(this.cpanel.isMetronomeOn());
         this.player.setAudible(this.cpanel.isMusicOn());
     };
-    MainState.VERSION = "0.01 02Nov17 Phaser-CE 2.8.7";
+    MainState.VERSION = "0.90 10-Nov-17 Phaser-CE 2.8.7 (c) PSR 2017";
     return MainState;
 }(Phaser.State));
 var Background = (function (_super) {
@@ -119,6 +122,10 @@ var Background = (function (_super) {
         ledge.width = _this.game.width;
         ledge.height = Configurator.ledgeHeight;
         ledge.tint = 0x282828;
+        var info = game.add.bitmapText(_this.game.width / 2, _this.game.height, "font", MainState.VERSION, 24, _this);
+        info.anchor.x = 0.5;
+        info.anchor.y = 1.0;
+        info.tint = 0;
         for (var n = 0; n < Configurator.getStringCount(); n++) {
             var isDouble = Configurator.modifier.isDoubleString(n);
             var gr = isDouble ? "dstring" : "string";
@@ -478,6 +485,86 @@ var ControlPanel = (function (_super) {
         return this.musicOn;
     };
     return ControlPanel;
+}(Phaser.Group));
+var DraggableSphere = (function () {
+    function DraggableSphere(game, owner, xStart, yStart, colour) {
+        this.sphere = game.add.image(xStart, yStart, "sprites", "sphere_" + colour, owner);
+        this.sphere.anchor.x = this.sphere.anchor.y = 0.5;
+        this.sphere.height = this.sphere.width = 80;
+        this.sphere.inputEnabled = true;
+        this.sphere.input.enableDrag();
+        this.sphere.input.setDragLock(true, false);
+        this.sphere.events.onDragStop.add(owner.updatePositionsOnDrop, owner);
+    }
+    DraggableSphere.prototype.setBounds = function (xStart, xEnd, y) {
+        this.sphere.input.boundsRect = new Phaser.Rectangle(xStart, y - 100, xEnd - xStart, y + 100);
+    };
+    DraggableSphere.prototype.moveTo = function (x, y) {
+        this.sphere.x = x;
+        this.sphere.y = y;
+    };
+    DraggableSphere.prototype.destroy = function () {
+        this.sphere.destroy();
+        this.sphere = null;
+    };
+    DraggableSphere.prototype.getX = function () {
+        return this.sphere.x;
+    };
+    DraggableSphere.prototype.isDragging = function () {
+        return this.sphere.input.isDragged;
+    };
+    return DraggableSphere;
+}());
+var PositionBar = (function (_super) {
+    __extends(PositionBar, _super);
+    function PositionBar(game, music, xLeft, xRight, y) {
+        var _this = _super.call(this, game) || this;
+        var bar = _this.game.add.image(xLeft, y, "sprites", "rectangle", _this);
+        bar.width = xRight - xLeft;
+        bar.height = 16;
+        bar.tint = 0x0000;
+        bar.anchor.y = 0.5;
+        _this.xLeft = xLeft;
+        _this.xRight = xRight;
+        _this.yPos = y;
+        _this.music = music;
+        _this.spheres = [];
+        _this.spheres.push(new DraggableSphere(game, _this, xLeft, y, "red"));
+        _this.spheres.push(new DraggableSphere(game, _this, xRight, y, "green"));
+        _this.spheres.push(new DraggableSphere(game, _this, (xLeft + xRight) / 2, y, "yellow"));
+        for (var _i = 0, _a = _this.spheres; _i < _a.length; _i++) {
+            var sphere = _a[_i];
+            sphere.setBounds(xLeft, xRight, y);
+        }
+        return _this;
+    }
+    PositionBar.prototype.updatePosition = function (barFractionalPosition) {
+        if (!this.spheres[2].isDragging()) {
+            var frac = barFractionalPosition / this.music.getBarCount();
+            frac = Math.min(1, frac);
+            this.spheres[2].moveTo(this.xLeft + (this.xRight - this.xLeft) * frac, this.yPos);
+        }
+        var xPos = this.spheres[2].getX();
+        xPos = Math.max(xPos, this.spheres[0].getX());
+        if (xPos > this.spheres[1].getX())
+            xPos = this.spheres[0].getX();
+        barFractionalPosition = this.music.getBarCount() *
+            (xPos - this.xLeft) / (this.xRight - this.xLeft);
+        return barFractionalPosition;
+    };
+    PositionBar.prototype.updatePositionsOnDrop = function () {
+        if (this.spheres[0].getX() + 50 >= this.spheres[1].getX()) {
+            this.spheres[0].moveTo(Math.max(this.spheres[1].getX() - 50, 0), this.yPos);
+        }
+    };
+    PositionBar.prototype.destroy = function () {
+        for (var _i = 0, _a = this.spheres; _i < _a.length; _i++) {
+            var ds = _a[_i];
+            ds.destroy();
+        }
+        _super.prototype.destroy.call(this);
+    };
+    return PositionBar;
 }(Phaser.Group));
 var PushButton = (function (_super) {
     __extends(PushButton, _super);

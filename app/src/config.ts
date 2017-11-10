@@ -108,7 +108,7 @@ class Configurator {
         Configurator.isFlipped = false;
         Configurator.xOrigin = Math.round(game.width * 0.22);
         Configurator.bounceHeightScale = 1;
-        Configurator.scrollBarHeight = game.height / 10;
+        Configurator.scrollBarHeight = game.height / 10 + 16;
         Configurator.yTop = game.height - Configurator.stringGap - 
                 Configurator.stringMargin * 2 - Configurator.ledgeHeight -
                 Configurator.scrollBarHeight;

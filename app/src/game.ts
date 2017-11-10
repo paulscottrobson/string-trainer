@@ -2,7 +2,7 @@
 
 class MainState extends Phaser.State {
 
-    private static VERSION:string="0.01 02Nov17 Phaser-CE 2.8.7";
+    public static VERSION:string="0.90 10-Nov-17 Phaser-CE 2.8.7 (c) PSR 2017";
 
     public music:IMusic;
     public player:MusicPlayer;
@@ -10,6 +10,7 @@ class MainState extends Phaser.State {
     private cpanel:IControlPanel;
     public position:number;
     public renderManager:IRenderManager;
+    public posBar:IPositionBar;
 
     create() {
         // Create music object
@@ -32,6 +33,9 @@ class MainState extends Phaser.State {
         // Set up control panel
         this.cpanel = new ControlPanel(this.game);
         this.cpanel.addSignalListener(this.buttonClicked,this);
+        // Set up position bar.
+        var y = this.game.height - Configurator.scrollBarHeight/2;
+        this.posBar = new PositionBar(this.game,this.music,64,this.game.width-64,y);
     }
     
     buttonClicked(msg:ButtonMessage):void {
@@ -57,6 +61,8 @@ class MainState extends Phaser.State {
         var bpms:number = this.music.getTempo() / 60;
         this.position = this.position + bpms * elapsed 
                                         / this.music.getBeats();
+        // Update scrolly bar thing.                                        
+        this.position = this.posBar.updatePosition(this.position);                                            
         // Update positions etc.                                        
         this.renderManager.moveTo(this.position);
         this.metronome.moveTo(this.position);
