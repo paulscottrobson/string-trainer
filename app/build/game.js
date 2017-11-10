@@ -76,13 +76,14 @@ var MainState = (function (_super) {
         this.position = 0;
         this.renderManager = new RenderManager(this.game, this.music);
         this.renderManager.addStrumEventHandler(this.player.strum, this.player);
-        var btn = new PushButton(this.game, "i_faster", ButtonMessage.SlowSpeed, this);
-        btn.x = btn.y = 70;
-        var btn2 = new ToggleButton(this.game, "i_music", ButtonMessage.FastSpeed, this);
-        btn2.x = btn2.y = 140;
+        this.cpanel = new ControlPanel(this.game);
+        this.cpanel.addSignalListener(this.buttonClicked, this);
     };
-    MainState.prototype.click = function (msg, sender) {
-        console.log(msg, sender);
+    MainState.prototype.buttonClicked = function (msg) {
+        if (msg == ButtonMessage.Restart) {
+            this.position = 0;
+            this.renderManager.moveTo(0);
+        }
     };
     MainState.prototype.destroy = function () {
         this.renderManager.destroy();
@@ -91,11 +92,14 @@ var MainState = (function (_super) {
     MainState.prototype.update = function () {
         var elapsed = this.game.time.elapsedMS;
         elapsed = elapsed / 1000;
+        elapsed = elapsed * this.cpanel.getSpeedScalar();
         var bpms = this.music.getTempo() / 60;
         this.position = this.position + bpms * elapsed
             / this.music.getBeats();
         this.renderManager.moveTo(this.position);
         this.metronome.moveTo(this.position);
+        this.metronome.setAudible(this.cpanel.isMetronomeOn());
+        this.player.setAudible(this.cpanel.isMusicOn());
     };
     MainState.VERSION = "0.01 02Nov17 Phaser-CE 2.8.7";
     return MainState;
@@ -193,6 +197,7 @@ var Renderer = (function (_super) {
                 var cn = this.bar.getMusic().getChordNumber(strum.getChordName());
                 btn = new StrumButton(this.game, w - 2, strum.getChordName(), strum.isChordDownStrum(), cn);
                 this.buttons[sn].push(btn);
+                this.add(btn);
             }
             else {
                 var sCount = this.bar.getMusic().getStringCount();
@@ -201,6 +206,7 @@ var Renderer = (function (_super) {
                     if (fretPos != Strum.NOSTRUM) {
                         var btn;
                         btn = new FingerButton(this.game, strn, fretPos, w);
+                        this.add(btn);
                         this.buttons[sn].push(btn);
                     }
                 }
@@ -255,7 +261,7 @@ var Renderer = (function (_super) {
         if (!this.isRendered)
             return;
         this.isRendered = false;
-        this.removeChildren();
+        this.removeAll(true);
         this.sineCurves = this.buttons = this.beatLines = null;
         this.sineCurveHeight = this.debugRect = null;
     };
@@ -404,6 +410,75 @@ var ButtonMessage;
     ButtonMessage[ButtonMessage["MusicAudible"] = 5] = "MusicAudible";
     ButtonMessage[ButtonMessage["MetronomeAudible"] = 6] = "MetronomeAudible";
 })(ButtonMessage || (ButtonMessage = {}));
+var ControlPanel = (function (_super) {
+    __extends(ControlPanel, _super);
+    function ControlPanel(game) {
+        var _this = _super.call(this, game) || this;
+        _this.speedScalar = 1;
+        _this.isPaused = false;
+        _this.musicOn = true;
+        _this.metronomeOn = true;
+        _this.buttonCount = 0;
+        _this.signal = new Phaser.Signal();
+        _this.size = _this.game.width / 12;
+        _this.addButton("i_slower", ButtonMessage.SlowSpeed, false);
+        _this.addButton("i_normal", ButtonMessage.NormalSpeed, false);
+        _this.addButton("i_faster", ButtonMessage.FastSpeed, false);
+        _this.addButton("i_restart", ButtonMessage.Restart, false);
+        _this.addButton("i_music", ButtonMessage.MusicAudible, true);
+        _this.addButton("i_metronome", ButtonMessage.MetronomeAudible, true);
+        _this.addButton("i_play", ButtonMessage.RunMusic, true);
+        return _this;
+    }
+    ControlPanel.prototype.addButton = function (base, msg, isToggle) {
+        var btn;
+        if (isToggle) {
+            btn = new ToggleButton(this.game, base, msg, this, this.size);
+        }
+        else {
+            btn = new PushButton(this.game, base, msg, this, this.size);
+        }
+        btn.x = this.game.width / 2 + (this.buttonCount - 3) * 1.1 * btn.width;
+        btn.y = btn.height * 0.6;
+        this.buttonCount++;
+    };
+    ControlPanel.prototype.addSignalListener = function (func, target) {
+        this.signal.add(func, target);
+    };
+    ControlPanel.prototype.clickButton = function (msg, sender) {
+        this.signal.dispatch(msg);
+        switch (msg) {
+            case ButtonMessage.RunMusic:
+                this.isPaused = !this.isPaused;
+                break;
+            case ButtonMessage.FastSpeed:
+                this.speedScalar = this.speedScalar * 1.1;
+                break;
+            case ButtonMessage.SlowSpeed:
+                this.speedScalar = this.speedScalar / 1.1;
+                break;
+            case ButtonMessage.NormalSpeed:
+                this.speedScalar = 1;
+                break;
+            case ButtonMessage.MetronomeAudible:
+                this.metronomeOn = !this.metronomeOn;
+                break;
+            case ButtonMessage.MusicAudible:
+                this.musicOn = !this.musicOn;
+                break;
+        }
+    };
+    ControlPanel.prototype.getSpeedScalar = function () {
+        return this.isPaused ? 0 : this.speedScalar;
+    };
+    ControlPanel.prototype.isMetronomeOn = function () {
+        return this.metronomeOn;
+    };
+    ControlPanel.prototype.isMusicOn = function () {
+        return this.musicOn;
+    };
+    return ControlPanel;
+}(Phaser.Group));
 var PushButton = (function (_super) {
     __extends(PushButton, _super);
     function PushButton(game, image, identifier, listener, size) {
@@ -422,6 +497,7 @@ var PushButton = (function (_super) {
         _this.buttonImage.width = _this.buttonImage.height = size * 0.7;
         _this.listener = listener;
         _this.message = identifier;
+        _this.tween = null;
         return _this;
     }
     PushButton.prototype.destroy = function () {
@@ -429,7 +505,15 @@ var PushButton = (function (_super) {
         this.listener = this.buttonImage = null;
     };
     PushButton.prototype.clickHandler = function () {
-        this.listener.click(this.message, this);
+        this.listener.clickButton(this.message, this);
+        if (this.tween == null) {
+            var tweenInfo = { width: this.width - 10, height: this.height - 10 };
+            this.tween = this.game.add.tween(this).to(tweenInfo, 150, Phaser.Easing.Default, true, 0, 0, true);
+            this.tween.onComplete.add(this.tweenOver, this);
+        }
+    };
+    PushButton.prototype.tweenOver = function () {
+        this.tween = null;
     };
     return PushButton;
 }(Phaser.Group));
@@ -467,7 +551,7 @@ var RenderManager = (function () {
         this.ball = game.add.image(Configurator.xOrigin, Configurator.yTop, "sprites", "sphere_red");
         this.ball.anchor.x = 0.5;
         this.ball.anchor.y = 1.0;
-        this.ball.width = this.ball.height = Configurator.barWidth / 12;
+        this.ball.width = this.ball.height = Configurator.barWidth / 10;
     }
     RenderManager.prototype.destroy = function () {
         for (var _i = 0, _a = this.renderers; _i < _a.length; _i++) {
@@ -779,6 +863,9 @@ var Metronome = (function () {
             }
         }
     };
+    Metronome.prototype.setAudible = function (isOn) {
+        this.isOn = isOn;
+    };
     return Metronome;
 }());
 var MusicPlayer = (function () {
@@ -801,6 +888,9 @@ var MusicPlayer = (function () {
             this.channelSoundID[n] = null;
         }
     }
+    MusicPlayer.prototype.setAudible = function (isOn) {
+        this.isOn = isOn;
+    };
     MusicPlayer.prototype.strum = function (isStart, strum) {
         if (isStart) {
             for (var n = 0; n < strum.getStringCount(); n++) {

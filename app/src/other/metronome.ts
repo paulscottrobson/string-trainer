@@ -33,4 +33,8 @@ class Metronome {
             }
         }
     }    
+
+    setAudible(isOn:boolean):void {
+        this.isOn = isOn;
+    }
 }

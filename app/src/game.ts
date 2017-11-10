@@ -1,12 +1,13 @@
 /// <reference path="../lib/phaser.comments.d.ts"/>
 
-class MainState extends Phaser.State implements IButtonListener {
+class MainState extends Phaser.State {
 
     private static VERSION:string="0.01 02Nov17 Phaser-CE 2.8.7";
 
     public music:IMusic;
     public player:MusicPlayer;
     public metronome:Metronome;
+    private cpanel:IControlPanel;
     public position:number;
     public renderManager:IRenderManager;
 
@@ -28,18 +29,18 @@ class MainState extends Phaser.State implements IButtonListener {
         this.position = 0;
         this.renderManager = new RenderManager(this.game,this.music);
         this.renderManager.addStrumEventHandler(this.player.strum,this.player);
-
-        var btn:PushButton = new PushButton(this.game,"i_faster",
-                ButtonMessage.SlowSpeed,this);
-        btn.x = btn.y = 70;        
-        var btn2:ToggleButton = new ToggleButton(this.game,"i_music",
-        ButtonMessage.FastSpeed,this);
-        btn2.x = btn2.y = 140;                
+        // Set up control panel
+        this.cpanel = new ControlPanel(this.game);
+        this.cpanel.addSignalListener(this.buttonClicked,this);
     }
     
-    click(msg:ButtonMessage,sender:any):void {
-        console.log(msg,sender);
+    buttonClicked(msg:ButtonMessage):void {
+        if (msg == ButtonMessage.Restart) { 
+            this.position = 0;
+            this.renderManager.moveTo(0);
+        }
     }
+
     destroy() : void {
         this.renderManager.destroy();
         this.music = this.renderManager = null;
@@ -50,6 +51,8 @@ class MainState extends Phaser.State implements IButtonListener {
         var elapsed:number = this.game.time.elapsedMS;
         // Time in seconds
         elapsed = elapsed / 1000;
+        // Apply scalar 
+        elapsed = elapsed * this.cpanel.getSpeedScalar();
         // Beats per millisecond
         var bpms:number = this.music.getTempo() / 60;
         this.position = this.position + bpms * elapsed 
@@ -57,5 +60,7 @@ class MainState extends Phaser.State implements IButtonListener {
         // Update positions etc.                                        
         this.renderManager.moveTo(this.position);
         this.metronome.moveTo(this.position);
+        this.metronome.setAudible(this.cpanel.isMetronomeOn());
+        this.player.setAudible(this.cpanel.isMusicOn());
     }
 }    

@@ -88,6 +88,7 @@ class Renderer extends Phaser.Group implements IRenderer {
                 var cn:number = this.bar.getMusic().getChordNumber(strum.getChordName());
                 btn = new StrumButton(this.game,w-2,strum.getChordName(),strum.isChordDownStrum(),cn);                
                 this.buttons[sn].push(btn);
+                this.add(btn);
             } else {
                 var sCount:number = this.bar.getMusic().getStringCount();
                 for (var strn:number = 0;strn < sCount;strn++) {
@@ -95,6 +96,7 @@ class Renderer extends Phaser.Group implements IRenderer {
                     if (fretPos != Strum.NOSTRUM) {
                         var btn:IButton;
                         btn = new FingerButton(this.game,strn,fretPos,w);
+                        this.add(btn);
                         this.buttons[sn].push(btn);
                     }
                 }
@@ -170,7 +172,7 @@ class Renderer extends Phaser.Group implements IRenderer {
     private deleteRender(): void {
         if (!this.isRendered) return;
         this.isRendered = false;
-        this.removeChildren();
+        this.removeAll(true);
         this.sineCurves = this.buttons = this.beatLines = null;
         this.sineCurveHeight = this.debugRect = null;
     }

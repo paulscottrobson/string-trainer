@@ -42,6 +42,10 @@ class MusicPlayer {
         }
     }
 
+    setAudible(isOn:boolean):void {
+        this.isOn = isOn;
+    }
+
     strum(isStart:boolean,strum:IStrum) {
         if (isStart) {
             for (var n = 0;n < strum.getStringCount();n++) {

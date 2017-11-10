@@ -7,5 +7,5 @@
  */
 
 interface IButtonListener {
-    click(msg:ButtonMessage,sender:any):void;
+    clickButton(msg:ButtonMessage,sender:any):void;
 }

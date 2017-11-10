@@ -11,6 +11,7 @@ class PushButton extends Phaser.Group {
     protected buttonImage:Phaser.Image;
     private listener:IButtonListener;
     private message:ButtonMessage;
+    private tween:Phaser.Tween;
 
     constructor(game:Phaser.Game,image:string,identifier:ButtonMessage,listener:IButtonListener,size:number = 0) {
         super(game);
@@ -25,6 +26,7 @@ class PushButton extends Phaser.Group {
         this.buttonImage.width = this.buttonImage.height = size * 0.7;
         this.listener = listener;
         this.message = identifier;
+        this.tween = null;
     }
 
     destroy(): void {
@@ -33,6 +35,16 @@ class PushButton extends Phaser.Group {
     }
     
     protected clickHandler(): void {
-        this.listener.click(this.message,this);
+        this.listener.clickButton(this.message,this);
+        if (this.tween == null) {
+            var tweenInfo:any = { width:this.width-10,height:this.height-10 };
+            this.tween = this.game.add.tween(this).to(tweenInfo,150,
+                    Phaser.Easing.Default,true,0,0,true);
+            this.tween.onComplete.add(this.tweenOver,this);
+        }
+    }
+
+    private tweenOver(): void {
+        this.tween = null;
     }
 }
