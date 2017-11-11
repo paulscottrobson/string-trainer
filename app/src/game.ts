@@ -2,7 +2,7 @@
 
 class MainState extends Phaser.State {
 
-    public static VERSION:string="0.90 10-Nov-17 Phaser-CE 2.8.7 (c) PSR 2017";
+    public static VERSION:string="0.91 11-Nov-17 Phaser-CE 2.8.7 (c) PSR 2017";
 
     public music:IMusic;
     public player:MusicPlayer;
@@ -21,6 +21,9 @@ class MainState extends Phaser.State {
         // Create configuration
         Configurator.setup(this.game,this.music.getStringCount(),
                 this.music.getInformation("options"));
+        if (Configurator.melodyOnly) {
+            this.music.processMelody();
+        }
         // Create player
         this.player = new MusicPlayer(this.game,
                         this.music.getStringCount(),this.music.getTuning())

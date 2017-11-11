@@ -1,0 +1,33 @@
+{
+    "beats":"4",
+    "capo":"0",
+    "composer":"unknown",
+    "options":"ukulele",
+    "string0":"g3",
+    "string1":"c4",
+    "string2":"e4",
+    "string3":"a4",
+    "strings":"4",
+    "tempo":"80",
+    "title":"good king wenceslas.ukulele",
+    "version":"1",
+    "bars":[
+        "a-d-12;--d-12;-cd-12;--ca12",
+        "a-d-12;--d-12;ec--24",
+        "-aa-12;ec--12;c-a-12;-ac-12",
+        "a-d-12;-a--12;e-d-12;c---12",
+        "a-d-12;--d-12;-cd-12;--ca12",
+        "a-d-12;--d-12;ec--24",
+        "-aa-12;-c--12;c-a-12;--c-12",
+        "a-d-12;-e--12;-cd-24",
+        "e--f12;c--d12;--dc12;--ca12",
+        "--ac12;-c-a12;-ad-24",
+        "-aa-12;ec--12;-aa-12;c-c-12",
+        "a-d-12;c---12;e-d-12;a---12",
+        "ec--12;-c--12;-aa-12;--c-12",
+        "-ed-12;--d-12;-c-a24",
+        "e--f12;-a-d12;-c-c12;--ca12",
+        "-ed-12;e---12;-ad-12;e---06;c---06",
+        "a-d-48"
+    ]
+}

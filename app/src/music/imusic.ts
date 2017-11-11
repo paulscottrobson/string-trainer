@@ -81,6 +81,13 @@ interface IMusic {
      */
     analyse():any;
     /**
+     * Process tune to be melody only (ish)
+     * 
+     * @returns {*} 
+     * @memberof IMusic
+     */
+    processMelody():any;
+    /**
      * Destroy object
      * 
      * @memberof IMusic

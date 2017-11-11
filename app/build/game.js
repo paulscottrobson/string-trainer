@@ -45,6 +45,9 @@ var Configurator = (function () {
             if (op == "strumstick") {
                 Configurator.modifier = new StrumstickModifier();
             }
+            if (op == "melody") {
+                Configurator.melodyOnly = true;
+            }
         }
     };
     Configurator.getStringCount = function () {
@@ -71,6 +74,9 @@ var MainState = (function (_super) {
     };
     MainState.prototype.create = function () {
         Configurator.setup(this.game, this.music.getStringCount(), this.music.getInformation("options"));
+        if (Configurator.melodyOnly) {
+            this.music.processMelody();
+        }
         this.player = new MusicPlayer(this.game, this.music.getStringCount(), this.music.getTuning());
         var bgr = new Background(this.game);
         this.metronome = new Metronome(this.game, this.music);
@@ -105,7 +111,7 @@ var MainState = (function (_super) {
         this.metronome.setAudible(this.cpanel.isMetronomeOn());
         this.player.setAudible(this.cpanel.isMusicOn());
     };
-    MainState.VERSION = "0.90 10-Nov-17 Phaser-CE 2.8.7 (c) PSR 2017";
+    MainState.VERSION = "0.91 11-Nov-17 Phaser-CE 2.8.7 (c) PSR 2017";
     return MainState;
 }(Phaser.State));
 var Background = (function (_super) {
@@ -866,6 +872,15 @@ var Music = (function () {
         }
         return analysis;
     };
+    Music.prototype.processMelody = function () {
+        for (var _i = 0, _a = this.bar; _i < _a.length; _i++) {
+            var bar = _a[_i];
+            for (var n = 0; n < bar.getStrumCount(); n++) {
+                var strum = bar.getStrum(n);
+                strum.melodyOnly();
+            }
+        }
+    };
     Music.prototype.destroy = function () {
         for (var _i = 0, _a = this.bar; _i < _a.length; _i++) {
             var b = _a[_i];
@@ -921,6 +936,19 @@ var Strum = (function () {
             this.chordName = def.substr(p1 + 1, def.lastIndexOf(")") - p1 - 1);
         }
     }
+    Strum.prototype.melodyOnly = function () {
+        var found = false;
+        for (var n = this.fretPos.length - 1; n >= 0; n--) {
+            if (this.fretPos[n] != Strum.NOSTRUM) {
+                if (found) {
+                    this.fretPos[n] = Strum.NOSTRUM;
+                }
+                else {
+                    found = true;
+                }
+            }
+        }
+    };
     Strum.prototype.destroy = function () {
         this.bar = this.fretPos = null;
     };

@@ -99,6 +99,14 @@ class Configurator {
      * @memberof Configurator
      */
     public static modifier:IModifiers
+    /**
+     * True if displaying only the top note.
+     * 
+     * @static
+     * @type {boolean}
+     * @memberof Configurator
+     */
+    public static melodyOnly:boolean;
 
     public static setup(game:Phaser.Game,stringCount:number,musicOptions:string) : void {
         Configurator.stringGap = game.height / 3.5;
@@ -132,6 +140,9 @@ class Configurator {
             }
             if (op == "strumstick") {
                 Configurator.modifier = new StrumstickModifier();
+            }
+            if (op == "melody") {
+                Configurator.melodyOnly = true;
             }
         }        
     }

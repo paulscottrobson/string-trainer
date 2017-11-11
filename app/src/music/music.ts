@@ -72,6 +72,14 @@ class Music implements IMusic {
         return analysis;
     }
 
+    processMelody(): void{
+        for (var bar of this.bar) {
+            for (var n = 0;n < bar.getStrumCount();n++) {
+                var strum:IStrum = bar.getStrum(n);
+                strum.melodyOnly();
+            }
+        }
+    }
     destroy():void {
         for (var b of this.bar) { b.destroy(); }
         this.bar = this.stringBaseNote = this.json = null;

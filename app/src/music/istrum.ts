@@ -76,4 +76,10 @@ interface IStrum {
      * @memberof IStrum
      */
     isChordDownStrum():boolean;
+    /**
+     * Convert strum to melody only.
+     * 
+     * @memberof IStrum
+     */
+    melodyOnly():void;
 }

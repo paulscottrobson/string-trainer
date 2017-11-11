@@ -42,6 +42,18 @@ class Strum implements IStrum {
         //console.log(def,this.fretPos,this.length,this.chordName);
     }
 
+    melodyOnly(): void {
+        var found:boolean = false;
+        for (var n = this.fretPos.length-1;n >= 0;n--) {
+            if (this.fretPos[n] != Strum.NOSTRUM) {
+                if (found) {
+                    this.fretPos[n] = Strum.NOSTRUM;
+                } else {
+                    found = true;
+                }
+            }
+        }
+    }
     destroy(): void {
         this.bar = this.fretPos = null;
     }

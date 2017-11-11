@@ -184,5 +184,11 @@ class UkuleleCompiler(BaseCompiler):
 						  "version":"1","capo":"0","options":"ukulele" }		
 
 
-c = MerlinCompiler("./happy_birthday.merlin","../app/music.json")
-c = UkuleleCompiler("./sans-day-carol.ukulele","../app/music.json")
+#c = MerlinCompiler("./happy_birthday.merlin","../app/music.json")
+#c = UkuleleCompiler("./sans-day-carol.ukulele","../app/music.json")good-king-wenceslas.ukulele
+
+c = UkuleleCompiler("in-the-bleak-midwinter.ukulele","../app/in-the-bleak-midwinter.json")
+c = UkuleleCompiler("i-saw-three-ships.ukulele","../app/i-saw-three-ships.json")
+c = UkuleleCompiler("sans-day-carol.ukulele","../app/sans-day-carol.json")
+c = UkuleleCompiler("good-king-wenceslas.ukulele","../app/good-king-wenceslas.json")
+
