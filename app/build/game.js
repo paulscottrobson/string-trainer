@@ -66,9 +66,10 @@ var MainState = (function (_super) {
     function MainState() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
+    MainState.prototype.init = function (music) {
+        this.music = music;
+    };
     MainState.prototype.create = function () {
-        var musicJson = this.game.cache.getJSON("music");
-        this.music = new Music(musicJson);
         Configurator.setup(this.game, this.music.getStringCount(), this.music.getInformation("options"));
         this.player = new MusicPlayer(this.game, this.music.getStringCount(), this.music.getTuning());
         var bgr = new Background(this.game);
@@ -842,6 +843,29 @@ var Music = (function () {
             }
         }
     }
+    Music.prototype.analyse = function () {
+        var analysis = {};
+        var baseNumbers = [];
+        for (var n1 = 0; n1 < this.getStringCount(); n1++) {
+            baseNumbers[n1] = MusicPlayer.toNoteID(this.stringBaseNote[n1]);
+        }
+        for (var _i = 0, _a = this.bar; _i < _a.length; _i++) {
+            var bar = _a[_i];
+            for (var n = 0; n < bar.getStrumCount(); n++) {
+                var strum = bar.getStrum(n);
+                for (var str = 0; str < this.getStringCount(); str++) {
+                    var fretPos = strum.getStringFret(str);
+                    if (fretPos != Strum.NOSTRUM) {
+                        fretPos = fretPos + baseNumbers[str];
+                        if (!(fretPos in analysis))
+                            analysis[fretPos] = 0;
+                        analysis[fretPos] = analysis[fretPos] + 1;
+                    }
+                }
+            }
+        }
+        return analysis;
+    };
     Music.prototype.destroy = function () {
         for (var _i = 0, _a = this.bar; _i < _a.length; _i++) {
             var b = _a[_i];
@@ -1005,13 +1029,18 @@ var MusicPlayer = (function () {
             this.channelSoundID[channel] = null;
         }
     };
-    MusicPlayer.preload = function (game, noteCount, baseNote) {
+    MusicPlayer.preload = function (game, noteCount, baseNote, music) {
+        var analysis = music.analyse();
+        var note1 = MusicPlayer.toNoteID(baseNote.toLowerCase());
         MusicPlayer.noteCount = noteCount;
         MusicPlayer.baseNote = baseNote.toLowerCase();
         for (var n = 1; n <= MusicPlayer.noteCount; n++) {
-            var ns = n.toString();
-            game.load.audio(ns, ["assets/sounds/" + ns + ".mp3",
-                "assets/sounds/" + ns + ".ogg"]);
+            if ((note1 + n - 1) in analysis) {
+                console.log(ns);
+                var ns = n.toString();
+                game.load.audio(ns, ["assets/sounds/" + ns + ".mp3",
+                    "assets/sounds/" + ns + ".ogg"]);
+            }
         }
     };
     MusicPlayer.toNoteID = function (str) {
@@ -1061,6 +1090,8 @@ var BootState = (function (_super) {
     BootState.prototype.preload = function () {
         var _this = this;
         this.game.load.image("loader", "assets/sprites/loader.png");
+        var src = StringTrainerApplication.getURLName("music", "music.json");
+        this.game.load.json("music", StringTrainerApplication.getURLName("music", src));
         this.game.load.onLoadComplete.add(function () { _this.game.state.start("Preload", true, false, 1); }, this);
     };
     BootState.prototype.create = function () {
@@ -1083,17 +1114,17 @@ var PreloadState = (function (_super) {
         loader.height = this.game.height / 8;
         loader.anchor.setTo(0.5);
         this.game.load.setPreloadSprite(loader);
-        this.game.load.json("music", "music.json");
         this.game.load.json("sprites", "assets/sprites/sprites.json");
         this.game.load.atlas("sprites", "assets/sprites/sprites.png", "assets/sprites/sprites.json");
         for (var _i = 0, _a = ["font"]; _i < _a.length; _i++) {
             var fontName = _a[_i];
             this.game.load.bitmapFont(fontName, "assets/fonts/" + fontName + ".png", "assets/fonts/" + fontName + ".fnt");
         }
-        MusicPlayer.preload(this.game, 48, "C3");
+        var music = new Music(this.game.cache.getJSON("music"));
+        MusicPlayer.preload(this.game, 48, "C3", music);
         this.game.load.audio("metronome", ["assets/sounds/metronome.mp3",
             "assets/sounds/metronome.ogg"]);
-        this.game.load.onLoadComplete.add(function () { _this.game.state.start("Main", true, false, 1); }, this);
+        this.game.load.onLoadComplete.add(function () { _this.game.state.start("Main", true, false, music); }, this);
     };
     return PreloadState;
 }(Phaser.State));

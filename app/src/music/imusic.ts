@@ -74,6 +74,13 @@ interface IMusic {
      */
     getChordNumber(name:string):number;
     /**
+     * Work out note usage for preloader optimisation.
+     * 
+     * @returns {*} 
+     * @memberof IMusic
+     */
+    analyse():any;
+    /**
      * Destroy object
      * 
      * @memberof IMusic

@@ -48,6 +48,30 @@ class Music implements IMusic {
         }
     }
 
+    analyse(): any {
+        var analysis:any = {}
+        // Work out base notes for string.
+        var baseNumbers:number[] = [];
+        for (var n1 = 0;n1 < this.getStringCount();n1++) {
+            baseNumbers[n1] = MusicPlayer.toNoteID(this.stringBaseNote[n1]);
+        }
+        // Analyse whole song for used notes.
+        for (var bar of this.bar) {
+            for (var n = 0;n < bar.getStrumCount();n++) {
+                var strum:IStrum = bar.getStrum(n);
+                for (var str = 0;str < this.getStringCount();str++) {
+                    var fretPos:number = strum.getStringFret(str);
+                    if (fretPos != Strum.NOSTRUM) {
+                        fretPos = fretPos+baseNumbers[str];
+                        if (!(fretPos in analysis)) analysis[fretPos] = 0;
+                        analysis[fretPos] = analysis[fretPos] + 1;
+                    }
+                }
+            }
+        }
+        return analysis;
+    }
+
     destroy():void {
         for (var b of this.bar) { b.destroy(); }
         this.bar = this.stringBaseNote = this.json = null;

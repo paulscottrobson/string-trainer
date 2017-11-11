@@ -12,10 +12,12 @@ class MainState extends Phaser.State {
     public renderManager:IRenderManager;
     public posBar:IPositionBar;
 
-    create() {
-        // Create music object
-        var musicJson:any = this.game.cache.getJSON("music");
-        this.music = new Music(musicJson);
+    init(music:IMusic) {
+        // Music object passed into preloader.
+        this.music = music;        
+    }
+
+    create() {    
         // Create configuration
         Configurator.setup(this.game,this.music.getStringCount(),
                 this.music.getInformation("options"));

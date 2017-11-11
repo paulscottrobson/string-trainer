@@ -97,13 +97,22 @@ class MusicPlayer {
      * @param {string} baseNote base note (e.g. D#4)
      * @memberof MusicPlayer
      */
-    static preload(game:Phaser.Game,noteCount:number,baseNote:string) : void {
+    static preload(game:Phaser.Game,noteCount:number,baseNote:string,music:IMusic) : void {
+        var analysis:any = music.analyse();
+        //console.log(analysis);        
+        var note1:number = MusicPlayer.toNoteID(baseNote.toLowerCase());
+
         MusicPlayer.noteCount = noteCount;
         MusicPlayer.baseNote = baseNote.toLowerCase();
+
+        // For each note, if in analysis load it.
         for (var n:number = 1;n <= MusicPlayer.noteCount;n++) {
-            var ns:string = n.toString();
-            game.load.audio(ns,["assets/sounds/"+ns+".mp3",
+            if ((note1 + n - 1) in analysis) {
+                console.log(ns);
+                var ns:string = n.toString();
+                game.load.audio(ns,["assets/sounds/"+ns+".mp3",
                                      "assets/sounds/"+ns+".ogg"]);        
+            }                                     
         }
     }
 
