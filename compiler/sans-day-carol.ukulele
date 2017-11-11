@@ -1,0 +1,13 @@
+//
+//		Sans Day Carol (ZAW)
+//
+
+tuning := g3,c4,e4,a4
+tempo := 80
+beats := 3
+
+& & x1-. 0= | 3xx2 3 3x0-. 1= | 0x2 x1 0x0 | 1x2 x30 x0x3 | x1x2o x1-. 0= | 3xx2 3 3x0-. 1= | 0x2 x1 0x0- 0- | 1x2 x30 x0x3
+
+x1x2o x1- 0- | 35 35 56-. 7= | 8t- 8- 35 33 | 3x5 35 56-. 7= | 8xx7o x1-. 0= | 3xx2 3 3x0-. 1= | 0x2 x1 0x0
+
+1x2 x30 x0x3 | x1x2o x3 | x300o x3 | 0102o x1-. 0= | 3xx2 3 3x0-. 1= | 0x2 x1 0x0 | 1x2 x30 x0x0 | x1x3 xxx2o

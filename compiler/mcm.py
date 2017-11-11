@@ -57,7 +57,7 @@ class Strum:
 				twLength -= 6
 			if lm == '=':
 				twLength -= 9
-			if lm == '=':
+			if lm == '.':
 				twLength = int(twLength * 3 / 2)
 		return twLength 
 
@@ -185,4 +185,4 @@ class UkuleleCompiler(BaseCompiler):
 
 
 c = MerlinCompiler("./happy_birthday.merlin","../app/music.json")
-c = UkuleleCompiler("./test.ukulele","../app/music.json")
+c = UkuleleCompiler("./sans-day-carol.ukulele","../app/music.json")

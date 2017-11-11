@@ -1,0 +1,14 @@
+//
+//		In the Bleak Midwinter (ZAW)
+//
+
+tuning := g3,c4,e4,a4
+tempo := 80
+
+01. 1- 3xx2 0 | x32 xxx2 x10 xxx2 | x34. 0- x32 xx2 | x3x3 xxx2 xxx0 xx4
+
+01 x3- 1- 3xx2 0 | x34 xx0 x12 xx0 | x3x3. 0- x30x xx4- x1- | x1x2 xxx2 xx0 x1
+
+13 01 13 35 | 56 5 01o | 3xx2 0 x3x3 x1 | x00 xx2 xx3 xx4
+
+01. 1- 3x4 0 | x32 xx0 x1x3 xxx2 | x3x3 0 x30 xx4- x1- | x1x3 xxx0 xxx2o
