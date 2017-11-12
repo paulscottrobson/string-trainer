@@ -14,7 +14,7 @@ var Configurator = (function () {
     Configurator.setup = function (game, stringCount, musicOptions) {
         Configurator.stringGap = game.height / 3.5;
         Configurator.stringMargin = game.height / 16;
-        Configurator.ledgeHeight = game.height / 20;
+        Configurator.ledgeHeight = game.height / 15;
         Configurator.barWidth = Math.round(game.width / 2.5);
         Configurator.isFlipped = false;
         Configurator.xOrigin = Math.round(game.width * 0.22);
@@ -78,7 +78,7 @@ var MainState = (function (_super) {
             this.music.processMelody();
         }
         this.player = new MusicPlayer(this.game, this.music.getStringCount(), this.music.getTuning());
-        var bgr = new Background(this.game);
+        var bgr = new Background(this.game, this.music);
         this.metronome = new Metronome(this.game, this.music);
         this.position = 0;
         this.renderManager = new RenderManager(this.game, this.music);
@@ -111,12 +111,12 @@ var MainState = (function (_super) {
         this.metronome.setAudible(this.cpanel.isMetronomeOn());
         this.player.setAudible(this.cpanel.isMusicOn());
     };
-    MainState.VERSION = "0.91 11-Nov-17 Phaser-CE 2.8.7 (c) PSR 2017";
+    MainState.VERSION = "0.92 12-Nov-17 Phaser-CE 2.8.7 (c) PSR 2017";
     return MainState;
 }(Phaser.State));
 var Background = (function (_super) {
     __extends(Background, _super);
-    function Background(game) {
+    function Background(game, music) {
         var _this = _super.call(this, game) || this;
         var bgr = _this.game.add.image(0, 0, "sprites", "background", _this);
         bgr.width = _this.game.width;
@@ -144,6 +144,16 @@ var Background = (function (_super) {
             }
             string.anchor.y = 0.5;
         }
+        var title = music.getInformation("title") + " by " + music.getInformation("composer");
+        title = title.charAt(0).toUpperCase() + title.substr(1).toLowerCase();
+        for (var n = 1; n < title.length; n++) {
+            var c = title.charAt(n - 1).toLowerCase();
+            if (c < 'a' || c > 'z') {
+                title = title.substr(0, n) + title.charAt(n).toUpperCase() + title.substr(n + 1);
+            }
+        }
+        var ttl = game.add.bitmapText(_this.game.width / 2, _this.game.height - Configurator.scrollBarHeight - Configurator.ledgeHeight / 2, "font", title, Configurator.ledgeHeight * 0.6, _this);
+        ttl.anchor.x = ttl.anchor.y = 0.5;
         return _this;
     }
     return Background;
@@ -346,7 +356,7 @@ var BaseButton = (function (_super) {
         return BaseButton.colours[n % BaseButton.colours.length];
     };
     BaseButton.colours = [
-        0xFF0000, 0x00FF00, 0x0000FF, 0xFFFF00, 0xFF8000, 0xFFFF00, 0xFF00FF,
+        0xFF0000, 0x00FF00, 0x0000FF, 0xFFFF00, 0xFF8000, 0x888800, 0xFF00FF,
         0x00FFFF, 0xFF8000, 0x0080FF, 0x008000, 0x808000, 0x008080, 0x8B3413
     ];
     return BaseButton;
@@ -504,7 +514,7 @@ var DraggableSphere = (function () {
         this.sphere.events.onDragStop.add(owner.updatePositionsOnDrop, owner);
     }
     DraggableSphere.prototype.setBounds = function (xStart, xEnd, y) {
-        this.sphere.input.boundsRect = new Phaser.Rectangle(xStart, y - 100, xEnd - xStart, y + 100);
+        this.sphere.input.boundsRect = new Phaser.Rectangle(xStart - this.sphere.width / 2, y - 100, xEnd - xStart + this.sphere.width, y + 100);
     };
     DraggableSphere.prototype.moveTo = function (x, y) {
         this.sphere.x = x;

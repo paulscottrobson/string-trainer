@@ -1,7 +1,7 @@
 {
     "beats":"3",
     "capo":"0",
-    "composer":"unknown",
+    "composer":"zoe-anne wadey",
     "options":"ukulele",
     "string0":"g3",
     "string1":"c4",
@@ -9,7 +9,7 @@
     "string3":"a4",
     "strings":"4",
     "tempo":"80",
-    "title":"sans day carol.ukulele",
+    "title":"sans day carol",
     "version":"1",
     "bars":[
         "----12;----12;--b-09;---a03",

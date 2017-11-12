@@ -5,6 +5,7 @@
 tuning := g3,c4,e4,a4
 tempo := 80
 beats := 3
+composer := zoe-anne wadey
 
 & & x1-. 0= | 3xx2 3 3x0-. 1= | 0x2 x1 0x0 | 1x2 x30 x0x3 | x1x2o x1-. 0= | 3xx2 3 3x0-. 1= | 0x2 x1 0x0- 0- | 1x2 x30 x0x3
 

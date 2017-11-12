@@ -20,7 +20,7 @@ class DraggableSphere {
     }
 
     setBounds(xStart:number,xEnd:number,y:number) : void {
-        this.sphere.input.boundsRect = new Phaser.Rectangle(xStart,y-100,xEnd-xStart,y+100);
+        this.sphere.input.boundsRect = new Phaser.Rectangle(xStart-this.sphere.width/2,y-100,xEnd-xStart+this.sphere.width,y+100);
     }
 
     moveTo(x:number,y:number) : void {

@@ -2,7 +2,7 @@
 
 class MainState extends Phaser.State {
 
-    public static VERSION:string="0.91 11-Nov-17 Phaser-CE 2.8.7 (c) PSR 2017";
+    public static VERSION:string="0.92 12-Nov-17 Phaser-CE 2.8.7 (c) PSR 2017";
 
     public music:IMusic;
     public player:MusicPlayer;
@@ -28,7 +28,7 @@ class MainState extends Phaser.State {
         this.player = new MusicPlayer(this.game,
                         this.music.getStringCount(),this.music.getTuning())
         // Set up the display
-        var bgr:Background = new Background(this.game);
+        var bgr:Background = new Background(this.game,this.music);
         // Set up metronome.
         this.metronome = new Metronome(this.game,this.music);
         // Set up Render Manager

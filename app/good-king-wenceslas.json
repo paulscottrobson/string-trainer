@@ -1,7 +1,7 @@
 {
     "beats":"4",
     "capo":"0",
-    "composer":"unknown",
+    "composer":"zoe-anne wadey",
     "options":"ukulele",
     "string0":"g3",
     "string1":"c4",
@@ -9,9 +9,10 @@
     "string3":"a4",
     "strings":"4",
     "tempo":"80",
-    "title":"good king wenceslas.ukulele",
+    "title":"good king wenceslas",
     "version":"1",
     "bars":[
+        "----12;----12;----12;----12",
         "a-d-12;--d-12;-cd-12;--ca12",
         "a-d-12;--d-12;ec--24",
         "-aa-12;ec--12;c-a-12;-ac-12",

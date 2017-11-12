@@ -4,6 +4,9 @@
 
 tuning := g3,c4,e4,a4
 tempo := 80
+composer := zoe-anne wadey
+
+& & & &
 
 01. 1- 3xx2 0 | x32 xxx2 x10 xxx2 | x34. 0- x32 xx2 | x3x3 xxx2 xxx0 xx4
 

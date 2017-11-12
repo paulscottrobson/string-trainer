@@ -1,7 +1,7 @@
 {
     "beats":"4",
     "capo":"0",
-    "composer":"unknown",
+    "composer":"zoe-anne wadey",
     "options":"ukulele",
     "string0":"g3",
     "string1":"c4",
@@ -9,9 +9,10 @@
     "string3":"a4",
     "strings":"4",
     "tempo":"80",
-    "title":"in the bleak midwinter.ukulele",
+    "title":"in the bleak midwinter",
     "version":"1",
     "bars":[
+        "----12;----12;----12;----12",
         "--ba18;---b06;c--d12;---a12",
         "-cd-12;c---12;-ab-12;c---12",
         "-ed-18;---a06;-cd-12;-c--12",

@@ -8,7 +8,7 @@
  */
 class Background extends Phaser.Group {
 
-    constructor(game:Phaser.Game) {
+    constructor(game:Phaser.Game,music:IMusic) {
         super(game);
         // Set up the background
         var bgr:Phaser.Image = this.game.add.image(0,0,
@@ -43,6 +43,18 @@ class Background extends Phaser.Group {
             if (isDouble) { string.height *= 2; }
             string.anchor.y = 0.5;
         }
+        var title:string = music.getInformation("title")+" by "+music.getInformation("composer");
+        title = title.charAt(0).toUpperCase()+title.substr(1).toLowerCase() 
+        for (var n:number = 1;n < title.length;n++) {
+            var c:string = title.charAt(n-1).toLowerCase();
+            if (c < 'a' || c > 'z') {
+                title = title.substr(0,n)+title.charAt(n).toUpperCase()+title.substr(n+1);
+            }
+        }
+        var ttl:Phaser.BitmapText = game.add.bitmapText(this.game.width/2,
+                this.game.height-Configurator.scrollBarHeight - Configurator.ledgeHeight/2,
+                "font",title,Configurator.ledgeHeight * 0.6,this);
+        ttl.anchor.x = ttl.anchor.y = 0.5;                
     }
     
 }

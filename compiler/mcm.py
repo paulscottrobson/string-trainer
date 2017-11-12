@@ -130,10 +130,10 @@ class BaseCompiler:
 		if tuning != "":
 			self.setTuning(tuning)
 		# calculate title						  
-		title = source.lower().replace("_"," ").replace("-"," ").replace(".merlin","")
+		title = source.lower().replace("_"," ").replace("-"," ")
 		if title.find("/") >= 0:
 			title = title.split("/")[-1]
-		self.infoKeys["title"] = title
+		self.infoKeys["title"] = title if title.find(".") < 0 else title[:title.find(".")].strip()
 		# update any key values, then remove them.
 		for assign in [x for x in self.src if x.find(":=") >= 0]:
 			assign = [x.strip() for x in assign.split(":=")]
@@ -185,10 +185,14 @@ class UkuleleCompiler(BaseCompiler):
 
 
 #c = MerlinCompiler("./happy_birthday.merlin","../app/music.json")
-#c = UkuleleCompiler("./sans-day-carol.ukulele","../app/music.json")good-king-wenceslas.ukulele
 
 c = UkuleleCompiler("in-the-bleak-midwinter.ukulele","../app/in-the-bleak-midwinter.json")
 c = UkuleleCompiler("i-saw-three-ships.ukulele","../app/i-saw-three-ships.json")
 c = UkuleleCompiler("sans-day-carol.ukulele","../app/sans-day-carol.json")
 c = UkuleleCompiler("good-king-wenceslas.ukulele","../app/good-king-wenceslas.json")
+c = UkuleleCompiler("silent-night.ukulele","../app/silent-night.json")
+c = UkuleleCompiler("sussex-carol.ukulele","../app/sussex-carol.json")
+c = UkuleleCompiler("tomorrow-shall-be-my-dancing-day.ukulele","../app/tomorrow-shall-be-my-dancing-day.json")
+c = UkuleleCompiler("./we-three-kings.ukulele","../app/we-three-kings.json")
 
+c = UkuleleCompiler("./we-three-kings.ukulele","../app/music.json")

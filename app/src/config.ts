@@ -111,7 +111,7 @@ class Configurator {
     public static setup(game:Phaser.Game,stringCount:number,musicOptions:string) : void {
         Configurator.stringGap = game.height / 3.5;
         Configurator.stringMargin = game.height / 16;
-        Configurator.ledgeHeight = game.height / 20;
+        Configurator.ledgeHeight = game.height / 15;
         Configurator.barWidth = Math.round(game.width / 2.5);
         Configurator.isFlipped = false;
         Configurator.xOrigin = Math.round(game.width * 0.22);
