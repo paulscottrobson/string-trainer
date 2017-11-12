@@ -184,15 +184,15 @@ class UkuleleCompiler(BaseCompiler):
 						  "version":"1","capo":"0","options":"ukulele" }		
 
 
-#c = MerlinCompiler("./happy_birthday.merlin","../app/music.json")
+#c = MerlinCompiler("./happy_birthday.merlin","../app/music/zawcarols/music.json")
 
-c = UkuleleCompiler("in-the-bleak-midwinter.ukulele","../app/in-the-bleak-midwinter.json")
-c = UkuleleCompiler("i-saw-three-ships.ukulele","../app/i-saw-three-ships.json")
-c = UkuleleCompiler("sans-day-carol.ukulele","../app/sans-day-carol.json")
-c = UkuleleCompiler("good-king-wenceslas.ukulele","../app/good-king-wenceslas.json")
-c = UkuleleCompiler("silent-night.ukulele","../app/silent-night.json")
-c = UkuleleCompiler("sussex-carol.ukulele","../app/sussex-carol.json")
-c = UkuleleCompiler("tomorrow-shall-be-my-dancing-day.ukulele","../app/tomorrow-shall-be-my-dancing-day.json")
-c = UkuleleCompiler("./we-three-kings.ukulele","../app/we-three-kings.json")
+c = UkuleleCompiler("in-the-bleak-midwinter.ukulele","../app/music/zawcarols/in-the-bleak-midwinter.json")
+c = UkuleleCompiler("i-saw-three-ships.ukulele","../app/music/zawcarols/i-saw-three-ships.json")
+c = UkuleleCompiler("sans-day-carol.ukulele","../app/music/zawcarols/sans-day-carol.json")
+c = UkuleleCompiler("good-king-wenceslas.ukulele","../app/music/zawcarols/good-king-wenceslas.json")
+c = UkuleleCompiler("silent-night.ukulele","../app/music/zawcarols/silent-night.json")
+c = UkuleleCompiler("sussex-carol.ukulele","../app/music/zawcarols/sussex-carol.json")
+c = UkuleleCompiler("tomorrow-shall-be-my-dancing-day.ukulele","../app/music/zawcarols/tomorrow-shall-be-my-dancing-day.json")
+c = UkuleleCompiler("./we-three-kings.ukulele","../app/music/zawcarols/we-three-kings.json")
 
 c = UkuleleCompiler("./we-three-kings.ukulele","../app/music.json")
