@@ -6,7 +6,7 @@
 # ****************************************************************************************
 # ****************************************************************************************
 
-import song,instrument
+import song,instrument,cm
 
 class Analyser:
 	def __init__(self,song):
@@ -53,6 +53,10 @@ class Analyser:
 		score = int(score / self.noteCount)
 		return score
 
+	def render(self,transpose,instrument,targetFile):
+		self.analyse(transpose,instrument)
+		self.song.render(targetFile,instrument,transpose,self.noteInfo)
+
 analyser = Analyser(song.Song("here-comes-the-sun.song"))
 for t1 in range(0,1):
 	for t2 in range(0,1):
@@ -64,3 +68,6 @@ for t1 in range(0,1):
 				print("----------------------------------")
 				print("Transpose:{0} Score:{1} Tuning:{2}".format(transpose,analyser.score(),merlin.getTuning()))
 				print(analyser.report())
+
+analyser.render(12,merlin,"./here-comes-the-sun.merlin")
+cm.MerlinCompiler("./here-comes-the-sun.merlin","../app/music.json")

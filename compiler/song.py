@@ -6,7 +6,7 @@
 # ****************************************************************************************
 # ****************************************************************************************
 
-import re
+import re,cm
 
 # ****************************************************************************************
 # 									A single note
@@ -41,6 +41,18 @@ class Note:
 				usage[note] = 0
 			usage[note] += 1
 
+	def render(self,instrument,transpose,noteInfo):
+		if self.noteID == -1:
+			return "&"+self.lengthInfo
+		trNote = self.noteID + transpose
+		assert trNote in noteInfo
+		strID = noteInfo[trNote]["string"]
+		trNote = trNote - noteInfo[trNote]["basenote"]
+		diNote = instrument.toFret(trNote)
+		itemLetter = (instrument.getStringCount()-1-strID) * "x"
+		itemLetter = itemLetter + cm.Strum.fretID[int(diNote)]
+		return itemLetter+self.lengthInfo
+
 	@staticmethod
 	def toIndex(name):
 		return Note.index[name[:-1].lower()]+int(name[-1])*12
@@ -66,7 +78,12 @@ class Bar:
 		for note in self.notes:
 			note.analyse(transpose,usage)
 
-			
+	def render(self,instrument,transpose,noteInfo):
+		render = []
+		for note in self.notes:
+			render.append(note.render(instrument,transpose,noteInfo))			
+		return " ".join(render)
+
 # ****************************************************************************************
 #											A song
 # ****************************************************************************************
@@ -101,6 +118,24 @@ class Song:
 		for bar in self.bars:
 			bar.analyse(transpose,noteUsage)
 		return noteUsage
+
+
+	def render(self,targetFile,instrument,transpose,noteInfo):
+		h = open(targetFile,"w")
+		self.keys["options"] = instrument.getOptions()
+		self.keys["strings"] = str(instrument.getStringCount())
+		for s in range(0,instrument.getStringCount()):
+			self.keys["string"+str(s)] = instrument.getTuning().split(",")[s]
+		klist = [x for x in self.keys]
+		klist.sort()
+		for k in klist:
+			h.write("{0} := {1}\n".format(k,self.keys[k]))
+		h.write("\n")
+		rbars = []
+		for bar in self.bars:
+			rbars.append(bar.render(instrument,transpose,noteInfo))
+		h.write("\n".join(rbars))
+		h.close()	
 
 if __name__ == '__main__':
 	x = Song("here-comes-the-sun.song")

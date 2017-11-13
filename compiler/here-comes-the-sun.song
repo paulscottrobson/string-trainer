@@ -25,7 +25,7 @@ composer := The Beatles
 
 // ---------- Verse ----------
 
-& C- a- b- C. | &- c b a f- | &- a b a f- |
+& C- a- b- C. | &- C b a f- | &- a b a f- |
 // Little darling, it's been a long cold lonely win
 
 &- e & &. | & C- a- b- C. | &- C b a f- 
@@ -36,4 +36,4 @@ composer := The Beatles
 
 // ----- Sun sun sun bit -----
 
-C~. b. a | &- f- a- aoo-
+// C~. b. a | &- f- a- aoo-

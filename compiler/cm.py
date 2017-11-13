@@ -28,7 +28,7 @@ class Strum:
 	def __init__(self,strumDef,compiler):
 		self.compiler = compiler
 		# rests to x
-		strumDef = "x" if strumDef == "&" else strumDef
+		strumDef = "x"+strumDef[1:] if strumDef[0] == "&" else strumDef
 		# validate format
 		m = re.match("^(["+Strum.fretID+"x]+)([o\.\-\=]*)$",strumDef)
 		if m is None:
@@ -185,14 +185,15 @@ class UkuleleCompiler(BaseCompiler):
 
 
 
-c = UkuleleCompiler("in-the-bleak-midwinter.ukulele","../app/music/zawcarols/in-the-bleak-midwinter.json")
-c = UkuleleCompiler("i-saw-three-ships.ukulele","../app/music/zawcarols/i-saw-three-ships.json")
-c = UkuleleCompiler("sans-day-carol.ukulele","../app/music/zawcarols/sans-day-carol.json")
-c = UkuleleCompiler("good-king-wenceslas.ukulele","../app/music/zawcarols/good-king-wenceslas.json")
-c = UkuleleCompiler("silent-night.ukulele","../app/music/zawcarols/silent-night.json")
-c = UkuleleCompiler("sussex-carol.ukulele","../app/music/zawcarols/sussex-carol.json")
-c = UkuleleCompiler("tomorrow-shall-be-my-dancing-day.ukulele","../app/music/zawcarols/tomorrow-shall-be-my-dancing-day.json")
-c = UkuleleCompiler("./we-three-kings.ukulele","../app/music/zawcarols/we-three-kings.json")
+if __name__ == '__main__':
+	c = UkuleleCompiler("zaw/in-the-bleak-midwinter.ukulele","../app/music/zawcarols/in-the-bleak-midwinter.json")
+	c = UkuleleCompiler("zaw/i-saw-three-ships.ukulele","../app/music/zawcarols/i-saw-three-ships.json")
+	c = UkuleleCompiler("zaw/sans-day-carol.ukulele","../app/music/zawcarols/sans-day-carol.json")
+	c = UkuleleCompiler("zaw/good-king-wenceslas.ukulele","../app/music/zawcarols/good-king-wenceslas.json")
+	c = UkuleleCompiler("zaw/silent-night.ukulele","../app/music/zawcarols/silent-night.json")
+	c = UkuleleCompiler("zaw/sussex-carol.ukulele","../app/music/zawcarols/sussex-carol.json")
+	c = UkuleleCompiler("zaw/tomorrow-shall-be-my-dancing-day.ukulele","../app/music/zawcarols/tomorrow-shall-be-my-dancing-day.json")
+	c = UkuleleCompiler("zaw/we-three-kings.ukulele","../app/music/zawcarols/we-three-kings.json")
 
-c = UkuleleCompiler("./we-three-kings.ukulele","../app/music.json")
-c = MerlinCompiler("./happy_birthday.merlin","../app/music.json")
+	c = UkuleleCompiler("zaw/we-three-kings.ukulele","../app/music.json")
+	c = MerlinCompiler("./happy_birthday.merlin","../app/music.json")

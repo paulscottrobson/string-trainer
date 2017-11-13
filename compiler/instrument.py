@@ -73,6 +73,16 @@ class BaseInstrument:
 			return self.getStringUsageNames()[self.selectedString]+".bent"
 		else:
 			return self.getStringUsageNames()[self.selectedString]
+	#
+	#	Convert chromatic to fret#
+	#
+	def toFret(self,chromID):
+		fretChromaticList = self.getChromaticOffsets()
+		for n in range(0,len(fretChromaticList)):
+			if fretChromaticList[n] == chromID:
+				return n
+		assert False
+
 
 class MerlinInstrument(BaseInstrument):
 	def getStringCount(self):
@@ -86,4 +96,5 @@ class MerlinInstrument(BaseInstrument):
 	def getChromaticOffsets(self):
 		return [ 0,   2,  4, 5,   7,   9,  11, 12 ]
 		#		 D D# E F F# G G# A A# B C C#  D
-
+	def getOptions(self):
+		return "merlin"
