@@ -30,7 +30,7 @@ class Strum:
 		# rests to x
 		strumDef = "x"+strumDef[1:] if strumDef[0] == "&" else strumDef
 		# validate format
-		m = re.match("^(["+Strum.fretID+"x]+)([o\.\-\=]*)$",strumDef)
+		m = re.match("^(["+Strum.fretID+"x\^]+)([o\.\-\=]*)$",strumDef)
 		if m is None:
 			raise CompilerException("Unknown strum '"+strumDef+"'")
 		# convert
@@ -39,11 +39,18 @@ class Strum:
 		#print(strumDef,self.strums,self.twLength)
 
 	def createStrums(self,strums):
+		frettings = []
+		while strums != "":
+			frettings.append(None if strums[0] == 'x' else Strum.fretID.find(strums[0]))
+			strums = strums[1:]
+			if strums != "" and strums[0] == '^':
+				frettings[-1] = frettings[-1] + 0.5
+				strums = strums[1:]
+		while len(frettings) < self.compiler.getStringCount():
+			frettings.append(None)
 		# pad with x
-		strums = (strums+"xxxxxxx")[:self.compiler.getStringCount()]
-		strums = [None if x == "x" else Strum.fretID.find(x) for x in strums]
-		strums.reverse()
-		return strums
+		frettings.reverse()
+		return frettings
 
 	def getLength(self):
 		return self.twLength
@@ -67,7 +74,10 @@ class Strum:
 		return render
 
 	def fretRender(self,s):
-		return "-" if s is None else chr(self.compiler.mapFret(s)+97)
+		if s is None:
+			return "-"
+		bend = 0 if s == int(s) else 1
+		return chr(self.compiler.mapFret(int(s))+97+bend)
 
 Strum.fretID = "0123456789tlwhuisv"				# represent frets 0-17
 

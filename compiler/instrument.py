@@ -81,6 +81,9 @@ class BaseInstrument:
 		for n in range(0,len(fretChromaticList)):
 			if fretChromaticList[n] == chromID:
 				return n
+			if n > 0:
+				if fretChromaticList[n-1]+1 == chromID:
+					return n-1+0.5
 		assert False
 
 

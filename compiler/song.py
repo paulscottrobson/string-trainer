@@ -51,6 +51,8 @@ class Note:
 		diNote = instrument.toFret(trNote)
 		itemLetter = (instrument.getStringCount()-1-strID) * "x"
 		itemLetter = itemLetter + cm.Strum.fretID[int(diNote)]
+		if int(diNote) != diNote:
+			itemLetter = itemLetter + "^"
 		return itemLetter+self.lengthInfo
 
 	@staticmethod

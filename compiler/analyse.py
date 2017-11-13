@@ -69,5 +69,5 @@ for t1 in range(0,1):
 				print("Transpose:{0} Score:{1} Tuning:{2}".format(transpose,analyser.score(),merlin.getTuning()))
 				print(analyser.report())
 
-analyser.render(12,merlin,"./here-comes-the-sun.merlin")
+analyser.render(5,merlin,"./here-comes-the-sun.merlin")
 cm.MerlinCompiler("./here-comes-the-sun.merlin","../app/music.json")
