@@ -8,8 +8,9 @@
 
 beats := 4 										// not really required.
 accidentals := C#,F#,G# 						// key sharps (or flats)
+composer := The Beatles
 
-// C-B is the top half of the stace [C3] c-b the botto half. [C4]
+// C-B is the top half of the stace [C3] c-b the bottom half. [C4]
 
 // ---------- Chorus & link ----------
 
@@ -32,3 +33,7 @@ accidentals := C#,F#,G# 						// key sharps (or flats)
 
 & C- b a g- |  &ooo 
 // since its been here
+
+// ----- Sun sun sun bit -----
+
+C~. b. a | &- f- a- aoo-

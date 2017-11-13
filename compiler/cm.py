@@ -184,7 +184,6 @@ class UkuleleCompiler(BaseCompiler):
 						  "version":"1","capo":"0","options":"ukulele" }		
 
 
-#c = MerlinCompiler("./happy_birthday.merlin","../app/music/zawcarols/music.json")
 
 c = UkuleleCompiler("in-the-bleak-midwinter.ukulele","../app/music/zawcarols/in-the-bleak-midwinter.json")
 c = UkuleleCompiler("i-saw-three-ships.ukulele","../app/music/zawcarols/i-saw-three-ships.json")
@@ -196,3 +195,4 @@ c = UkuleleCompiler("tomorrow-shall-be-my-dancing-day.ukulele","../app/music/zaw
 c = UkuleleCompiler("./we-three-kings.ukulele","../app/music/zawcarols/we-three-kings.json")
 
 c = UkuleleCompiler("./we-three-kings.ukulele","../app/music.json")
+c = MerlinCompiler("./happy_birthday.merlin","../app/music.json")

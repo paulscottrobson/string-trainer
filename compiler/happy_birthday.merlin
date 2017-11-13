@@ -6,6 +6,7 @@
 
 //	override the default beats, which is 4.
 beats := 3
+options := merlin
 
 // tuning := c3,g3,c4 you can override the tuning like this. Merlin default is d3,a3,d4
 

@@ -15,7 +15,7 @@ import re
 class Note:
 	def __init__(self,notedef,accidentals):
 		# check syntax
-		m = re.match("^([a-gA-G\&][\#\\b]?)([\-\=o\.]*)$",notedef)
+		m = re.match("^([a-gA-G\&][\#\\b\\~]?)([\-\=o\.]*)$",notedef)
 		assert m is not None,"Can't understand "+notedef	
 		# save length info ; we don't care
 		self.lengthInfo = m.group(2)
@@ -26,6 +26,8 @@ class Note:
 		note = note.lower()
 		if len(note) == 1 and note in accidentals:
 			note = accidentals[note]
+		if note[-1] == '~':
+			note = note[:-1]			
 		# convert to note offset (C0 = 0) or rest (-1)
 		if note == "&":
 			self.noteID = -1
@@ -64,6 +66,7 @@ class Bar:
 		for note in self.notes:
 			note.analyse(transpose,usage)
 
+			
 # ****************************************************************************************
 #											A song
 # ****************************************************************************************
@@ -99,11 +102,6 @@ class Song:
 			bar.analyse(transpose,noteUsage)
 		return noteUsage
 
-x = Song("here-comes-the-sun.song")
-print(x.analyse(0))
-print(x.analyse(1))
-print(x.analyse(-1))
-print(Note.toName(49))
-#
-# TODO: Analyse the notes of the song against different transpositions and tunings.
-# TODO: Rendering code in tunings.
+if __name__ == '__main__':
+	x = Song("here-comes-the-sun.song")
+	print(x.analyse(0))
