@@ -21,8 +21,12 @@ class ControlPanel extends Phaser.Group implements IControlPanel,IButtonListener
         this.signal = new Phaser.Signal();
         this.size = this.game.width / 12;
 
-        this.speedPC = this.game.add.bitmapText(this.game.width-20,0,"font","100%",this.size*0.6,this);
-        this.speedPC.y = this.size * 0.6;this.speedPC.anchor.y = 0.5;this.speedPC.anchor.x = 1;
+        var img:Phaser.Image = this.game.add.image(0,0,"sprites","roundframe",this);
+        img.scale.x = img.scale.y = 1.4;
+        img.anchor.x = img.anchor.y = 0.5;
+        img.x = this.game.width-this.size;img.y = this.size * 0.6;
+        this.speedPC = this.game.add.bitmapText(img.x,img.y,"font","100%",this.size*0.6,this);
+        this.speedPC.anchor.y = 0.4;this.speedPC.anchor.x = 0.5;
         this.addButton(Phaser.Keyboard.S,"i_slower",ButtonMessage.SlowSpeed,false);
         this.addButton(Phaser.Keyboard.N,"i_normal",ButtonMessage.NormalSpeed,false);
         this.addButton(Phaser.Keyboard.F,"i_faster",ButtonMessage.FastSpeed,false);
@@ -39,7 +43,7 @@ class ControlPanel extends Phaser.Group implements IControlPanel,IButtonListener
         } else {
             btn = new PushButton(this.game,base,msg,this,this.size);
         }
-        btn.x = this.game.width/2+(this.buttonCount-3)*1.1 * btn.width;
+        btn.x = this.game.width/2+(this.buttonCount-4)*1.1 * btn.width;
         btn.y = btn.height * 0.6;
         this.buttonCount++;
 

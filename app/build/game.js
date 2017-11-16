@@ -445,10 +445,14 @@ var ControlPanel = (function (_super) {
         _this.buttonCount = 0;
         _this.signal = new Phaser.Signal();
         _this.size = _this.game.width / 12;
-        _this.speedPC = _this.game.add.bitmapText(_this.game.width - 20, 0, "font", "100%", _this.size * 0.6, _this);
-        _this.speedPC.y = _this.size * 0.6;
-        _this.speedPC.anchor.y = 0.5;
-        _this.speedPC.anchor.x = 1;
+        var img = _this.game.add.image(0, 0, "sprites", "roundframe", _this);
+        img.scale.x = img.scale.y = 1.4;
+        img.anchor.x = img.anchor.y = 0.5;
+        img.x = _this.game.width - _this.size;
+        img.y = _this.size * 0.6;
+        _this.speedPC = _this.game.add.bitmapText(img.x, img.y, "font", "100%", _this.size * 0.6, _this);
+        _this.speedPC.anchor.y = 0.4;
+        _this.speedPC.anchor.x = 0.5;
         _this.addButton(Phaser.Keyboard.S, "i_slower", ButtonMessage.SlowSpeed, false);
         _this.addButton(Phaser.Keyboard.N, "i_normal", ButtonMessage.NormalSpeed, false);
         _this.addButton(Phaser.Keyboard.F, "i_faster", ButtonMessage.FastSpeed, false);
@@ -466,7 +470,7 @@ var ControlPanel = (function (_super) {
         else {
             btn = new PushButton(this.game, base, msg, this, this.size);
         }
-        btn.x = this.game.width / 2 + (this.buttonCount - 3) * 1.1 * btn.width;
+        btn.x = this.game.width / 2 + (this.buttonCount - 4) * 1.1 * btn.width;
         btn.y = btn.height * 0.6;
         this.buttonCount++;
         var key = this.game.input.keyboard.addKey(keyID);
