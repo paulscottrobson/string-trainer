@@ -9,6 +9,7 @@ class ControlPanel extends Phaser.Group implements IControlPanel,IButtonListener
     private buttonCount:number;
     private signal:Phaser.Signal;
     private size:number;
+    private speedPC:Phaser.BitmapText;
 
     constructor(game:Phaser.Game) {
         super(game);
@@ -20,13 +21,15 @@ class ControlPanel extends Phaser.Group implements IControlPanel,IButtonListener
         this.signal = new Phaser.Signal();
         this.size = this.game.width / 12;
 
+        this.speedPC = this.game.add.bitmapText(this.game.width-20,0,"font","100%",this.size*0.6,this);
+        this.speedPC.y = this.size * 0.6;this.speedPC.anchor.y = 0.5;this.speedPC.anchor.x = 1;
         this.addButton(Phaser.Keyboard.S,"i_slower",ButtonMessage.SlowSpeed,false);
         this.addButton(Phaser.Keyboard.N,"i_normal",ButtonMessage.NormalSpeed,false);
         this.addButton(Phaser.Keyboard.F,"i_faster",ButtonMessage.FastSpeed,false);
-        this.addButton(Phaser.Keyboard.R,"i_restart",ButtonMessage.Restart,false);
+        this.addButton(Phaser.Keyboard.SPACEBAR,"i_restart",ButtonMessage.Restart,false);
         this.addButton(Phaser.Keyboard.A,"i_music",ButtonMessage.MusicAudible,true);
         this.addButton(Phaser.Keyboard.M,"i_metronome",ButtonMessage.MetronomeAudible,true);
-        this.addButton(Phaser.Keyboard.P,"i_play",ButtonMessage.RunMusic,true);
+        this.addButton(Phaser.Keyboard.ENTER,"i_play",ButtonMessage.RunMusic,true);
     }
 
     private addButton(keyID:number,base:string,msg:ButtonMessage,isToggle:boolean) {
@@ -54,9 +57,9 @@ class ControlPanel extends Phaser.Group implements IControlPanel,IButtonListener
             case ButtonMessage.RunMusic:
                 this.isPaused = !this.isPaused;break;
             case ButtonMessage.FastSpeed:
-                this.speedScalar = this.speedScalar * 1.1;break;
+                this.speedScalar = Math.min(this.speedScalar + 0.05,1.8);break;
             case ButtonMessage.SlowSpeed:
-                this.speedScalar = this.speedScalar / 1.1;break;
+                this.speedScalar = Math.max(this.speedScalar - 0.05,0.25);break;
             case ButtonMessage.NormalSpeed:
                 this.speedScalar = 1;break;
             case ButtonMessage.MetronomeAudible:
@@ -64,6 +67,7 @@ class ControlPanel extends Phaser.Group implements IControlPanel,IButtonListener
             case ButtonMessage.MusicAudible:
                 this.musicOn = !this.musicOn;break;
         }
+        this.speedPC.text = Math.round(this.speedScalar * 100).toString()+"%";
     }
 
     getSpeedScalar(): number {

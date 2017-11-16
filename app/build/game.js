@@ -445,13 +445,17 @@ var ControlPanel = (function (_super) {
         _this.buttonCount = 0;
         _this.signal = new Phaser.Signal();
         _this.size = _this.game.width / 12;
+        _this.speedPC = _this.game.add.bitmapText(_this.game.width - 20, 0, "font", "100%", _this.size * 0.6, _this);
+        _this.speedPC.y = _this.size * 0.6;
+        _this.speedPC.anchor.y = 0.5;
+        _this.speedPC.anchor.x = 1;
         _this.addButton(Phaser.Keyboard.S, "i_slower", ButtonMessage.SlowSpeed, false);
         _this.addButton(Phaser.Keyboard.N, "i_normal", ButtonMessage.NormalSpeed, false);
         _this.addButton(Phaser.Keyboard.F, "i_faster", ButtonMessage.FastSpeed, false);
-        _this.addButton(Phaser.Keyboard.R, "i_restart", ButtonMessage.Restart, false);
+        _this.addButton(Phaser.Keyboard.SPACEBAR, "i_restart", ButtonMessage.Restart, false);
         _this.addButton(Phaser.Keyboard.A, "i_music", ButtonMessage.MusicAudible, true);
         _this.addButton(Phaser.Keyboard.M, "i_metronome", ButtonMessage.MetronomeAudible, true);
-        _this.addButton(Phaser.Keyboard.P, "i_play", ButtonMessage.RunMusic, true);
+        _this.addButton(Phaser.Keyboard.ENTER, "i_play", ButtonMessage.RunMusic, true);
         return _this;
     }
     ControlPanel.prototype.addButton = function (keyID, base, msg, isToggle) {
@@ -478,10 +482,10 @@ var ControlPanel = (function (_super) {
                 this.isPaused = !this.isPaused;
                 break;
             case ButtonMessage.FastSpeed:
-                this.speedScalar = this.speedScalar * 1.1;
+                this.speedScalar = Math.min(this.speedScalar + 0.05, 1.8);
                 break;
             case ButtonMessage.SlowSpeed:
-                this.speedScalar = this.speedScalar / 1.1;
+                this.speedScalar = Math.max(this.speedScalar - 0.05, 0.25);
                 break;
             case ButtonMessage.NormalSpeed:
                 this.speedScalar = 1;
@@ -493,6 +497,7 @@ var ControlPanel = (function (_super) {
                 this.musicOn = !this.musicOn;
                 break;
         }
+        this.speedPC.text = Math.round(this.speedScalar * 100).toString() + "%";
     };
     ControlPanel.prototype.getSpeedScalar = function () {
         return this.isPaused ? 0 : this.speedScalar;
