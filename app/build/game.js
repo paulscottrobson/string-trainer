@@ -111,7 +111,7 @@ var MainState = (function (_super) {
         this.metronome.setAudible(this.cpanel.isMetronomeOn());
         this.player.setAudible(this.cpanel.isMusicOn());
     };
-    MainState.VERSION = "0.92 12-Nov-17 Phaser-CE 2.8.7 (c) PSR 2017";
+    MainState.VERSION = "0.93 16-Nov-17 Phaser-CE 2.8.7 (c) PSR 2017";
     return MainState;
 }(Phaser.State));
 var Background = (function (_super) {
@@ -445,16 +445,16 @@ var ControlPanel = (function (_super) {
         _this.buttonCount = 0;
         _this.signal = new Phaser.Signal();
         _this.size = _this.game.width / 12;
-        _this.addButton("i_slower", ButtonMessage.SlowSpeed, false);
-        _this.addButton("i_normal", ButtonMessage.NormalSpeed, false);
-        _this.addButton("i_faster", ButtonMessage.FastSpeed, false);
-        _this.addButton("i_restart", ButtonMessage.Restart, false);
-        _this.addButton("i_music", ButtonMessage.MusicAudible, true);
-        _this.addButton("i_metronome", ButtonMessage.MetronomeAudible, true);
-        _this.addButton("i_play", ButtonMessage.RunMusic, true);
+        _this.addButton(Phaser.Keyboard.S, "i_slower", ButtonMessage.SlowSpeed, false);
+        _this.addButton(Phaser.Keyboard.N, "i_normal", ButtonMessage.NormalSpeed, false);
+        _this.addButton(Phaser.Keyboard.F, "i_faster", ButtonMessage.FastSpeed, false);
+        _this.addButton(Phaser.Keyboard.R, "i_restart", ButtonMessage.Restart, false);
+        _this.addButton(Phaser.Keyboard.A, "i_music", ButtonMessage.MusicAudible, true);
+        _this.addButton(Phaser.Keyboard.M, "i_metronome", ButtonMessage.MetronomeAudible, true);
+        _this.addButton(Phaser.Keyboard.P, "i_play", ButtonMessage.RunMusic, true);
         return _this;
     }
-    ControlPanel.prototype.addButton = function (base, msg, isToggle) {
+    ControlPanel.prototype.addButton = function (keyID, base, msg, isToggle) {
         var btn;
         if (isToggle) {
             btn = new ToggleButton(this.game, base, msg, this, this.size);
@@ -465,6 +465,8 @@ var ControlPanel = (function (_super) {
         btn.x = this.game.width / 2 + (this.buttonCount - 3) * 1.1 * btn.width;
         btn.y = btn.height * 0.6;
         this.buttonCount++;
+        var key = this.game.input.keyboard.addKey(keyID);
+        key.onDown.add(btn.clickHandler, btn);
     };
     ControlPanel.prototype.addSignalListener = function (func, target) {
         this.signal.add(func, target);
@@ -1074,7 +1076,6 @@ var MusicPlayer = (function () {
         MusicPlayer.baseNote = baseNote.toLowerCase();
         for (var n = 1; n <= MusicPlayer.noteCount; n++) {
             if ((note1 + n - 1) in analysis) {
-                console.log(ns);
                 var ns = n.toString();
                 game.load.audio(ns, ["assets/sounds/" + ns + ".mp3",
                     "assets/sounds/" + ns + ".ogg"]);

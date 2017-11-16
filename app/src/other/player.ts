@@ -108,7 +108,7 @@ class MusicPlayer {
         // For each note, if in analysis load it.
         for (var n:number = 1;n <= MusicPlayer.noteCount;n++) {
             if ((note1 + n - 1) in analysis) {
-                console.log(ns);
+                //console.log(ns);
                 var ns:string = n.toString();
                 game.load.audio(ns,["assets/sounds/"+ns+".mp3",
                                      "assets/sounds/"+ns+".ogg"]);        

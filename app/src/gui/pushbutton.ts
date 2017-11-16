@@ -34,7 +34,7 @@ class PushButton extends Phaser.Group {
         this.listener = this.buttonImage = null;
     }
     
-    protected clickHandler(): void {
+    clickHandler(): void {
         this.listener.clickButton(this.message,this);
         if (this.tween == null) {
             var tweenInfo:any = { width:this.width-10,height:this.height-10 };

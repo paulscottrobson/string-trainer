@@ -17,7 +17,7 @@ class ToggleButton extends PushButton {
         this.isOn = true;
     }
 
-    protected clickHandler(): void {
+    clickHandler(): void {
         super.clickHandler();
         this.isOn = !this.isOn;
         var w:number = this.buttonImage.width;
