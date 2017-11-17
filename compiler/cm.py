@@ -204,6 +204,7 @@ if __name__ == '__main__':
 	c = UkuleleCompiler("zaw/sussex-carol.ukulele","../app/music/zawcarols/sussex-carol.json")
 	c = UkuleleCompiler("zaw/tomorrow-shall-be-my-dancing-day.ukulele","../app/music/zawcarols/tomorrow-shall-be-my-dancing-day.json")
 	c = UkuleleCompiler("zaw/we-three-kings.ukulele","../app/music/zawcarols/we-three-kings.json")
-
-	c = UkuleleCompiler("zaw/we-three-kings.ukulele","../app/music.json")
-	c = MerlinCompiler("./happy_birthday.merlin","../app/music.json")
+	c = UkuleleCompiler("zaw/sugar-plum-fairies.ukulele","../app/music/zawcarols/sugar-plum-fairies.json")
+	c = UkuleleCompiler("zaw/troike.ukulele","../app/music/zawcarols/troike.json")
+	
+#	c = MerlinCompiler("./happy_birthday.merlin","../app/music.json")
