@@ -1,12 +1,6 @@
 # ****************************************************************************************
 # ****************************************************************************************
 #
-#								Seagull Merlin Compiler
-#								=======================
-#
-#	This converts the .merlin format to .json format suitable for the stringtrainer
-#	application.
-#
 # ****************************************************************************************
 # ****************************************************************************************
 
@@ -33,8 +27,10 @@ class Strum:
 		m = re.match("^(["+Strum.fretID+"x\^]+)([o\.\-\=]*)$",strumDef)
 		if m is None:
 			raise CompilerException("Unknown strum '"+strumDef+"'")
+		# translate if needed.
+		strum = self.compiler.translate(m.group(1))
 		# convert
-		self.strums = self.createStrums(m.group(1))
+		self.strums = self.createStrums(strum)
 		self.twLength = self.calculateLength(m.group(2))
 		#print(strumDef,self.strums,self.twLength)
 
@@ -168,6 +164,9 @@ class BaseCompiler:
 		for key in k:
 			target.write('    "{0}":"{1}",\n'.format(key,self.infoKeys[key]))
 
+	def translate(self,strumDef):
+		return strumDef
+
 class MerlinCompiler(BaseCompiler):
 	def getStringCount(self):
 		return 3
@@ -181,6 +180,11 @@ class MerlinCompiler(BaseCompiler):
 
 MerlinCompiler.fretMapping = [	0, 	2,	4,	5,	7,	9,	11,	12 ]
 #								D 	E 	F# 	G 	A 	B 	C# 	D
+
+class DAAConverterCompiler(MerlinCompiler):
+	def translate(self,strumDef):
+		n = int(strumDef) - 3
+		return str(n) if n >= 0 else "x"+str(n+3	)
 
 class UkuleleCompiler(BaseCompiler):
 	def getStringCount(self):
@@ -208,3 +212,4 @@ if __name__ == '__main__':
 	c = UkuleleCompiler("zaw/troike.ukulele","../app/music/zawcarols/troike.json")
 	
 #	c = MerlinCompiler("./happy_birthday.merlin","../app/music.json")
+	c = DAAConverterCompiler("./brother-john.daa","../app/music.json")
