@@ -1,0 +1,15 @@
+//	Demo - Oh Danny Boy
+
+instrument := Merlin
+title := Oh Danny Boy
+composer := Classic
+tempo := 80
+beats := 3
+
+&o &- 4= | "danny boy if you should"  430 2- 310 4- |  200- 1- 0- 101 x2- |  000 0- 101- 2- 3- | 200 1- 000 4-
+
+430 2- 310 4- |  200- 1- 0- 101 x2- |  000 0- 111- 2- 3- | 200 1- 000.
+
+11. 111 0- |  101- 2- 3- 430- 3- 2- | 111oo | 430 533 430
+
+311 2- 111- 0- 1- | 000oo

@@ -1,0 +1,13 @@
+//
+//		I saw three ships (ZAW)
+//
+
+instrument := ukulele
+tuning := g3,c4,e4,a4
+tempo := 140
+beats := 3
+composer := zoe-anne wadey
+
+& & ..0 | .1.2o .1| .34o 0 | 3.2o 0 | .30o 1 | 01o .1 | .14o 0 | .32o .0 | ..00o ..0
+
+.1.2o .1 | .34o 0 | 3.2o 0 |.30o 1 | 01o .1 | .12 .3 0 | .30o ...3 | .1.2oo
