@@ -62,7 +62,7 @@ class MusicJSON:
 		# add to current strum				
 		self.bars[-1].append(strum)
 		# check range.
-		print(qbPosition,self.settings)
+		#print(qbPosition,self.settings)
 		if qbPosition >= int(self.settings["beats"]) * 4:
 			raise CompilerException("Bar overflow")
 		#print(strum)
@@ -97,7 +97,7 @@ class MusicJSON:
 			render = contents[0][1]
 			contents = contents[1:]
 		if len(contents) == 0:
-			return ""
+			return render
 		# is there a space to the first note ? If so, pad with rest.
 		if contents[0][0] != 0:
 			rest = [ None ] * self.strings
@@ -135,3 +135,5 @@ if __name__ == '__main__':
 			c.addStrum([n,s+1,s],0+s*2,chr(s+65)+"m" if s != 2 else "")
 		c.addStrum([None,None,None],(4+n)*2)
 	print(c.render())		
+
+

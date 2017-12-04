@@ -7,7 +7,7 @@
 # ******************************************************************************************
 
 class BaseInstrument:
-	
+
 	def compile(self):
 		# Basic Info
 		defn =  [ self.getShortName(),self.getName(),self.getDefaultTuning(), \
@@ -23,6 +23,9 @@ class BaseInstrument:
 			defn.append(fi[0]+"="+str(fi[1]))
 		# Put them together in a string
 		return ".".join(defn)
+
+	def fretToChromatic(self,fret):
+		return self.getFretInfo(fret)[1]
 
 	def isStringDoubled(self,str):
 		return False

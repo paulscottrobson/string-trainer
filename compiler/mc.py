@@ -9,6 +9,7 @@
 from musicjson import MusicJSON
 from exception import CompilerException
 import instruments
+import re
 
 class MusicCompiler:
 	#
@@ -29,7 +30,6 @@ class MusicCompiler:
 		# Current chord and strum pattern.
 		self.currentChord = None
 		self.strumPattern = "d-" * self.getBeats()
-		print(self.strumPattern)
 		# Scan every line
 		for n in range(0,len(self.src)):
 			self.lineNumber = n + 1
@@ -81,17 +81,87 @@ class MusicCompiler:
 	#
 	def compileBar(self,barDef):
 		self.musicjson.addBar()
-		# Extract lyrics
-		# Extract strum patterns
-		# Set up beat chords with lastchords
+		barDef = self.lyricsAndStrumPatterns(barDef)
+		barDef = self.processChords(barDef)
+		# convert rests (&)
+		barDef = barDef.replace("&","."*self.instrument.getStringCount()).strip()
 		# Process items one at a time.
-		# Create strums with chords and string patterns
+		print('"'+barDef+'"')
+	#
+	#	Process chords.
+	#
+	def processChords(self,barDef):
+		# start with repeating the last chord.
+		chords = [self.currentChord] * self.getBeats()
+		# extract out chords.
+		m = re.search("\[(.*?)\]",barDef)
+		# while more to extract
+		while m is not None:
+			# remove from definition			 
+			barDef = barDef.replace(m.group(0)," ")
+			cInfo = m.group(1)
+			# add default :1
+			cInfo = cInfo if cInfo.find(":") >= 0 else cInfo+":1"
+			# if turning off make chord "x"
+			cInfo = cInfo if cInfo[0] != ':' else "x"+cInfo
+			# split into chord and position
+			cInfo = cInfo.split(":")
+			# fill from there to the end of the bar with the chord.
+			for pos in range(int(cInfo[1])-1,self.getBeats()):
+				chords[pos] = cInfo[0] if cInfo[0] != 'x' else None
+			# look again.			
+			m = re.search("\[(.*?)\]",barDef)
+		# convert chords to actual chord definitions.
+		xchords = [ None ] * self.getBeats()
+		for i in range(0,len(chords)):
+			if chords[i] is not None:
+				# Get chord from settings.
+				key = "chord."+chords[i]
+				xchords[i] = [int(x) for x in self.musicjson.get(key)]
+				# Convert to chromatic strum as these are fret numbers.
+				xchords[i] = [self.instrument.fretToChromatic(x) for x in xchords[i]]
+		#print(xchords)
+		# check every half beat
+		for halfBeat in range(0,self.getBeats()*2):
+			# see if there is a strum there
+			c = self.strumPattern[halfBeat]
+			if not(c == '_' or c == '.' or c == '-' or c == ' '):
+				# check there is a chord in that half beat
+				ch = xchords[int(halfBeat/2)]
+				# if so, add to bar.
+				if ch is not None:
+					self.musicjson.addStrum(ch,halfBeat*2,chords[int(halfBeat/2)])					
+		# the last chord is the first chord next time.
+		self.currentChord = chords[-1]
+		return barDef
+	#
+	#	Extract lyrics and strum patterns out.
+	#
+	def lyricsAndStrumPatterns(self,barDef):
+		# Look for lyrics.
+		m = re.search('\"(.*?)\"',barDef)
+		if m is not None:
+			barDef = barDef.replace(m.group(0)," ")
+			self.musicjson.setLyric(m.group(1).lower())
+			if barDef.find('"') >= 0:
+				raise CompilerException("Only one lyric per bar")
+		# Extract strum patterns
+		m = re.search('\{(.*?)}',barDef)
+		if m is not None:
+			barDef = barDef.replace(m.group(0)," ")
+			self.strumPattern = m.group(1).lower()
+			#print(self.strumPattern)
+			if barDef.find('{') >= 0:
+				raise CompilerException("Only one strum pattern per bar")
+		return barDef
 
 if __name__ == '__main__':
 	mc = MusicCompiler()
-	mc.compile("good-king-wenceslas.music")			# music only, no chords
-	print(mc.musicjson.render())
-	#mc.compile("oh danny boy.music")				# chords, music, lyrics
+	#mc.compile("good-king-wenceslas.music")			# music only, no chords
+	mc.compile("oh danny boy.music")				# chords, music, lyrics
 	#mc.compile("let-it-be.music") 					# chords and lyrics only.
 
 	#print(instruments.InstrumentFactory().get("merlin"))
+	print(mc.musicjson.render())
+
+# TODO: Fret conversion
