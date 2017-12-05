@@ -18,7 +18,7 @@ class MusicCompiler:
 	def compile(self,sourceFile):
 		self.sourceFile = sourceFile
 		self.lineNumber = 0
-		self.fretMapping = "0123456789tvwhuixv"
+		self.fretMapping = "0123456789tvwhuisv"
 		# Read and tidy
 		self.preProcess()
 		# Figure out instrument, create json store
@@ -85,8 +85,9 @@ class MusicCompiler:
 		barDef = self.lyricsAndStrumPatterns(barDef)
 		barDef = self.processChords(barDef)
 		# convert rests (&)
-		barDef = barDef.replace("&","."*self.instrument.getStringCount()).strip()
+		barDef = barDef.replace("&","x"*self.instrument.getStringCount()).strip()
 		# Process items one at a time.
+		self.barPosition = 0
 		for item in barDef.split(" "):
 			if item != "":
 				self.compileItem(item)
@@ -94,9 +95,64 @@ class MusicCompiler:
 	#	Compile an item. All we (should) have left are Strums.
 	#				
 	def compileItem(self,itemDef):
-		m = re.match("^("+self.fretMapping+"x)+(o\.\-\=)*$")		
+		m = re.match("^(["+self.fretMapping+"x\^]+)([o\.\-\=]*)$",itemDef)		
 		if m is None:
 			raise CompilerException("Cannot process "+itemDef)
+		strum = self.convertToStrum(m.group(1))
+		qbLength = self.convertToQBLength(m.group(2))
+		self.musicjson.addStrum(strum,self.barPosition)
+		self.barPosition += qbLength
+		#print(itemDef,strum,qbLength)
+	#
+	#	Convert strum text to a strum list.
+	#
+	def convertToStrum(self,strumDef):
+		strum = []
+		while strumDef != "":
+			# No strum.
+			if strumDef[0] == 'x':
+				strum.append(None)
+				strumDef = strumDef[1:]
+			else:
+				# Strum 0-9 etc.
+				if self.fretMapping.find(strumDef[0]) < 0:
+					raise "No such fret position "+strumDef[0]
+				# Get chromatic offset
+				fretID = self.fretMapping.find(strumDef[0])
+				#print(strumDef[0],fretID)
+				strum.append(self.instrument.fretToChromatic(fretID))
+				strumDef = strumDef[1:]
+				# Handle +
+				if strumDef != "" and strumDef[0] == '+':
+					strum[-1] += 1
+					strumDef = strumDef[1:]
+				# Handle ^ (bend)
+				if strumDef != "" and strumDef[0] == '^':
+					strum[-1] += 1
+					strumDef = strumDef[1:]
+		# check length
+		if len(strum) > self.instrument.getStringCount():
+			raise CompilerException("Too many strums")
+		# pad out and fix it so lowest string first.
+		while len(strum) < self.instrument.getStringCount():
+			strum.append(None)
+		strum.reverse()
+		return strum
+	#
+	#	Convert length modifiers to a quarterbeatTime
+	#
+	def convertToQBLength(self,modifiers):
+		qbLength = 4
+		for m in modifiers:
+			if m == 'o':
+				qbLength += 4
+			if m == '.':
+				qbLength = int(qbLength*3/2)
+			if m == '-':
+				qbLength -= 2
+			if m == '=':
+				qbLength -= 3
+		return qbLength
 	#
 	#	Process chords.
 	#
@@ -167,11 +223,9 @@ class MusicCompiler:
 
 if __name__ == '__main__':
 	mc = MusicCompiler()
-	#mc.compile("good-king-wenceslas.music")			# music only, no chords
-	mc.compile("oh danny boy.music")				# chords, music, lyrics
-	#mc.compile("let-it-be.music") 					# chords and lyrics only.
+	mc.compile("good-king-wenceslas.music")			# music only, no chords, uke
+	#mc.compile("oh danny boy.music")				# chords, music, lyrics, merlin
+	#mc.compile("let-it-be.music") 					# chords and lyrics only, loog
 
 	#print(instruments.InstrumentFactory().get("merlin"))
 	print(mc.musicjson.render())
-
-# TODO: Fret conversion
