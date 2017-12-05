@@ -11,7 +11,7 @@
 "composer":"the beatles",
 "chord.am":"210",
 "bars":[
-    "<when i>",
+    "<when i>;---,16",
     "<find myself in times of trouble>;aba[c],04;aba[c],04;aad[g],04;aad[g],04",
     "<mother mary comes to me>;cba[am],04;cba[am],04;cbb[f],04;cbb[f],04",
     "<speaking words of wisdom let it>;aba[c],04;aba[c],04;aad[g],04;aad[g],04",

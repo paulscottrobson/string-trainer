@@ -22,6 +22,10 @@ class Bar implements IBar {
                 qbPosition += strum.getQBLength();
             }
         }
+        // Check Pad strum to end, so we always have a full bar.
+        if (qbPosition != music.getBeats()*4) {
+            throw "Padding bar not working ?"
+        }
     }
 
     getMusic(): IMusic {

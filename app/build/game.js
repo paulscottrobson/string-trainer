@@ -134,6 +134,9 @@ var Bar = (function () {
                 qbPosition += strum.getQBLength();
             }
         }
+        if (qbPosition != music.getBeats() * 4) {
+            throw "Padding bar not working ?";
+        }
     }
     Bar.prototype.getMusic = function () {
         return this.music;

@@ -68,7 +68,7 @@ class MusicJSON:
 		#print(strum)
 	#
 	#	Sort all the strums in a bar. We can't assume they come in in order
-	# 	though they probably will !
+	# 	though they probably will.
 	#
 	def sortStrums(self,bar):
 		bar.sort(key = lambda x:x[0])
@@ -96,11 +96,11 @@ class MusicJSON:
 		if contents[0][0] == -1:
 			render = contents[0][1]
 			contents = contents[1:]
-		if len(contents) == 0:
-			return render
+		# are we now empty. if so we want rests for the whole bar.
 		# is there a space to the first note ? If so, pad with rest.
-		if contents[0][0] != 0:
+		if len(contents) == 0 or contents[0][0] != 0:
 			rest = [ None ] * self.strings
+			rest.insert(0,"")
 			rest.insert(0,0)
 			contents.insert(0,rest)
 		# now render each one in turn.
