@@ -3,11 +3,9 @@
 #
 echo "Making Graphics"
 cd graphics
-rm source/notebutton*.png
-rm source/sinecurve*.png
-python makeframes.py
-python makecurves.py
-python makeatlas.py
+python3 makeatlas.py
+python3 makecurves.py
+python3 makeframes.py
 
 echo "Copying to assets"
 cp sprites.* ../app/assets/sprites

@@ -1,23 +1,26 @@
 {
-    "beats":"4",
-    "capo":"0",
-    "composer":"unknown",
-    "options":"merlin",
-    "string0":"d3",
-    "string1":"a3",
-    "string2":"d4",
-    "strings":"3",
-    "tempo":"100",
-    "title":"brother john",
-    "version":"1",
-    "bars":[
-        "--a12;--c12;--e12;--a12",
-        "--a12;--c12;--e12;--a12",
-        "--e12;--f12;--h24",
-        "--e12;--f12;--h24",
-        "--h06;--j06;--h06;--f06;--e12;--a12",
-        "--h06;--j06;--h06;--f06;--e12;--a12",
-        "--c12;-a-12;--a24",
-        "--c12;-a-12;--a24"
-    ]
+"tuning":"d3,a3,d4",
+"title":"oh danny boy",
+"tempo":"80",
+"instrument":"merlin",
+"beats":"3",
+"capo":"0",
+"composer":"classic",
+"bars":[
+    "----08;----02;--h-02",
+    "<danny boy if you should>;afh-04;--e-02;acf-04;--h-02",
+    "aae-02;--c-02;--a-02;cac-04;-e--02",
+    "aaa-04;--a-02;cac-02;--e-02;--f-02",
+    "aae-04;--c-02;aaa-04;--h-02",
+    "afh-04;--e-02;acf-04;--h-02",
+    "aae-02;--c-02;--a-02;cac-04;-e--02",
+    "aaa-04;--a-02;ccc-02;--e-02;--f-02",
+    "aae-04;--c-02;aaa-06",
+    "-cc-06;ccc-04;--a-02",
+    "cac-02;--e-02;--f-02;afh-02;--f-02;--e-02",
+    "ccc-12",
+    "afh-04;ffj-04;afh-04",
+    "ccf-04;--e-02;ccc-02;--a-02;--c-02",
+    "aaa-12"
+]
 }

@@ -223,9 +223,9 @@ class MusicCompiler:
 
 if __name__ == '__main__':
 	mc = MusicCompiler()
-	mc.compile("good-king-wenceslas.music")			# music only, no chords, uke
-	#mc.compile("oh danny boy.music")				# chords, music, lyrics, merlin
+	#mc.compile("good-king-wenceslas.music")			# music only, no chords, uke
+	mc.compile("oh danny boy.music")				# chords, music, lyrics, merlin
 	#mc.compile("let-it-be.music") 					# chords and lyrics only, loog
 
 	#print(instruments.InstrumentFactory().get("merlin"))
-	print(mc.musicjson.render())
+	open("../app/music.json","w").write(mc.musicjson.render())

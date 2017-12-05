@@ -23,25 +23,24 @@ class PreloadState extends Phaser.State {
         loader.height = this.game.height / 8;        
         loader.anchor.setTo(0.5);
         this.game.load.setPreloadSprite(loader);
-
-        this.game.load.json("sprites","assets/sprites/sprites.json")    
+        // Get the sprite info, which we may need to check later.
+        this.game.load.json("sprite_info","assets/sprites/sprites.json")    
         // Load the sprite atlas.
         this.game.load.atlas("sprites","assets/sprites/sprites.png",
                                        "assets/sprites/sprites.json");
         // Load the fonts
-        for (var fontName of ["font"]) {
+        for (var fontName of ["dfont","font"]) {
             this.game.load.bitmapFont(fontName,"assets/fonts/"+fontName+".png",
                                                "assets/fonts/"+fontName+".fnt");
         }
-        // Create music, which is preloaded early.
-        var music:IMusic = new Music(this.game.cache.getJSON("music"));
-        // Load notes
-        MusicPlayer.preload(this.game,48,"C3",music);
+        // Anaylse the Music to see what notes are needed and preload them.
+        //Player.preload(this.game,new Music(this.game.cache.getJSON("music")));
+
         // Load metronome sounds
         this.game.load.audio("metronome",["assets/sounds/metronome.mp3",
                                           "assets/sounds/metronome.ogg"]);        
 
         // Switch to game state when load complete.        
-        this.game.load.onLoadComplete.add(() => { this.game.state.start("Main",true,false,music); },this);
+        this.game.load.onLoadComplete.add(() => { this.game.state.start("Main",true,false); },this);
     }
 }

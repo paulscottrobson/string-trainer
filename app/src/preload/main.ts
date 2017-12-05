@@ -4,19 +4,13 @@ window.onload = function() {
     var game = new StringTrainerApplication();
 }
 
-/**
- * Main Application class
- * 
- * @class StringTrainerApplication
- * @extends {Phaser.Game}
- */
 class StringTrainerApplication extends Phaser.Game {
 
     constructor() {
         // Call the super constructor.
         super({
             enableDebug: false,
-            width:1280,
+            width:600,
             height:800,
             renderer:Phaser.AUTO,
             parent:null,
@@ -52,16 +46,17 @@ class StringTrainerApplication extends Phaser.Game {
  * Boot state. Preloads loader image, sets up display.
  */
 class BootState extends Phaser.State {
+
     preload() : void {
         // Load the loader image
         this.game.load.image("loader","assets/sprites/loader.png");
-        // Load the music file, so we can analyse it and only load the sounds needed.
-        var src:string = StringTrainerApplication.getURLName("music","music.json");
-        this.game.load.json("music",StringTrainerApplication.getURLName("music",src));        
+        // Identify the music that is displayed (key::music)
+        var musicKey:string = StringTrainerApplication.getURLName("music","music.json");
+        // Load the music file
+        this.game.load.json("music",musicKey);
         this.game.load.onLoadComplete.add(() => { this.game.state.start("Preload",true,false,1); },this);
-
     }
-
+    
     create() : void {        
         // Make the game window fit the display area. Doesn't work in the Game constructor.
         this.game.scale.pageAlignHorizontally = true;
