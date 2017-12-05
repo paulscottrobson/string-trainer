@@ -18,6 +18,7 @@ class MusicCompiler:
 	def compile(self,sourceFile):
 		self.sourceFile = sourceFile
 		self.lineNumber = 0
+		self.fretMapping = "0123456789tvwhuixv"
 		# Read and tidy
 		self.preProcess()
 		# Figure out instrument, create json store
@@ -86,7 +87,16 @@ class MusicCompiler:
 		# convert rests (&)
 		barDef = barDef.replace("&","."*self.instrument.getStringCount()).strip()
 		# Process items one at a time.
-		print('"'+barDef+'"')
+		for item in barDef.split(" "):
+			if item != "":
+				self.compileItem(item)
+	#
+	#	Compile an item. All we (should) have left are Strums.
+	#				
+	def compileItem(self,itemDef):
+		m = re.match("^("+self.fretMapping+"x)+(o\.\-\=)*$")		
+		if m is None:
+			raise CompilerException("Cannot process "+itemDef)
 	#
 	#	Process chords.
 	#

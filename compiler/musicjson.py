@@ -123,7 +123,7 @@ class MusicJSON:
 	#	Map a fret to a letter or .
 	#
 	def map(self,fretNo):
-		return chr(fretNo+97) if fretNo is not None else '.'
+		return chr(fretNo+97) if fretNo is not None else '-'
 
 if __name__ == '__main__':
 	c = MusicJSON("loog","g3,b3,e4",3)

@@ -1,0 +1,17 @@
+//
+//		Silent Night
+//
+
+instrument := ukulele
+tuning := g3,c4,e4,a4
+tempo := 80
+composer := zoe-anne wadey
+beats := 3
+
+& & &
+
+x30 xx4- 0- x3x0 | x00 xx2 xx0 | x30 xx4- 0- x3x0 | x00 xx2 xx0 | 53 xx2 53 | 23 xx2 x1 | 3x0 x0 3xx0 | x30 xx2 xx4
+
+01 xxx2 0x0 | 31 xxx2- 2- 0x0 | x30 xx4- 0- x3x0 | x00 xx4 xxx0 | 01 xxx2 0x0 | 31 xxx2- 2- 0x0 | x30 xx4- 0- x3x0 | x00 xx4 xxx0
+
+53 xx2 53 | 8xx4 xx7- 5- 21 | 3x0 xx4 xxx0 | 7x0 x0 xx7 | 3x0 x34 x0x0 | x32 xxx0- x1- xx24 | xxw xw xxxw | xxwoo

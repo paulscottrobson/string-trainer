@@ -1,0 +1,20 @@
+//
+//		We Three Kings
+//
+
+instrument := ukulele
+tuning := g3,c4,e4,a4
+tempo := 120
+composer := zoe-anne wadey
+beats := 3
+
+& & &
+
+
+0x2o x3 | x12o xx2 | x00 x1 x0 | xx22oo | 0x2o x3 | x122o xx2 | x00 x1 x0 | xx22oo | x10o x1
+
+x30o x3 | 010o 0 | 35 13 01 | x30 0 x3 | x122o x00 | xx22oo | x00o x3 | x1x2o x1 | x1x2o xx0
+
+x1x3o xx2 | x1x2oo | x1x2o x1 | x1x2o xx0 | x1x3o xx2 | x1x2oo | x12o x1
+
+x34o 0 | 1x2o 0 | x30o 0 | x1x2o x1 | x1x2o xx0 | x1x3o xx2 | x1x2oo

@@ -1,0 +1,18 @@
+//
+//		Tomorrow / Dancing Day
+//
+
+instrument := ukulele
+tuning := g3,c4,e4,a4
+tempo := 100
+composer := zoe-anne wadey
+beats := 3
+
+& & xx0 | x10 x0 x10 | x34 0 1x4 | 3x2 1 0x2 | x34o 0 | x10 x0 x12 | x34 0 1xx0 | 3x0 1 01
+
+x30o 0- 1- | 310o 0 | 132o 0 | x32 x1 0 | x30o xx0 | x12o x34 | 01 13 35 | 1xx3 0 x30
+
+x1x2o 0| x32o 0- 1- | 310oo | 0x2 x1 0 | x32o 0 | x30o 0
+
+x300o xx0 | x10 x0 x32 | 0x0 1xx3 3xx2 | 1xx3 0 x30 | x1x2o &
+

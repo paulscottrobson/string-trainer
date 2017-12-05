@@ -1,0 +1,19 @@
+//
+//		Sussex Carol
+//
+
+instrument := ukulele
+tuning := g3,c4,e4,a4
+tempo := 140
+composer := zoe-anne wadey
+beats := 3
+
+& & 3 |310o 0 | 1x23o 3 | 010 x3 x1| x303o x0 | x122o x1 | x32 0 1 | 0x03o x3 | x10o 3
+
+310o 0 | 1x23o 3 | 010 x3 x1| x303o x0 | x122o x1 | x32 0 1 | 0x03o x3 | x1x2oo
+
+x30oo | x3x3o x1 | x3x2 0 1xx0 | 3x2 1 0x2 | x30o xx0 | xxx3o xxx3 | 3xx2oo | 5xx3oo | 3xx2oo
+
+1xx0o 0 | x30 x1 x30 | x10xo xx4 | x15 xx4 xx5 | x30oo | x3x3o x1 | x3x2 0 1xx0 | 3x2 1 0x2
+
+x30o xx0 | xxx3o xxx3 | 3xx2oo | 5xx3oo | 3xx2oo | 13o 0 | x30 x1 x30 | x1x2oo | & & &
