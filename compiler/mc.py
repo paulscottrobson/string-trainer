@@ -16,6 +16,7 @@ class MusicCompiler:
 	#	Compile a single piece of music.
 	#
 	def compile(self,sourceFile):
+		print("Compiling "+sourceFile)
 		self.sourceFile = sourceFile
 		self.lineNumber = 0
 		self.fretMapping = "0123456789tvwhuisv"
@@ -39,7 +40,7 @@ class MusicCompiler:
 				for barDef in [x.strip() for x in self.src[n].split("|") if x.strip() != ""]:
 					self.compileBar(barDef)
 	#
-	#	Preprocess file
+	#	Preprocess file, tabs, returns, spaces, comments 
 	#
 	def preProcess(self):
 		# read in files
@@ -51,7 +52,7 @@ class MusicCompiler:
 		# strip finally
 		self.src = [x.strip() for x in self.src]
 	#
-	#	Find instrument and create instance of it.
+	#	Find instrument being used and create instance of it.
 	#
 	def getInstrument(self):
 		# find things with := and instrument
@@ -64,7 +65,7 @@ class MusicCompiler:
 		# and create one.
 		self.instrument = instruments.InstrumentFactory().get(inst)
 	#
-	#	Do settings
+	#	Copy overriding settings.
 	#
 	def processSettings(self):
 		self.musicjson.set("instrument",self.instrument.getShortName())
@@ -73,7 +74,7 @@ class MusicCompiler:
 			item = [x.strip() for x in item.split(":=")]
 			self.musicjson.set(item[0],item[1])
 	#
-	#	Get number of beats
+	#	Get number of beats/bar
 	#
 	def getBeats(self):
 		return int(self.musicjson.get("beats"),10)
@@ -81,10 +82,13 @@ class MusicCompiler:
 	#	Compile a single bar
 	#
 	def compileBar(self,barDef):
+		# add a new empty bar
 		self.musicjson.addBar()
+		# remove lyrics "hi" and strum pattens {xxxx}
 		barDef = self.lyricsAndStrumPatterns(barDef)
+		# remove chords and generate if there are any [Dm:2]
 		barDef = self.processChords(barDef)
-		# convert rests (&)
+		# convert rests (&) to xxx
 		barDef = barDef.replace("&","x"*self.instrument.getStringCount()).strip()
 		# Process items one at a time.
 		self.barPosition = 0
@@ -95,11 +99,15 @@ class MusicCompiler:
 	#	Compile an item. All we (should) have left are Strums.
 	#				
 	def compileItem(self,itemDef):
+		# check matches the syntax
 		m = re.match("^(["+self.fretMapping+"x\^]+)([o\.\-\=]*)$",itemDef)		
 		if m is None:
 			raise CompilerException("Cannot process "+itemDef)
+		# get strum part
 		strum = self.convertToStrum(m.group(1))
+		# get length part
 		qbLength = self.convertToQBLength(m.group(2))
+		# write to bar
 		self.musicjson.addStrum(strum,self.barPosition)
 		self.barPosition += qbLength
 		#print(itemDef,strum,qbLength)
@@ -108,8 +116,9 @@ class MusicCompiler:
 	#
 	def convertToStrum(self,strumDef):
 		strum = []
+		# while more to process
 		while strumDef != "":
-			# No strum.
+			# No strum (x)
 			if strumDef[0] == 'x':
 				strum.append(None)
 				strumDef = strumDef[1:]
@@ -117,12 +126,12 @@ class MusicCompiler:
 				# Strum 0-9 etc.
 				if self.fretMapping.find(strumDef[0]) < 0:
 					raise "No such fret position "+strumDef[0]
-				# Get chromatic offset
+				# Get chromatic offset from fret number.
 				fretID = self.fretMapping.find(strumDef[0])
 				#print(strumDef[0],fretID)
 				strum.append(self.instrument.fretToChromatic(fretID))
 				strumDef = strumDef[1:]
-				# Handle +
+				# Handle + (e.g. 6+ on dulcimer)
 				if strumDef != "" and strumDef[0] == '+':
 					strum[-1] += 1
 					strumDef = strumDef[1:]
@@ -130,7 +139,7 @@ class MusicCompiler:
 				if strumDef != "" and strumDef[0] == '^':
 					strum[-1] += 1
 					strumDef = strumDef[1:]
-		# check length
+		# check length, not more strums than strings !
 		if len(strum) > self.instrument.getStringCount():
 			raise CompilerException("Too many strums")
 		# pad out and fix it so lowest string first.
@@ -207,25 +216,42 @@ class MusicCompiler:
 		# Look for lyrics.
 		m = re.search('\"(.*?)\"',barDef)
 		if m is not None:
+			# remove in def
 			barDef = barDef.replace(m.group(0)," ")
+			# add to this bar
 			self.musicjson.setLyric(m.group(1).lower())
+			# check only one.
 			if barDef.find('"') >= 0:
 				raise CompilerException("Only one lyric per bar")
 		# Extract strum patterns
 		m = re.search('\{(.*?)}',barDef)
 		if m is not None:
+			# remove in def
 			barDef = barDef.replace(m.group(0)," ")
+			# set current
 			self.strumPattern = m.group(1).lower()
+			if len(self.strumPattern) != self.getBeats()*2:
+				raise CompilerException("Bad strum pattern "+m.group(0))
 			#print(self.strumPattern)
+			# check no more
 			if barDef.find('{') >= 0:
 				raise CompilerException("Only one strum pattern per bar")
 		return barDef
+	#
+	#	Write result file.
+	#
+	def write(self,targetFile):
+		h = open(targetFile,"w")
+		h.write(self.musicjson.render())
+		h.close()
 
 if __name__ == '__main__':
 	mc = MusicCompiler()
-	#mc.compile("good-king-wenceslas.music")			# music only, no chords, uke
-	mc.compile("oh danny boy.music")				# chords, music, lyrics, merlin
-	#mc.compile("let-it-be.music") 					# chords and lyrics only, loog
+	mc.compile("good-king-wenceslas.music")			# music only, no chords, uke
+	mc.write("../app/music1.json")
+	mc.compile("let-it-be.music") 					# chords and lyrics only, loog
+	mc.write("../app/music2.json")
 
 	#print(instruments.InstrumentFactory().get("merlin"))
-	open("../app/music.json","w").write(mc.musicjson.render())
+	mc.compile("oh danny boy.music")				# chords, music, lyrics, merlin
+	mc.write("../app/music.json")
