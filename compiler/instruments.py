@@ -166,6 +166,6 @@ if __name__ == '__main__':
 	# convert it to typescript class
 	classDef = 	'// AUTOMATICALLY GENERATED\n\n'
 	classDef +=  'class InstrumentInfo {\n'
-	classDef += 'static public encodedInfo:string = "'+defn+'";\n}\n'
+	classDef += 'public static encodedInfo:string = "'+defn+'";\n}\n'
 	# which is written to /tmp
 	h = open("/tmp/instrumentinfo.ts","w").write(classDef)

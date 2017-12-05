@@ -113,7 +113,7 @@ class MusicJSON:
 			if contents[n][1] != "":
 				item = item+"["+contents[n][1]+"]"
 			# how long it is in quarterbeats
-			render = render + item + "-"
+			render = render + item + ","
 			# next one is time of next or end of bar.
 			nextTime = contents[n+1][0] if n < len(contents)-1 else int(self.settings["beats"],10)*4
 			render = render + "{0:02}".format(nextTime-contents[n][0])
