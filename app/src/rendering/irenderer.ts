@@ -6,16 +6,15 @@
  * renderer constructor.
  * 
  * @interface IRenderer
- * @extends {Phaser.Group}
  */
 interface IRenderer {
     /**
-     * Get the display size of the rendered bar
+     * Move the renderer
      * 
-     * @returns {number} 
+     * @param {number} pos depends but usually and x or y coordinate.
      * @memberof IRenderer
      */
-    getExtent():number[];
+    moveTo(pos:number):void;
     /**
      * Get the parent render manager
      * 
@@ -24,12 +23,12 @@ interface IRenderer {
      */
     getRenderManager():IRenderManager;
     /**
-     * Move the non strum items to the given bar position.
+     * Move the non strum items to the given position.
      * 
-     * @param {number} barPosition 
+     * @param {number} pos , normally x or y coordinate
      * @memberof IRenderer
      */
-    moveNonStrumItemsTo(barPosition:number):void;
+    moveNonStrumItemsTo(pos:number):void;
     /**
      * Create the non strum items for a bar, e.g. a bar line, things that move
      * with the bar but that are not part of the music.
@@ -44,10 +43,27 @@ interface IRenderer {
      */
     destroyNonStrumItems():void;
     /**
-     * Get the StrumRenderer for this particular class
+     * Create a strum renderer
      * 
+     * @param {IRenderer} renderer 
+     * @param {Phaser.Game} game 
+     * @param {IStrum} strum 
      * @returns {IStrumRenderer} 
      * @memberof IRenderer
      */
-    getStrumRenderer():IStrumRenderer;
+    createStrumRenderer(renderer:IRenderer,game:Phaser.Game,strum:IStrum):IStrumRenderer;
+    /**
+     * True if the current render is visible in the given position
+     * 
+     * @param {number} pos
+     * @returns {boolean} 
+     * @memberof IRenderer
+     */
+    isVisible(pos:number):boolean;
+    /**
+     * Destroy the renderer.
+     * 
+     * @memberof IRenderer
+     */
+    destroy():void;
 }

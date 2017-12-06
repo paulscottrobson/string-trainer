@@ -29,10 +29,19 @@ class Configuration {
      * @memberof Configuration
      */
     public static strings:number;
-    
+    /**
+     * Bottom area of display screen / top line of control area.
+     * 
+     * @static
+     * @type {number}
+     * @memberof Configuration
+     */
+    public static yBase:number;
+
     public static initialise(game:Phaser.Game): void {
         Configuration.width = game.width;
         Configuration.height = game.height;
+        Configuration.yBase = Configuration.height - 100;
         Configuration.instrument = null;
     }
 }

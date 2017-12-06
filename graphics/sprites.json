@@ -155,7 +155,7 @@
             "sourceSize":{ "w":300,"h":300 }
         },
         "dstring": {
-            "frame":{ "x":172,"y":1728,"w":143,"h":25 },
+            "frame":{ "x":172,"y":1748,"w":143,"h":25 },
             "rotated":false,
             "trimmed":false,
             "spriteSourceSize":{ "x":0,"y":0,"w":143,"h":25 },
@@ -181,6 +181,13 @@
             "trimmed":false,
             "spriteSourceSize":{ "x":0,"y":0,"w":128,"h":128 },
             "sourceSize":{ "w":128,"h":128 }
+        },
+        "string": {
+            "frame":{ "x":172,"y":1728,"w":249,"h":19 },
+            "rotated":false,
+            "trimmed":false,
+            "spriteSourceSize":{ "x":0,"y":0,"w":249,"h":19 },
+            "sourceSize":{ "w":249,"h":19 }
         },
         "notebutton_up_66": {
             "frame":{ "x":396,"y":1344,"w":110,"h":62 },
@@ -371,7 +378,7 @@
         "image":"sprites.png",
         "size":{
              "w":512,
-             "h":1768
+             "h":1775
          },
          "scale":1
     }

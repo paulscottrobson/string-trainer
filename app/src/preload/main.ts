@@ -10,7 +10,7 @@ class StringTrainerApplication extends Phaser.Game {
         // Call the super constructor.
         super({
             enableDebug: false,
-            width:600,
+            width:1200,
             height:800,
             renderer:Phaser.AUTO,
             parent:null,

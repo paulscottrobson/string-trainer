@@ -58,5 +58,5 @@ class Instrument {
     isTabInverted():boolean { 
         return this.rawInfo[4] == 'y'; }
     isDoubleString(n:number):boolean { 
-        return this.rawInfo[n+5] == 'd'; }
+        return this.rawInfo[n+5].toLowerCase() == 'd'; }
 }

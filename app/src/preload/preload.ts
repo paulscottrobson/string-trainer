@@ -15,7 +15,7 @@ class PreloadState extends Phaser.State {
      */
     preload(): void {
         // Create the loading sprite
-        this.game.stage.backgroundColor = "#000040";
+        this.game.stage.backgroundColor = "#000000";
         var loader:Phaser.Sprite = this.add.sprite(this.game.width/2,
                                                    this.game.height/2,
                                                    "loader");

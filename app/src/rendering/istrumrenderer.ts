@@ -8,31 +8,12 @@
  */
 interface IStrumRenderer {
     /**
-     * Get the owning renderer.
-     * 
-     * @returns {IRenderer} 
-     * @memberof IStrumRenderer
-     */
-    getRenderer():IRenderer;
-    /**
-     * Create objects associated with this strum.
-     * 
-     * @memberof IStrumRenderer
-     */
-    createStrumObjects():void;
-    /**
-     * Delete objects
-     * 
-     * @memberof IStrumRenderer
-     */
-    deleteStrumObjects():void;
-    /**
      * Move objects associate with this strum to the correct position.
      * 
-     * @param {number} barPosition 
+     * @param {number} pos base position of the strum, not the strum position.
      * @memberof IStrumRenderer
      */
-    moveStrumObjects(barPosition:number);
+    moveTo(pos:number);
     /**
      * Called to highlight, or unhighlight a particular strum when it is being
      * used. Can be used to mark current note on the stave, or to make the
@@ -43,4 +24,10 @@ interface IStrumRenderer {
      * @memberof IStrumRenderer
      */
     highlightStrumObjects(highlight:boolean,percent:number);
+    /**
+     * Destroy the rendered strum.
+     * 
+     * @memberof IStrumRenderer
+     */
+    destroy(): void;
 }
