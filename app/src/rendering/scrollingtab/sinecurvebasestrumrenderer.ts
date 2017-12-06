@@ -7,7 +7,8 @@
  * @class SineCurveBaseStrumRenderer
  * @implements {IStrumRenderer}
  */
-abstract class SineCurveBaseStrumRenderer implements IStrumRenderer {
+
+ abstract class SineCurveBaseStrumRenderer implements IStrumRenderer {
 
     protected renderer:IRenderer;
     protected game:Phaser.Game;

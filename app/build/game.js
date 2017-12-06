@@ -44,7 +44,7 @@ var MainState = (function (_super) {
     MainState.prototype.update = function () {
         var elapsedMS = this.game.time.elapsedMS;
     };
-    MainState.VERSION = "0.01 26-Nov-17 Phaser-CE 2.8.7 (c) PSR 2017";
+    MainState.VERSION = "0.01 06-Dec-17 Phaser-CE 2.8.7 (c) PSR 2017";
     return MainState;
 }(Phaser.State));
 var InstrumentInfo = (function () {
@@ -404,7 +404,9 @@ var SineCurveBaseStrumRenderer = (function () {
 var ScrollingTabChordsRenderer = (function (_super) {
     __extends(ScrollingTabChordsRenderer, _super);
     function ScrollingTabChordsRenderer(renderer, game, strum) {
-        return _super.call(this, renderer, game, strum) || this;
+        var _this = _super.call(this, renderer, game, strum) || this;
+        throw "To be completed";
+        return _this;
     }
     ScrollingTabChordsRenderer.prototype.moveTo = function (pos) {
     };
@@ -419,7 +421,9 @@ var ScrollingTabChordsRenderer = (function (_super) {
 var ScrollingTabNotesRenderer = (function (_super) {
     __extends(ScrollingTabNotesRenderer, _super);
     function ScrollingTabNotesRenderer(renderer, game, strum) {
-        return _super.call(this, renderer, game, strum) || this;
+        var _this = _super.call(this, renderer, game, strum) || this;
+        throw "To be completed";
+        return _this;
     }
     ScrollingTabNotesRenderer.prototype.moveTo = function (pos) {
     };
@@ -463,7 +467,12 @@ var ScrollingTabRenderer = (function (_super) {
         this.beatBars = null;
     };
     ScrollingTabRenderer.prototype.createStrumRenderer = function (renderer, game, strum) {
-        return new ScrollingTabNotesRenderer(renderer, game, strum);
+        if (strum.getChord() != "") {
+            return new ScrollingTabChordsRenderer(renderer, game, strum);
+        }
+        else {
+            return new ScrollingTabNotesRenderer(renderer, game, strum);
+        }
     };
     ScrollingTabRenderer.prototype.isVisible = function (pos) {
         if (pos > Configuration.width)

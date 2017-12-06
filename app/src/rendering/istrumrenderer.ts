@@ -4,6 +4,9 @@
  * A strum renderer is responsible for rendering a single strum, so this 
  * could be note markers, sine loops, or the spheres, or notes on a stave
  * 
+ * It is a simple object that is created and destroyed, like any other
+ * composite graphic object.
+ * 
  * @interface IStrumRenderer
  */
 interface IStrumRenderer {

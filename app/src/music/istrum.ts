@@ -1,5 +1,10 @@
 /// <reference path="../../lib/phaser.comments.d.ts"/>
 
+/**
+ * Strum interface
+ * 
+ * @interface IStrum
+ */
 interface IStrum {
     /**
      * Get the owning bar

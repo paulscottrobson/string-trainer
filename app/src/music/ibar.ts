@@ -1,5 +1,10 @@
 /// <reference path="../../lib/phaser.comments.d.ts"/>
 
+/**
+ * Bar interface
+ * 
+ * @interface IBar
+ */
 interface IBar {
     /**
      * Get the music object owning this

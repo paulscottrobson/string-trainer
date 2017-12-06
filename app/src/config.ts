@@ -1,5 +1,10 @@
 /// <reference path="../lib/phaser.comments.d.ts"/>
 
+/**
+ * Configuration information.
+ * 
+ * @class Configuration
+ */
 class Configuration {
     /**
      * Display width

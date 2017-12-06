@@ -1,5 +1,9 @@
-Rendering System
-Scrolling Renderer
+Render bar numbers and boxes
+Render strums
+Render sine curve
+Get it moving.
+Add the bouncy ball facility.
+Add the highlight/dehighlight facility.
 Playback & Timing
 Control.
 

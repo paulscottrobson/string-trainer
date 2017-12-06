@@ -1,5 +1,12 @@
 /// <reference path="../../../lib/phaser.comments.d.ts"/>
 
+/**
+ * Base class for render manager
+ * 
+ * @abstract
+ * @class BaseRenderManager
+ * @implements {IRenderManager}
+ */
 abstract class BaseRenderManager implements IRenderManager {
 
     protected game:Phaser.Game;

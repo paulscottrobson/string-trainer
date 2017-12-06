@@ -2,8 +2,11 @@
 
 /**
  * A renderer contains all the rendered objects relating
- * to a single bar. These are created and destroyed by the manager, not the
- * renderer constructor.
+ * to a single bar. 
+ * 
+ * These are created and destroyed by the manager, and the
+ * graphical representation is created and destroyed by the
+ * manager as is required.
  * 
  * @interface IRenderer
  */

@@ -1,5 +1,12 @@
 /// <reference path="../../../lib/phaser.comments.d.ts"/>
 
+/**
+ * Render manager for horizontally scrolling tab
+ * 
+ * @class ScrollingTabRenderManager
+ * @extends {BaseRenderManager}
+ * @implements {IRenderManager}
+ */
 class ScrollingTabRenderManager extends BaseRenderManager implements IRenderManager {
 
     public static centreFretboard;

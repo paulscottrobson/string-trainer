@@ -1,5 +1,12 @@
 /// <reference path="../../../lib/phaser.comments.d.ts"/>
 
+/**
+ * Renderer for Scrolling TAB
+ * 
+ * @class ScrollingTabRenderer
+ * @extends {BaseRenderer}
+ * @implements {IRenderer}
+ */
 class ScrollingTabRenderer extends BaseRenderer implements IRenderer {
 
     private beatBars:Phaser.Image[];
@@ -31,7 +38,11 @@ class ScrollingTabRenderer extends BaseRenderer implements IRenderer {
     }
 
     createStrumRenderer(renderer:IRenderer,game:Phaser.Game,strum:IStrum): IStrumRenderer {
-        return new ScrollingTabNotesRenderer(renderer,game,strum);
+        if (strum.getChord() != "") {
+            return new ScrollingTabChordsRenderer(renderer,game,strum);          
+        } else {
+            return new ScrollingTabNotesRenderer(renderer,game,strum);
+        }
     }
 
     isVisible(pos:number): boolean {

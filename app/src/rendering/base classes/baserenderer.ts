@@ -1,5 +1,12 @@
 /// <reference path="../../../lib/phaser.comments.d.ts"/>
 
+/**
+ * Base class for Renderer
+ * 
+ * @abstract
+ * @class BaseRenderer
+ * @implements {IRenderer}
+ */
 abstract class BaseRenderer implements IRenderer {
 
     protected manager:IRenderManager;

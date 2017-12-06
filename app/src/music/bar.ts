@@ -1,5 +1,11 @@
 /// <reference path="../../lib/phaser.comments.d.ts"/>
 
+/**
+ * Bar concrete implementation.
+ * 
+ * @class Bar
+ * @implements {IBar}
+ */
 class Bar implements IBar {
 
     private music:IMusic;

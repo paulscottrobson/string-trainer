@@ -1,5 +1,11 @@
 /// <reference path="../../lib/phaser.comments.d.ts"/>
 
+/**
+ * Concrete strum
+ * 
+ * @class Strum
+ * @implements {IStrum}
+ */
 class Strum implements IStrum {
 
     private bar:IBar;
