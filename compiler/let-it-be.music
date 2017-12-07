@@ -10,8 +10,8 @@ chord.f := 211
 chord.g := 003
 chord.Am := 210
 
-{d-d-d-d-}"when i"|[C][G:3]"find myself in times of trouble"
-[Am][F:3] "mother mary comes to me"|[C][G:3]"speaking words of wisdom let it"|[F][C:3]"be and"
+"when i"|{d-du-udu}[C][G:3]"find myself in times of trouble"
+{dddududu}[Am][F:3] "mother mary comes to me"|[C][G:3]"speaking words of wisdom let it"|[F][C:3]"be and"
 [G:3]"in my hour of darkness she is"|[Am][G:3]"standing right in front of me"|[C][G:3]"speaking words of wisdom let it"
 [F][C:3]"be .... let it be"|[Am][G:3]"let it be, ah let it be"
 [F][C:3]"let it be"|[G:3]"whisper words of wisdom let it"|[F][C:3]"be"

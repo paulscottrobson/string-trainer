@@ -412,17 +412,52 @@ var ScrollingTabChordsRenderer = (function (_super) {
     __extends(ScrollingTabChordsRenderer, _super);
     function ScrollingTabChordsRenderer(renderer, game, strum) {
         var _this = _super.call(this, renderer, game, strum) || this;
-        throw "To be completed";
+        var tm = Math.floor(strum.getQBStart() / 2);
+        _this.button = game.add.image(0, ScrollingTabRenderManager.centreFretboard, "sprites", tm % 2 == 0 ? "chordbutton_down" : "chordbutton_up");
+        _this.button.anchor.x = 0;
+        _this.button.anchor.y = 0.5;
+        _this.button.width = ScrollingTabRenderManager.xBarSize / (_this.beats * 2) * 0.97;
+        _this.button.height = ScrollingTabRenderManager.fretBoardStringSize * 0.95;
+        _this.button.tint = _this.getChordColour(strum.getChord());
+        var size = ScrollingTabRenderManager.xBarSize / _this.beats / 2 * 0.45;
+        var cName = strum.getChord().toLowerCase();
+        cName = cName.charAt(0).toUpperCase() + cName.substr(1);
+        _this.label = game.add.bitmapText(0, _this.button.y + ScrollingTabRenderManager.fretBoardStringSize * 0.3, "dfont", cName, size);
+        _this.label.anchor.x = 0.5;
+        _this.label.anchor.y = 0.5;
         return _this;
     }
     ScrollingTabChordsRenderer.prototype.moveTo = function (pos) {
+        this.button.x = pos + this.getStrumCentre() - this.getStrumWidth() / 2;
+        this.label.x = this.button.x + this.button.width / 2;
     };
     ScrollingTabChordsRenderer.prototype.highlightStrumObjects = function (highlight, percent) {
         throw new Error("Method not implemented.");
     };
     ScrollingTabChordsRenderer.prototype.destroy = function () {
+        this.button.destroy();
+        this.label.destroy();
+        this.button = this.label = null;
         _super.prototype.destroy.call(this);
     };
+    ScrollingTabChordsRenderer.prototype.getChordColour = function (name) {
+        if (ScrollingTabChordsRenderer.chordsUsed == null) {
+            ScrollingTabChordsRenderer.chordsUsed = { "": null };
+            var cc = 0;
+            var m = this.strum.getBar().getMusic();
+            for (var bn = 0; bn < m.getBarCount(); bn++) {
+                for (var sn = 0; sn < m.getBar(bn).getStrumCount(); sn++) {
+                    var cName = m.getBar(bn).getStrum(sn).getChord();
+                    if (ScrollingTabChordsRenderer.chordsUsed[cName] == undefined) {
+                        ScrollingTabChordsRenderer.chordsUsed[cName] = cc;
+                        cc++;
+                    }
+                }
+            }
+        }
+        return BaseRenderManager.getColour(ScrollingTabChordsRenderer.chordsUsed[name]);
+    };
+    ScrollingTabChordsRenderer.chordsUsed = null;
     return ScrollingTabChordsRenderer;
 }(SineCurveBaseStrumRenderer));
 var ScrollingTabNotesRenderer = (function (_super) {
@@ -435,11 +470,11 @@ var ScrollingTabNotesRenderer = (function (_super) {
         var height = Math.abs(ScrollingTabRenderManager.getStringY(1) -
             ScrollingTabRenderManager.getStringY(0));
         var width = _this.getStrumWidth();
+        var btn = _this.getBestMatch(width / height);
         for (var s = 0; s < Configuration.strings; s++) {
             _this.buttons[s] = null;
             _this.text[s] = null;
             if (fretting[s] != Strum.NOSTRUM) {
-                var btn = "notebutton_up_66";
                 _this.buttons[s] = game.add.image(10, ScrollingTabRenderManager.getStringY(s), "sprites", btn);
                 _this.buttons[s].width = width;
                 _this.buttons[s].height = height * 0.9;
@@ -447,7 +482,8 @@ var ScrollingTabNotesRenderer = (function (_super) {
                 _this.buttons[s].anchor.x = _this.buttons[s].anchor.y = 0.5;
                 var txt = Configuration.instrument.getDisplayName(fretting[s]);
                 _this.text[s] = game.add.bitmapText(0, _this.buttons[s].y, "dfont", txt, _this.buttons[s].height * 0.6);
-                _this.text[s].anchor.x = _this.text[s].anchor.y = 0.5;
+                _this.text[s].anchor.x = 0.58;
+                _this.text[s].anchor.y = 0.5;
             }
         }
         return _this;
@@ -480,6 +516,30 @@ var ScrollingTabNotesRenderer = (function (_super) {
         this.text = this.buttons = null;
         _super.prototype.destroy.call(this);
     };
+    ScrollingTabNotesRenderer.prototype.getBestMatch = function (aspect) {
+        if (ScrollingTabNotesRenderer.buttonInfo == null) {
+            ScrollingTabNotesRenderer.buttonInfo = {};
+            var scache = this.game.cache.getJSON("sprite_info");
+            for (var k in scache.frames) {
+                if (k.substr(0, 14) == "notebutton_up_") {
+                    var spr = scache.frames[k];
+                    var asp = spr.frame.w / spr.frame.h;
+                    ScrollingTabNotesRenderer.buttonInfo[k] = asp;
+                }
+            }
+        }
+        var best;
+        var bestDistance = 9999;
+        for (var k in ScrollingTabNotesRenderer.buttonInfo) {
+            var diff = Math.abs(aspect - ScrollingTabNotesRenderer.buttonInfo[k]);
+            if (diff < bestDistance) {
+                bestDistance = diff;
+                best = k;
+            }
+        }
+        return best;
+    };
+    ScrollingTabNotesRenderer.buttonInfo = null;
     return ScrollingTabNotesRenderer;
 }(SineCurveBaseStrumRenderer));
 var ScrollingTabRenderer = (function (_super) {

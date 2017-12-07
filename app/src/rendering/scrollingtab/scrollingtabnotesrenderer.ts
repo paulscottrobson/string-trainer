@@ -18,16 +18,20 @@ class ScrollingTabNotesRenderer extends SineCurveBaseStrumRenderer
         super(renderer,game,strum);
         this.buttons = [];
         this.text = [];
-
+        // Get fretting
         var fretting:number[] = strum.getStrum();
+        // Get button size
         var height:number = Math.abs(ScrollingTabRenderManager.getStringY(1)-
                                      ScrollingTabRenderManager.getStringY(0));
         var width:number = this.getStrumWidth();                                    
+        // Get button graphic
+        var btn:string = this.getBestMatch(width/height);
+        // For each string
         for (var s = 0;s < Configuration.strings;s++) {
             this.buttons[s] = null;
             this.text[s] = null;
+            // Create button & text if needed.
             if (fretting[s] != Strum.NOSTRUM) {
-                var btn:string = "notebutton_up_66";
                 this.buttons[s] = game.add.image(10,
                                                  ScrollingTabRenderManager.getStringY(s),
                                                  "sprites",btn);
@@ -39,7 +43,7 @@ class ScrollingTabNotesRenderer extends SineCurveBaseStrumRenderer
                 this.text[s] = game.add.bitmapText(0,this.buttons[s].y,
                                                 "dfont",txt,
                                                 this.buttons[s].height*0.6);
-                this.text[s].anchor.x = this.text[s].anchor.y = 0.5;                                                
+                this.text[s].anchor.x = 0.58;this.text[s].anchor.y = 0.5;                                                
             }
         }
     }
@@ -70,5 +74,39 @@ class ScrollingTabNotesRenderer extends SineCurveBaseStrumRenderer
         this.text = this.buttons = null;
         super.destroy();
     }
-}
 
+    static buttonInfo:any = null;
+
+    /**
+     * Find the best notebutton_up_x graphic to use.
+     * (Analyses sprite json)
+     * 
+     * @param {number} aspect aspect ratio required
+     * @returns {string} graphic name.
+     * @memberof ScrollingTabNotesRenderer
+     */
+    getBestMatch(aspect:number):string {
+        // If not loaded, build the aspect ratio table
+        if (ScrollingTabNotesRenderer.buttonInfo == null) {
+            ScrollingTabNotesRenderer.buttonInfo = {};
+            var scache:any = this.game.cache.getJSON("sprite_info");
+            for (var k in scache.frames) {
+                if (k.substr(0,14) == "notebutton_up_") {
+                    var spr:any = scache.frames[k];
+                    var asp:number = spr.frame.w / spr.frame.h;                    
+                    ScrollingTabNotesRenderer.buttonInfo[k] = asp;
+                }
+            }
+        }
+        var best:string;
+        var bestDistance:number = 9999;
+        for (var k in ScrollingTabNotesRenderer.buttonInfo) {
+            var diff:number = Math.abs(aspect - ScrollingTabNotesRenderer.buttonInfo[k]);
+            if (diff < bestDistance) {
+                bestDistance = diff;
+                best = k;
+            }
+        }
+        return best;
+    }
+}

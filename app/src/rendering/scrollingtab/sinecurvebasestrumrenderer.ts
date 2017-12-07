@@ -13,7 +13,7 @@
     protected renderer:IRenderer;
     protected game:Phaser.Game;
     protected strum:IStrum;
-    private beats:number;
+    protected beats:number;
 
     constructor(renderer:IRenderer,game:Phaser.Game,strum:IStrum) {
         this.renderer = renderer;this.game = game;this.strum = strum;    
