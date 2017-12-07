@@ -37,7 +37,7 @@ var MainState = (function (_super) {
     MainState.prototype.create = function () {
         this.manager = new ScrollingTabRenderManager(this.game, this.music);
         this.manager.create();
-        this.manager.moveTo(0);
+        this.manager.moveTo(1);
     };
     MainState.prototype.destroy = function () {
     };
@@ -395,7 +395,14 @@ var SineCurveBaseStrumRenderer = (function () {
         this.renderer = renderer;
         this.game = game;
         this.strum = strum;
+        this.beats = strum.getBar().getMusic().getBeats();
     }
+    SineCurveBaseStrumRenderer.prototype.getStrumWidth = function () {
+        return this.strum.getQBLength() / (this.beats * 4) * ScrollingTabRenderManager.xBarSize;
+    };
+    SineCurveBaseStrumRenderer.prototype.getStrumCentre = function () {
+        return (this.strum.getQBStart() + this.strum.getQBLength() / 2) / (this.beats * 4) * ScrollingTabRenderManager.xBarSize;
+    };
     SineCurveBaseStrumRenderer.prototype.destroy = function () {
         this.renderer = this.game = this.strum = null;
     };
@@ -422,15 +429,55 @@ var ScrollingTabNotesRenderer = (function (_super) {
     __extends(ScrollingTabNotesRenderer, _super);
     function ScrollingTabNotesRenderer(renderer, game, strum) {
         var _this = _super.call(this, renderer, game, strum) || this;
-        throw "To be completed";
+        _this.buttons = [];
+        _this.text = [];
+        var fretting = strum.getStrum();
+        var height = Math.abs(ScrollingTabRenderManager.getStringY(1) -
+            ScrollingTabRenderManager.getStringY(0));
+        var width = _this.getStrumWidth();
+        for (var s = 0; s < Configuration.strings; s++) {
+            _this.buttons[s] = null;
+            _this.text[s] = null;
+            if (fretting[s] != Strum.NOSTRUM) {
+                var btn = "notebutton_up_66";
+                _this.buttons[s] = game.add.image(10, ScrollingTabRenderManager.getStringY(s), "sprites", btn);
+                _this.buttons[s].width = width;
+                _this.buttons[s].height = height * 0.9;
+                _this.buttons[s].tint = BaseRenderManager.getColour(fretting[s]);
+                _this.buttons[s].anchor.x = _this.buttons[s].anchor.y = 0.5;
+                var txt = Configuration.instrument.getDisplayName(fretting[s]);
+                _this.text[s] = game.add.bitmapText(0, _this.buttons[s].y, "dfont", txt, _this.buttons[s].height * 0.6);
+                _this.text[s].anchor.x = _this.text[s].anchor.y = 0.5;
+            }
+        }
         return _this;
     }
     ScrollingTabNotesRenderer.prototype.moveTo = function (pos) {
+        var x = pos + this.getStrumCentre();
+        for (var s = 0; s < Configuration.strings; s++) {
+            if (this.buttons[s] != null) {
+                this.buttons[s].x = x;
+                this.text[s].x = x;
+                this.buttons[s].bringToTop();
+                this.game.world.bringToTop(this.text[s]);
+            }
+        }
     };
     ScrollingTabNotesRenderer.prototype.highlightStrumObjects = function (highlight, percent) {
         throw new Error("Method not implemented.");
     };
     ScrollingTabNotesRenderer.prototype.destroy = function () {
+        for (var _i = 0, _a = this.buttons; _i < _a.length; _i++) {
+            var b = _a[_i];
+            if (b != null)
+                b.destroy();
+        }
+        for (var _b = 0, _c = this.text; _b < _c.length; _b++) {
+            var t = _c[_b];
+            if (t != null)
+                t.destroy();
+        }
+        this.text = this.buttons = null;
         _super.prototype.destroy.call(this);
     };
     return ScrollingTabNotesRenderer;
@@ -487,7 +534,7 @@ var ScrollingTabRenderManager = (function (_super) {
     __extends(ScrollingTabRenderManager, _super);
     function ScrollingTabRenderManager(game, music) {
         var _this = _super.call(this, game, music) || this;
-        ScrollingTabRenderManager.fretBoardTotalSize = Configuration.yBase * 0.6;
+        ScrollingTabRenderManager.fretBoardTotalSize = Configuration.yBase * 0.5;
         ScrollingTabRenderManager.fretBoardStringSize =
             ScrollingTabRenderManager.fretBoardTotalSize * 0.85;
         ScrollingTabRenderManager.centreFretboard =
@@ -497,7 +544,7 @@ var ScrollingTabRenderManager = (function (_super) {
         ScrollingTabRenderManager.xStartPoint =
             Configuration.width * 0.15;
         ScrollingTabRenderManager.xBarSize =
-            Configuration.width * 0.33;
+            Configuration.width * 0.35;
         return _this;
     }
     ScrollingTabRenderManager.prototype.createRenderer = function (manager, game, bar) {
@@ -506,7 +553,7 @@ var ScrollingTabRenderManager = (function (_super) {
     ScrollingTabRenderManager.prototype.moveTo = function (barPosition) {
         for (var bn = 0; bn < this.music.getBarCount(); bn++) {
             this.renderers[bn].moveTo(ScrollingTabRenderManager.xStartPoint +
-                bn * ScrollingTabRenderManager.xBarSize);
+                (bn - barPosition) * ScrollingTabRenderManager.xBarSize);
         }
     };
     ScrollingTabRenderManager.prototype.createFixed = function (game) {

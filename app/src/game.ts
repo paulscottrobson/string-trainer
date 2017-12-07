@@ -29,7 +29,7 @@ class MainState extends Phaser.State {
     create() {    
         this.manager = new ScrollingTabRenderManager(this.game,this.music);
         this.manager.create();
-        this.manager.moveTo(0);
+        this.manager.moveTo(1);
         //this.manager.destroy();
     }
     

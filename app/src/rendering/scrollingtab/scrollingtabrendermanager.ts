@@ -23,7 +23,7 @@ class ScrollingTabRenderManager extends BaseRenderManager implements IRenderMana
     constructor(game:Phaser.Game,music:IMusic) {
         super(game,music);
         // Calculate positions and sizes of things.
-        ScrollingTabRenderManager.fretBoardTotalSize = Configuration.yBase * 0.6;
+        ScrollingTabRenderManager.fretBoardTotalSize = Configuration.yBase * 0.5;
         ScrollingTabRenderManager.fretBoardStringSize = 
                 ScrollingTabRenderManager.fretBoardTotalSize * 0.85;
         ScrollingTabRenderManager.centreFretboard = 
@@ -33,7 +33,7 @@ class ScrollingTabRenderManager extends BaseRenderManager implements IRenderMana
         ScrollingTabRenderManager.xStartPoint = 
                 Configuration.width * 0.15;
         ScrollingTabRenderManager.xBarSize = 
-                Configuration.width * 0.33;
+                Configuration.width * 0.35;
     }
 
     createRenderer(manager:IRenderManager,game:Phaser.Game,bar: IBar): IRenderer {
@@ -43,7 +43,7 @@ class ScrollingTabRenderManager extends BaseRenderManager implements IRenderMana
     moveTo(barPosition: number): void {
         for (var bn:number = 0;bn < this.music.getBarCount();bn++) {
             this.renderers[bn].moveTo(ScrollingTabRenderManager.xStartPoint + 
-                                                bn * ScrollingTabRenderManager.xBarSize);
+                                                (bn-barPosition) * ScrollingTabRenderManager.xBarSize);
         }
     }
     createFixed(game: Phaser.Game): void {

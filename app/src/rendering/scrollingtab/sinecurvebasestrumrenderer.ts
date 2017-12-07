@@ -13,10 +13,20 @@
     protected renderer:IRenderer;
     protected game:Phaser.Game;
     protected strum:IStrum;
+    private beats:number;
 
     constructor(renderer:IRenderer,game:Phaser.Game,strum:IStrum) {
         this.renderer = renderer;this.game = game;this.strum = strum;    
+        this.beats = strum.getBar().getMusic().getBeats();
         // TODO: Create sine curve
+    }
+
+    protected getStrumWidth(): number {
+        return this.strum.getQBLength() / (this.beats * 4) * ScrollingTabRenderManager.xBarSize;
+    }
+
+    protected getStrumCentre(): number {
+        return (this.strum.getQBStart()+this.strum.getQBLength()/2) / (this.beats * 4) * ScrollingTabRenderManager.xBarSize;
     }
 
     destroy(): void {
