@@ -66,7 +66,7 @@ class ScrollingTabNotesRenderer extends SineCurveBaseStrumRenderer
     }
 
     highlightStrumObjects(highlight: boolean, percent: number) {
-        this.yOffset = highlight ? 50 : 0;
+        this.yOffset = highlight ? ScrollingTabNotesRenderer.getYDip(percent) : 0;
     }
     
     destroy(): void {
@@ -114,4 +114,10 @@ class ScrollingTabNotesRenderer extends SineCurveBaseStrumRenderer
         }
         return best;
     }
+
+    public static getYDip(prop:number) :number {
+        if (prop > 50) prop = 100-prop;
+        return (prop < 16) ? prop : 16;
+    }
 }
+

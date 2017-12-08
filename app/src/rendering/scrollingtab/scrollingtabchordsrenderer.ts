@@ -44,7 +44,7 @@ class ScrollingTabChordsRenderer extends SineCurveBaseStrumRenderer
     }
 
     highlightStrumObjects(highlight: boolean, percent: number) {
-        this.yOffset = highlight ? 50 : 0;
+        this.yOffset = highlight ? ScrollingTabNotesRenderer.getYDip(percent) : 0;
     }
     
     destroy(): void {

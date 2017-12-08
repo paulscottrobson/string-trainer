@@ -40,7 +40,7 @@ class MainState extends Phaser.State {
     update() : void {
         // Time in milliseconds
         var elapsedMS:number = this.game.time.elapsedMS;
-        this.pos = this.pos + 0.01;
+        this.pos = Math.min(this.music.getBarCount(),this.pos + 0.02);
         this.manager.moveTo(this.pos);
 
 

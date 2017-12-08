@@ -45,7 +45,7 @@ var MainState = (function (_super) {
     };
     MainState.prototype.update = function () {
         var elapsedMS = this.game.time.elapsedMS;
-        this.pos = this.pos + 0.01;
+        this.pos = Math.min(this.music.getBarCount(), this.pos + 0.02);
         this.manager.moveTo(this.pos);
     };
     MainState.VERSION = "0.01 06-Dec-17 Phaser-CE 2.8.7 (c) PSR 2017";
@@ -502,7 +502,7 @@ var ScrollingTabChordsRenderer = (function (_super) {
         this.label.y = this.button.y + ScrollingTabRenderManager.fretBoardStringSize * 0.3;
     };
     ScrollingTabChordsRenderer.prototype.highlightStrumObjects = function (highlight, percent) {
-        this.yOffset = highlight ? 50 : 0;
+        this.yOffset = highlight ? ScrollingTabNotesRenderer.getYDip(percent) : 0;
     };
     ScrollingTabChordsRenderer.prototype.destroy = function () {
         this.button.destroy();
@@ -575,7 +575,7 @@ var ScrollingTabNotesRenderer = (function (_super) {
         }
     };
     ScrollingTabNotesRenderer.prototype.highlightStrumObjects = function (highlight, percent) {
-        this.yOffset = highlight ? 50 : 0;
+        this.yOffset = highlight ? ScrollingTabNotesRenderer.getYDip(percent) : 0;
     };
     ScrollingTabNotesRenderer.prototype.destroy = function () {
         for (var _i = 0, _a = this.buttons; _i < _a.length; _i++) {
@@ -613,6 +613,11 @@ var ScrollingTabNotesRenderer = (function (_super) {
             }
         }
         return best;
+    };
+    ScrollingTabNotesRenderer.getYDip = function (prop) {
+        if (prop > 50)
+            prop = 100 - prop;
+        return (prop < 16) ? prop : 16;
     };
     ScrollingTabNotesRenderer.buttonInfo = null;
     return ScrollingTabNotesRenderer;
