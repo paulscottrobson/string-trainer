@@ -22,7 +22,9 @@ var Configuration = (function () {
 var MainState = (function (_super) {
     __extends(MainState, _super);
     function MainState() {
-        return _super !== null && _super.apply(this, arguments) || this;
+        var _this = _super !== null && _super.apply(this, arguments) || this;
+        _this.pos = 0;
+        return _this;
     }
     MainState.prototype.init = function () {
         Configuration.initialise(this.game);
@@ -37,12 +39,14 @@ var MainState = (function (_super) {
     MainState.prototype.create = function () {
         this.manager = new ScrollingTabRenderManager(this.game, this.music);
         this.manager.create();
-        this.manager.moveTo(1);
+        this.manager.moveTo(0);
     };
     MainState.prototype.destroy = function () {
     };
     MainState.prototype.update = function () {
         var elapsedMS = this.game.time.elapsedMS;
+        this.pos = this.pos + 0.01;
+        this.manager.moveTo(this.pos);
     };
     MainState.VERSION = "0.01 06-Dec-17 Phaser-CE 2.8.7 (c) PSR 2017";
     return MainState;
@@ -396,6 +400,13 @@ var SineCurveBaseStrumRenderer = (function () {
         this.game = game;
         this.strum = strum;
         this.beats = strum.getBar().getMusic().getBeats();
+        var width = this.getStrumWidth();
+        var height = Configuration.height / 8;
+        var spr = this.getBestMatch2(width);
+        this.sineCurve = game.add.image(0, Configuration.yBase - ScrollingTabRenderManager.fretBoardTotalSize, "sprites", spr);
+        this.sineCurve.anchor.x = 0.5;
+        this.sineCurve.anchor.y = 1.0;
+        this.sineCurve.width = width;
     }
     SineCurveBaseStrumRenderer.prototype.getStrumWidth = function () {
         return this.strum.getQBLength() / (this.beats * 4) * ScrollingTabRenderManager.xBarSize;
@@ -404,8 +415,37 @@ var SineCurveBaseStrumRenderer = (function () {
         return (this.strum.getQBStart() + this.strum.getQBLength() / 2) / (this.beats * 4) * ScrollingTabRenderManager.xBarSize;
     };
     SineCurveBaseStrumRenderer.prototype.destroy = function () {
+        this.sineCurve.destroy();
+        this.sineCurve = null;
         this.renderer = this.game = this.strum = null;
     };
+    SineCurveBaseStrumRenderer.prototype.moveTo = function (pos) {
+        this.sineCurve.x = pos + this.getStrumCentre();
+    };
+    SineCurveBaseStrumRenderer.prototype.getBestMatch2 = function (width) {
+        if (SineCurveBaseStrumRenderer.curveInfo == null) {
+            SineCurveBaseStrumRenderer.curveInfo = {};
+            var scache = this.game.cache.getJSON("sprite_info");
+            for (var k in scache.frames) {
+                if (k.substr(0, 10) == "sinecurve_") {
+                    var spr = scache.frames[k];
+                    var asp = spr.frame.w;
+                    SineCurveBaseStrumRenderer.curveInfo[k] = asp;
+                }
+            }
+        }
+        var best;
+        var bestDistance = 9999;
+        for (var k in SineCurveBaseStrumRenderer.curveInfo) {
+            var diff = Math.abs(width - SineCurveBaseStrumRenderer.curveInfo[k]);
+            if (diff < bestDistance) {
+                bestDistance = diff;
+                best = k;
+            }
+        }
+        return best;
+    };
+    SineCurveBaseStrumRenderer.curveInfo = null;
     return SineCurveBaseStrumRenderer;
 }());
 var ScrollingTabChordsRenderer = (function (_super) {
@@ -428,6 +468,7 @@ var ScrollingTabChordsRenderer = (function (_super) {
         return _this;
     }
     ScrollingTabChordsRenderer.prototype.moveTo = function (pos) {
+        _super.prototype.moveTo.call(this, pos);
         this.button.x = pos + this.getStrumCentre() - this.getStrumWidth() / 2;
         this.label.x = this.button.x + this.button.width / 2;
     };
@@ -489,6 +530,7 @@ var ScrollingTabNotesRenderer = (function (_super) {
         return _this;
     }
     ScrollingTabNotesRenderer.prototype.moveTo = function (pos) {
+        _super.prototype.moveTo.call(this, pos);
         var x = pos + this.getStrumCentre();
         for (var s = 0; s < Configuration.strings; s++) {
             if (this.buttons[s] != null) {

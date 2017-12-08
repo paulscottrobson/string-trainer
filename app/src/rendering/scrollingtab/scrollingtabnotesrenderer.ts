@@ -49,6 +49,7 @@ class ScrollingTabNotesRenderer extends SineCurveBaseStrumRenderer
     }
                                                     
     moveTo(pos: number) {
+        super.moveTo(pos);
         var x:number = pos+this.getStrumCentre();
         for (var s = 0;s < Configuration.strings;s++) {
             if (this.buttons[s] != null) {

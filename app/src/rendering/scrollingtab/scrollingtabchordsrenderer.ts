@@ -34,6 +34,7 @@ class ScrollingTabChordsRenderer extends SineCurveBaseStrumRenderer
     }
                                                     
     moveTo(pos: number) {
+        super.moveTo(pos);
         this.button.x = pos+this.getStrumCentre()-this.getStrumWidth()/2;
         this.label.x = this.button.x + this.button.width / 2;
     }
