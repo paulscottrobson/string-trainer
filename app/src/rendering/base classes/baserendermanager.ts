@@ -12,7 +12,7 @@ abstract class BaseRenderManager implements IRenderManager {
     protected game:Phaser.Game;
     protected music:IMusic;
     protected renderers:IRenderer[];
-
+    
     constructor(game:Phaser.Game,music:IMusic) {
         this.game = game;this.music = music;
     }
@@ -25,10 +25,32 @@ abstract class BaseRenderManager implements IRenderManager {
         }
     }
 
-    abstract moveTo(barPosition: number): void;
+    moveTo(barPosition: number): void {
+        if (barPosition < this.music.getBarCount()) {
+            var cBar:IBar = this.music.getBar(Math.floor(barPosition));
+            var qbPos:number = (barPosition-Math.floor(barPosition))*4*this.music.getBeats();
+            for (var s = 0;s < cBar.getStrumCount();s++) {
+                var strum:IStrum = cBar.getStrum(s);
+                if (qbPos >= strum.getQBStart() && qbPos < strum.getQBEnd()) {
+                    var prop:number = (qbPos - strum.getQBStart())/strum.getQBLength();
+                    this.highlight(cBar,s,prop,true);
+                } else {
+                    this.highlight(cBar,s,0,false);
+                }
+            }            
+        }
+    }
+
     abstract createRenderer(manager:IRenderManager,game:Phaser.Game,bar: IBar): IRenderer;
     abstract createFixed(game: Phaser.Game): void;
     abstract destroyFixed(): void;
+
+    highlight(bar:IBar,strumNo:number,prop:number,isOn:boolean) : void {
+        var br:BaseRenderer = <BaseRenderer>this.renderers[bar.getBarNumber()]
+        if (br.isDrawn) {
+            br.strumRenders[strumNo].highlightStrumObjects(isOn,prop*100);
+        }
+    }
 
     destroy(): void {
         for (var rnd of this.renderers) {

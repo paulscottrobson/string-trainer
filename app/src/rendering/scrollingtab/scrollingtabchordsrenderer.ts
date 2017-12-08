@@ -13,11 +13,13 @@ class ScrollingTabChordsRenderer extends SineCurveBaseStrumRenderer
 
     private button:Phaser.Image;
     private label:Phaser.BitmapText;
+    private yOffset:number;
 
     constructor(renderer:IRenderer,game:Phaser.Game,strum:IStrum) {
         super(renderer,game,strum);
         var tm:number = Math.floor(strum.getQBStart()/2);
-        this.button = game.add.image(0,ScrollingTabRenderManager.centreFretboard,
+        this.yOffset = 0;
+        this.button = game.add.image(0,0,
                                      "sprites",
                                      tm % 2 == 0 ? "chordbutton_down":"chordbutton_up");
         this.button.anchor.x = 0;this.button.anchor.y = 0.5;
@@ -28,7 +30,7 @@ class ScrollingTabChordsRenderer extends SineCurveBaseStrumRenderer
         var size:number = ScrollingTabRenderManager.xBarSize / this.beats / 2 * 0.45;
         var cName:string = strum.getChord().toLowerCase();
         cName = cName.charAt(0).toUpperCase()+cName.substr(1);
-        this.label = game.add.bitmapText(0,this.button.y + ScrollingTabRenderManager.fretBoardStringSize * 0.3,
+        this.label = game.add.bitmapText(0,0,
                                         "dfont",cName,size);
         this.label.anchor.x = 0.5;this.label.anchor.y = 0.5 ;                                            
     }
@@ -36,11 +38,13 @@ class ScrollingTabChordsRenderer extends SineCurveBaseStrumRenderer
     moveTo(pos: number) {
         super.moveTo(pos);
         this.button.x = pos+this.getStrumCentre()-this.getStrumWidth()/2;
+        this.button.y = ScrollingTabRenderManager.centreFretboard+this.yOffset;
         this.label.x = this.button.x + this.button.width / 2;
+        this.label.y = this.button.y + ScrollingTabRenderManager.fretBoardStringSize * 0.3;
     }
 
     highlightStrumObjects(highlight: boolean, percent: number) {
-        throw new Error("Method not implemented.");
+        this.yOffset = highlight ? 50 : 0;
     }
     
     destroy(): void {

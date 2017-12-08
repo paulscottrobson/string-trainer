@@ -54,4 +54,16 @@ interface IRenderManager {
      * @memberof IRenderManager
      */
     destroy():void;
+
+    /**
+     * Highlight a specific position. Used to make something happen
+     * dependent on current position, e.g. the bouncy ball, the dipping
+     * blocks.
+     * 
+     * @param {IBar} bar bar highlighted
+     * @param {number} strumNo strum # highlighted
+     * @param {number} prop how far through that strum they are.
+     * @memberof IRenderManager
+     */
+    highlight(bar:IBar,strumNo:number,prop:number,isOn:boolean) : void;
 }

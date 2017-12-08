@@ -13,11 +13,13 @@ class ScrollingTabNotesRenderer extends SineCurveBaseStrumRenderer
 
     private buttons:Phaser.Image[];
     private text:Phaser.BitmapText[];
-
+    private yOffset:number = 0;
+    
     constructor(renderer:IRenderer,game:Phaser.Game,strum:IStrum) {
         super(renderer,game,strum);
         this.buttons = [];
         this.text = [];
+        this.yOffset = 0;
         // Get fretting
         var fretting:number[] = strum.getStrum();
         // Get button size
@@ -32,8 +34,7 @@ class ScrollingTabNotesRenderer extends SineCurveBaseStrumRenderer
             this.text[s] = null;
             // Create button & text if needed.
             if (fretting[s] != Strum.NOSTRUM) {
-                this.buttons[s] = game.add.image(10,
-                                                 ScrollingTabRenderManager.getStringY(s),
+                this.buttons[s] = game.add.image(0,0,
                                                  "sprites",btn);
                 this.buttons[s].width = width;
                 this.buttons[s].height = height * 0.9;
@@ -54,7 +55,10 @@ class ScrollingTabNotesRenderer extends SineCurveBaseStrumRenderer
         for (var s = 0;s < Configuration.strings;s++) {
             if (this.buttons[s] != null) {
                 this.buttons[s].x = x;
+                this.buttons[s].y = ScrollingTabRenderManager.getStringY(s)+this.yOffset;
+                
                 this.text[s].x = x;
+                this.text[s].y = this.buttons[s].y;
                 this.buttons[s].bringToTop();
                 this.game.world.bringToTop(this.text[s]);
             }            
@@ -62,7 +66,7 @@ class ScrollingTabNotesRenderer extends SineCurveBaseStrumRenderer
     }
 
     highlightStrumObjects(highlight: boolean, percent: number) {
-        throw new Error("Method not implemented.");
+        this.yOffset = highlight ? 50 : 0;
     }
     
     destroy(): void {

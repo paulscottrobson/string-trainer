@@ -12,8 +12,8 @@ abstract class BaseRenderer implements IRenderer {
     protected manager:IRenderManager;
     protected game:Phaser.Game;
     protected bar:IBar;
-    protected isDrawn:boolean;
-    protected strumRenders:IStrumRenderer[];
+    public    isDrawn:boolean;
+    public    strumRenders:IStrumRenderer[];
 
     constructor(manager:IRenderManager,game:Phaser.Game,bar:IBar) {
         this.manager = manager;this.game = game;this.bar = bar;    

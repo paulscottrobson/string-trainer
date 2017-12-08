@@ -42,24 +42,22 @@ class ScrollingTabRenderManager extends BaseRenderManager implements IRenderMana
     }
 
     moveTo(barPosition: number): void {
+        super.moveTo(barPosition);
         for (var bn:number = 0;bn < this.music.getBarCount();bn++) {
             this.renderers[bn].moveTo(ScrollingTabRenderManager.xStartPoint + 
                                                 (bn-barPosition) * ScrollingTabRenderManager.xBarSize);
         }
-        if (barPosition < this.music.getBarCount()) {
-            var cBar:IBar = this.music.getBar(Math.floor(barPosition));
-            var qbPos:number = (barPosition-Math.floor(barPosition))*4*this.music.getBeats();
-            for (var s = 0;s < cBar.getStrumCount();s++) {
-                var strum:IStrum = cBar.getStrum(s);
-                if (qbPos >= strum.getQBStart() && qbPos < strum.getQBEnd()) {
-                    var prop:number = (qbPos - strum.getQBStart())/strum.getQBLength();
-                    var sv:number = Math.sin(prop * Math.PI);
-                    var h:number = (<ScrollingTabRenderer>this.renderers[Math.floor(barPosition)]).getStrumSineHeight(s);
-                    this.ball.y = Configuration.yBase - ScrollingTabRenderManager.fretBoardTotalSize;
-                    this.ball.y = this.ball.y - sv * h;
-                    this.ball.bringToTop();
-                }
-            }            
+    }
+
+    highlight(bar:IBar,strumNo:number,prop:number,isOn:boolean) : void {
+        super.highlight(bar,strumNo,prop,isOn);
+        if (isOn) {
+            var sv:number = Math.sin(prop * Math.PI);
+            var renderer:ScrollingTabRenderer = (<ScrollingTabRenderer>this.renderers[bar.getBarNumber()]);
+            var h:number = renderer.getStrumSineHeight(strumNo);
+            this.ball.y = Configuration.yBase - ScrollingTabRenderManager.fretBoardTotalSize;
+            this.ball.y = this.ball.y - sv * h;
+            this.ball.bringToTop();
         }
     }
 

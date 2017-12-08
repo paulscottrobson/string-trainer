@@ -33,6 +33,7 @@ class ScrollingTabRenderer extends BaseRenderer implements IRenderer {
     }
 
     public getStrumSineHeight(strumNo:number) : number {
+        if (!this.isDrawn) return 0;
         return (<SineCurveBaseStrumRenderer>this.strumRenders[strumNo]).getSineHeight();
     }
     
