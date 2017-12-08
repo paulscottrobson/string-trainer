@@ -13,7 +13,7 @@ abstract class BaseRenderer implements IRenderer {
     protected game:Phaser.Game;
     protected bar:IBar;
     protected isDrawn:boolean;
-    private   strumRenders:IStrumRenderer[];
+    protected strumRenders:IStrumRenderer[];
 
     constructor(manager:IRenderManager,game:Phaser.Game,bar:IBar) {
         this.manager = manager;this.game = game;this.bar = bar;    

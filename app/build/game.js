@@ -406,8 +406,12 @@ var SineCurveBaseStrumRenderer = (function () {
         this.sineCurve = game.add.image(0, Configuration.yBase - ScrollingTabRenderManager.fretBoardTotalSize, "sprites", spr);
         this.sineCurve.anchor.x = 0.5;
         this.sineCurve.anchor.y = 1.0;
-        this.sineCurve.width = width;
+        var scale = width / this.sineCurve.width;
+        this.sineCurve.scale.x = scale;
     }
+    SineCurveBaseStrumRenderer.prototype.getSineHeight = function () {
+        return this.sineCurve.height;
+    };
     SineCurveBaseStrumRenderer.prototype.getStrumWidth = function () {
         return this.strum.getQBLength() / (this.beats * 4) * ScrollingTabRenderManager.xBarSize;
     };
@@ -608,6 +612,9 @@ var ScrollingTabRenderer = (function (_super) {
             }
         }
     };
+    ScrollingTabRenderer.prototype.getStrumSineHeight = function (strumNo) {
+        return this.strumRenders[strumNo].getSineHeight();
+    };
     ScrollingTabRenderer.prototype.destroyNonStrumItems = function () {
         for (var _i = 0, _a = this.beatBars; _i < _a.length; _i++) {
             var bb = _a[_i];
@@ -646,7 +653,7 @@ var ScrollingTabRenderManager = (function (_super) {
         ScrollingTabRenderManager.xStartPoint =
             Configuration.width * 0.15;
         ScrollingTabRenderManager.xBarSize =
-            Configuration.width * 0.35;
+            Configuration.width * 0.55;
         return _this;
     }
     ScrollingTabRenderManager.prototype.createRenderer = function (manager, game, bar) {
@@ -656,6 +663,21 @@ var ScrollingTabRenderManager = (function (_super) {
         for (var bn = 0; bn < this.music.getBarCount(); bn++) {
             this.renderers[bn].moveTo(ScrollingTabRenderManager.xStartPoint +
                 (bn - barPosition) * ScrollingTabRenderManager.xBarSize);
+        }
+        if (barPosition < this.music.getBarCount()) {
+            var cBar = this.music.getBar(Math.floor(barPosition));
+            var qbPos = (barPosition - Math.floor(barPosition)) * 4 * this.music.getBeats();
+            for (var s = 0; s < cBar.getStrumCount(); s++) {
+                var strum = cBar.getStrum(s);
+                if (qbPos >= strum.getQBStart() && qbPos < strum.getQBEnd()) {
+                    var prop = (qbPos - strum.getQBStart()) / strum.getQBLength();
+                    var sv = Math.sin(prop * Math.PI);
+                    var h = this.renderers[Math.floor(barPosition)].getStrumSineHeight(s);
+                    this.ball.y = Configuration.yBase - ScrollingTabRenderManager.fretBoardTotalSize;
+                    this.ball.y = this.ball.y - sv * h;
+                    this.ball.bringToTop();
+                }
+            }
         }
     };
     ScrollingTabRenderManager.prototype.createFixed = function (game) {
@@ -679,6 +701,10 @@ var ScrollingTabRenderManager = (function (_super) {
             str.anchor.y = 0.5;
             this.strings.push(str);
         }
+        this.ball = game.add.image(ScrollingTabRenderManager.xStartPoint, 100, "sprites", "spred");
+        this.ball.width = this.ball.height = ScrollingTabRenderManager.xBarSize / 10;
+        this.ball.anchor.x = 0.5;
+        this.ball.anchor.y = 1.0;
     };
     ScrollingTabRenderManager.prototype.destroyFixed = function () {
         for (var _i = 0, _a = this.strings; _i < _a.length; _i++) {
@@ -687,7 +713,8 @@ var ScrollingTabRenderManager = (function (_super) {
         }
         this.fretBoard.destroy();
         this.mainBoard.destroy();
-        this.strings = this.mainBoard = this.fretBoard = null;
+        this.ball.destroy();
+        this.ball = this.strings = this.mainBoard = this.fretBoard = null;
     };
     ScrollingTabRenderManager.getStringY = function (n) {
         if (!Configuration.instrument.isTabInverted()) {

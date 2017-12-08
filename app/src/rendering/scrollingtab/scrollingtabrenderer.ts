@@ -32,6 +32,10 @@ class ScrollingTabRenderer extends BaseRenderer implements IRenderer {
         }
     }
 
+    public getStrumSineHeight(strumNo:number) : number {
+        return (<SineCurveBaseStrumRenderer>this.strumRenders[strumNo]).getSineHeight();
+    }
+    
     destroyNonStrumItems(): void {        
         for (var bb of this.beatBars) bb.destroy();
         this.beatBars = null;

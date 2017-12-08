@@ -28,9 +28,14 @@
                                         Configuration.yBase - ScrollingTabRenderManager.fretBoardTotalSize,
                                         "sprites",spr);
         this.sineCurve.anchor.x = 0.5;this.sineCurve.anchor.y = 1.0;
-        this.sineCurve.width = width;
+        var scale = width / this.sineCurve.width;
+        this.sineCurve.scale.x = scale;
 //        this.sineCurve.height = height;                                        
                 
+    }
+
+    public getSineHeight(): number {
+        return this.sineCurve.height;
     }
 
     protected getStrumWidth(): number {

@@ -19,6 +19,7 @@ class ScrollingTabRenderManager extends BaseRenderManager implements IRenderMana
     private mainBoard:Phaser.Image;
     private fretBoard:Phaser.Image;
     private strings:Phaser.Image[];
+    private ball:Phaser.Image;
 
     constructor(game:Phaser.Game,music:IMusic) {
         super(game,music);
@@ -33,7 +34,7 @@ class ScrollingTabRenderManager extends BaseRenderManager implements IRenderMana
         ScrollingTabRenderManager.xStartPoint = 
                 Configuration.width * 0.15;
         ScrollingTabRenderManager.xBarSize = 
-                Configuration.width * 0.35;
+                Configuration.width * 0.55;
     }
 
     createRenderer(manager:IRenderManager,game:Phaser.Game,bar: IBar): IRenderer {
@@ -45,7 +46,23 @@ class ScrollingTabRenderManager extends BaseRenderManager implements IRenderMana
             this.renderers[bn].moveTo(ScrollingTabRenderManager.xStartPoint + 
                                                 (bn-barPosition) * ScrollingTabRenderManager.xBarSize);
         }
+        if (barPosition < this.music.getBarCount()) {
+            var cBar:IBar = this.music.getBar(Math.floor(barPosition));
+            var qbPos:number = (barPosition-Math.floor(barPosition))*4*this.music.getBeats();
+            for (var s = 0;s < cBar.getStrumCount();s++) {
+                var strum:IStrum = cBar.getStrum(s);
+                if (qbPos >= strum.getQBStart() && qbPos < strum.getQBEnd()) {
+                    var prop:number = (qbPos - strum.getQBStart())/strum.getQBLength();
+                    var sv:number = Math.sin(prop * Math.PI);
+                    var h:number = (<ScrollingTabRenderer>this.renderers[Math.floor(barPosition)]).getStrumSineHeight(s);
+                    this.ball.y = Configuration.yBase - ScrollingTabRenderManager.fretBoardTotalSize;
+                    this.ball.y = this.ball.y - sv * h;
+                    this.ball.bringToTop();
+                }
+            }            
+        }
     }
+
     createFixed(game: Phaser.Game): void {
         // Fretboard Background                                    
         this.fretBoard = game.add.image(0,
@@ -76,13 +93,20 @@ class ScrollingTabRenderManager extends BaseRenderManager implements IRenderMana
             str.anchor.y = 0.5;
             this.strings.push(str);                                                       
         }
+        // Bouncy ball
+        this.ball = game.add.image(ScrollingTabRenderManager.xStartPoint,100,
+                                                            "sprites","spred");
+        this.ball.width = this.ball.height = ScrollingTabRenderManager.xBarSize/10;
+        this.ball.anchor.x = 0.5;this.ball.anchor.y = 1.0;
     }
 
     destroyFixed(): void {
         for (var x of this.strings) x.destroy();
         this.fretBoard.destroy();
         this.mainBoard.destroy();
-        this.strings = this.mainBoard = this.fretBoard = null;
+        this.ball.destroy();
+        this.ball = this.strings = this.mainBoard = this.fretBoard = null;
+        
     }
 
     /**
