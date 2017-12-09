@@ -42,11 +42,29 @@ class Configuration {
      * @memberof Configuration
      */
     public static yBase:number;
+    /**
+     * Size of lyric area (height)
+     * 
+     * @static
+     * @type {number}
+     * @memberof Configuration
+     */
+    public static lyricSize:number;
+    /**
+     * Height of control bar.
+     * 
+     * @static
+     * @type {number}
+     * @memberof Configuration
+     */
+    public static controlHeight:number;
 
     public static initialise(game:Phaser.Game): void {
         Configuration.width = game.width;
         Configuration.height = game.height;
-        Configuration.yBase = Configuration.height - 100;
+        Configuration.controlHeight = 80;
+        Configuration.lyricSize = 50;
+        Configuration.yBase = Configuration.height - Configuration.controlHeight - Configuration.lyricSize;
         Configuration.instrument = null;
     }
 }

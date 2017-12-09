@@ -32,7 +32,7 @@ class ScrollingTabRenderManager extends BaseRenderManager implements IRenderMana
         ScrollingTabRenderManager.sineCurveHeight = 
                 ScrollingTabRenderManager.fretBoardTotalSize / 3;                
         ScrollingTabRenderManager.xStartPoint = 
-                Configuration.width * 0.15;
+                Configuration.width * 0.2;
         ScrollingTabRenderManager.xBarSize = 
                 Configuration.width * 0.55;
     }

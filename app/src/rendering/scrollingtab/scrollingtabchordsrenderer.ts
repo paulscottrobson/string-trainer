@@ -37,10 +37,21 @@ class ScrollingTabChordsRenderer extends SineCurveBaseStrumRenderer
                                                     
     moveTo(pos: number) {
         super.moveTo(pos);
+        var x:number = pos + this.getStrumCentre();
+        var alpha:number = 1;
+        if (x < ScrollingTabRenderManager.xStartPoint) {
+            alpha = 1-1.5*(ScrollingTabRenderManager.xStartPoint-x) /
+                                    ScrollingTabRenderManager.xBarSize;
+            alpha = Math.max(0,alpha);                                    
+        }
+        
         this.button.x = pos+this.getStrumCentre()-this.getStrumWidth()/2;
         this.button.y = ScrollingTabRenderManager.centreFretboard+this.yOffset;
+        this.button.alpha = alpha;
+
         this.label.x = this.button.x + this.button.width / 2;
         this.label.y = this.button.y + ScrollingTabRenderManager.fretBoardStringSize * 0.3;
+        this.label.alpha = alpha;
     }
 
     highlightStrumObjects(highlight: boolean, percent: number) {

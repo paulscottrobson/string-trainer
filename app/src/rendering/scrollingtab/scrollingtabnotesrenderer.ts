@@ -52,13 +52,21 @@ class ScrollingTabNotesRenderer extends SineCurveBaseStrumRenderer
     moveTo(pos: number) {
         super.moveTo(pos);
         var x:number = pos+this.getStrumCentre();
+        var alpha:number = 1;
+        if (x < ScrollingTabRenderManager.xStartPoint) {
+            alpha = 1-1.5*(ScrollingTabRenderManager.xStartPoint-x) /
+                                    ScrollingTabRenderManager.xBarSize;
+            alpha = Math.max(0,alpha);                                    
+        }
         for (var s = 0;s < Configuration.strings;s++) {
             if (this.buttons[s] != null) {
                 this.buttons[s].x = x;
                 this.buttons[s].y = ScrollingTabRenderManager.getStringY(s)+this.yOffset;
-                
+                this.buttons[s].alpha = alpha;
+
                 this.text[s].x = x;
                 this.text[s].y = this.buttons[s].y;
+                this.text[s].alpha = alpha;
                 this.buttons[s].bringToTop();
                 this.game.world.bringToTop(this.text[s]);
             }            
@@ -117,7 +125,7 @@ class ScrollingTabNotesRenderer extends SineCurveBaseStrumRenderer
 
     public static getYDip(prop:number) :number {
         if (prop > 50) prop = 100-prop;
-        return (prop < 16) ? prop : 16;
+        return (prop < 10) ? prop : 10;
     }
 }
 

@@ -14,7 +14,9 @@ var Configuration = (function () {
     Configuration.initialise = function (game) {
         Configuration.width = game.width;
         Configuration.height = game.height;
-        Configuration.yBase = Configuration.height - 100;
+        Configuration.controlHeight = 80;
+        Configuration.lyricSize = 50;
+        Configuration.yBase = Configuration.height - Configuration.controlHeight - Configuration.lyricSize;
         Configuration.instrument = null;
     };
     return Configuration;
@@ -32,11 +34,14 @@ var MainState = (function (_super) {
         this.music = new Music(json);
         Configuration.instrument = InstrumentDB.get()
             .find(this.music.getInstrumentShortName());
-        console.log(Configuration.instrument.getLongName());
         Configuration.strings = Configuration.instrument.getStringCount();
-        console.log(Configuration.strings);
     };
     MainState.prototype.create = function () {
+        this.speedControl = new SpeedArrow(this.game);
+        var i = this.game.add.image(0, Configuration.yBase, "sprites", "rectangle");
+        i.width = Configuration.width - Configuration.lyricSize - Configuration.controlHeight;
+        i.height = Configuration.lyricSize;
+        i.tint = 0xFFFF00;
         this.manager = new ScrollingTabRenderManager(this.game, this.music);
         this.manager.create();
         this.manager.moveTo(0);
@@ -45,7 +50,10 @@ var MainState = (function (_super) {
     };
     MainState.prototype.update = function () {
         var elapsedMS = this.game.time.elapsedMS;
-        this.pos = Math.min(this.music.getBarCount(), this.pos + 0.02);
+        var bpms = this.music.getTempo() / 60 / 1000;
+        bpms = bpms / this.music.getBeats() * this.speedControl.getScalar();
+        this.pos = Math.min(this.music.getBarCount(), this.pos + bpms * elapsedMS);
+        this.speedControl.updateRotate(elapsedMS);
         this.manager.moveTo(this.pos);
     };
     MainState.VERSION = "0.01 06-Dec-17 Phaser-CE 2.8.7 (c) PSR 2017";
@@ -57,6 +65,49 @@ var InstrumentInfo = (function () {
     InstrumentInfo.encodedInfo = "merlin.Seagull Merlin.d3,a3,d4.3.n.S.S.D.0=0.1=2.2=4.3=5.4=7.5=9.6=11.7=12:ukulele.Ukulele.g4,c4,a4,e4.4.n.S.S.S.S.0=0.1=1.2=2.3=3.4=4.5=5.6=6.7=7.8=8.9=9.10=10.11=11.12=12.13=13.14=14:strumstick.McNally Strumstick.d3,a3,d4.3.n.S.S.D.0=0.1=2.2=4.3=5.4=7.5=9.6=10.7=11.8=12.9=14.10=16.11=17.12=19.13=21.14=22:dulcimer.Mountain Dulcimer.d3,a3,d4.3.y.S.S.D.0=0.1=2.2=4.3=5.4=7.5=9.6=10.6+=11.7=12.8=14.9=16.10=17.11=19.12=21.13=22.13+=23.14=24:loog.Loog Guitar.g3,b3,e4.3.n.S.S.S.0=0.1=1.2=2.3=3.4=4.5=5.6=6.7=7.8=8.9=9.10=10.11=11.12=12.13=13.14=14.15=15.16=16.17=17.18=18";
     return InstrumentInfo;
 }());
+var SpeedArrow = (function (_super) {
+    __extends(SpeedArrow, _super);
+    function SpeedArrow(game) {
+        var _this = _super.call(this, game) || this;
+        _this.arrow = _this.game.add.image(0, 0, "sprites", "arrow", _this);
+        _this.arrow.width = Configuration.height - Configuration.yBase;
+        _this.arrow.height = _this.arrow.width;
+        _this.arrow.anchor.x = _this.arrow.anchor.y = 0.5;
+        _this.arrow.x = _this.game.width - _this.arrow.width / 2;
+        _this.arrow.y = _this.game.height - _this.arrow.height / 2;
+        _this.arrow.inputEnabled = true;
+        _this.arrow.tint = 0xFF8000;
+        return _this;
+    }
+    SpeedArrow.prototype.destroy = function () {
+        _super.prototype.destroy.call(this);
+        this.arrow = null;
+    };
+    SpeedArrow.prototype.updateRotate = function (elapsedMS) {
+        var ptr = this.game.input.activePointer;
+        if (ptr.leftButton.isDown &&
+            Math.abs(ptr.x - this.arrow.x) < this.arrow.width / 2 &&
+            Math.abs(ptr.y - this.arrow.y) < this.arrow.height / 2) {
+            this.arrow.rotation = this.arrow.rotation + elapsedMS / 1000;
+            if (this.arrow.rotation >= 2 * Math.PI)
+                this.arrow.rotation -= 2 * Math.PI;
+            this.arrow.tint = (this.getScalar() < 1 ? 0x0080F0 : 0x00FF00);
+            if (this.getScalar() > 0.98 && this.getScalar() < 1.02)
+                this.arrow.tint = 0xFF8000;
+        }
+    };
+    SpeedArrow.prototype.getScalar = function () {
+        var n = (this.arrow.rotation - Math.PI) / Math.PI;
+        if (n < 0) {
+            n = 2 + n;
+        }
+        else {
+            n = n * 3 / 4 + 0.25;
+        }
+        return n;
+    };
+    return SpeedArrow;
+}(Phaser.Group));
 var Instrument = (function () {
     function Instrument(info) {
         this.rawInfo = info.split(".");
@@ -496,10 +547,19 @@ var ScrollingTabChordsRenderer = (function (_super) {
     }
     ScrollingTabChordsRenderer.prototype.moveTo = function (pos) {
         _super.prototype.moveTo.call(this, pos);
+        var x = pos + this.getStrumCentre();
+        var alpha = 1;
+        if (x < ScrollingTabRenderManager.xStartPoint) {
+            alpha = 1 - 1.5 * (ScrollingTabRenderManager.xStartPoint - x) /
+                ScrollingTabRenderManager.xBarSize;
+            alpha = Math.max(0, alpha);
+        }
         this.button.x = pos + this.getStrumCentre() - this.getStrumWidth() / 2;
         this.button.y = ScrollingTabRenderManager.centreFretboard + this.yOffset;
+        this.button.alpha = alpha;
         this.label.x = this.button.x + this.button.width / 2;
         this.label.y = this.button.y + ScrollingTabRenderManager.fretBoardStringSize * 0.3;
+        this.label.alpha = alpha;
     };
     ScrollingTabChordsRenderer.prototype.highlightStrumObjects = function (highlight, percent) {
         this.yOffset = highlight ? ScrollingTabNotesRenderer.getYDip(percent) : 0;
@@ -563,12 +623,20 @@ var ScrollingTabNotesRenderer = (function (_super) {
     ScrollingTabNotesRenderer.prototype.moveTo = function (pos) {
         _super.prototype.moveTo.call(this, pos);
         var x = pos + this.getStrumCentre();
+        var alpha = 1;
+        if (x < ScrollingTabRenderManager.xStartPoint) {
+            alpha = 1 - 1.5 * (ScrollingTabRenderManager.xStartPoint - x) /
+                ScrollingTabRenderManager.xBarSize;
+            alpha = Math.max(0, alpha);
+        }
         for (var s = 0; s < Configuration.strings; s++) {
             if (this.buttons[s] != null) {
                 this.buttons[s].x = x;
                 this.buttons[s].y = ScrollingTabRenderManager.getStringY(s) + this.yOffset;
+                this.buttons[s].alpha = alpha;
                 this.text[s].x = x;
                 this.text[s].y = this.buttons[s].y;
+                this.text[s].alpha = alpha;
                 this.buttons[s].bringToTop();
                 this.game.world.bringToTop(this.text[s]);
             }
@@ -617,7 +685,7 @@ var ScrollingTabNotesRenderer = (function (_super) {
     ScrollingTabNotesRenderer.getYDip = function (prop) {
         if (prop > 50)
             prop = 100 - prop;
-        return (prop < 16) ? prop : 16;
+        return (prop < 10) ? prop : 10;
     };
     ScrollingTabNotesRenderer.buttonInfo = null;
     return ScrollingTabNotesRenderer;
@@ -687,7 +755,7 @@ var ScrollingTabRenderManager = (function (_super) {
         ScrollingTabRenderManager.sineCurveHeight =
             ScrollingTabRenderManager.fretBoardTotalSize / 3;
         ScrollingTabRenderManager.xStartPoint =
-            Configuration.width * 0.15;
+            Configuration.width * 0.2;
         ScrollingTabRenderManager.xBarSize =
             Configuration.width * 0.55;
         return _this;
