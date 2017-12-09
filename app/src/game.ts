@@ -19,7 +19,7 @@ class MainState extends Phaser.State {
     private pos:number = 0;
     private lastQBeat = -1;
     private lastBar = -1;
-    private managerIndex:number = 0;
+    private managerIndex:number = 1;
     private background:Background;
     
     init() {
@@ -37,9 +37,9 @@ class MainState extends Phaser.State {
     create() {    
         // Add fixed entities
         this.background = new Background(this.game,this);
+        this.lyricDisplay = new LyricBar(this.game);
         this.speedControl = new SpeedArrow(this.game);
         this.positionControl = new PositionBar(this.game,this.music,32,Configuration.width-Configuration.lyricSize - Configuration.controlHeight-32,Configuration.height-Configuration.controlHeight/2);
-        this.lyricDisplay = new LyricBar(this.game);
         this.metronome = new Metronome(this.game,this.music);
         this.player = new Player(this.game,this.music);
 
@@ -60,6 +60,8 @@ class MainState extends Phaser.State {
         // Create new one.
         if (this.managerIndex == 0) 
             this.manager = new ScrollingTabRenderManager(this.game,this.music);
+        if (this.managerIndex == 1) 
+            this.manager = new ProjectedRenderManager(this.game,this.music);
 
         // Restart position
         this.manager.create();
@@ -67,12 +69,21 @@ class MainState extends Phaser.State {
         this.pos = 0;this.lastBar = this.lastQBeat = -1;
         // Advance counter
         this.managerIndex++;
-        if (this.managerIndex == 1) 
+        if (this.managerIndex == 2) 
             this.managerIndex = 0;
                     
     }
 
     destroy() : void {
+        this.background.destroy();
+        this.speedControl.destroy();
+        this.positionControl.destroy();
+        this.lyricDisplay.destroy();
+        this.metronome.destroy();
+        this.player.destroy();
+        this.background = this.speedControl = this.positionControl = null;
+        this.lyricDisplay = this.metronome = this.player = null;
+        this.background = null;
     }
 
     update() : void {

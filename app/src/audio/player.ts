@@ -13,7 +13,7 @@ class Player {
         this.notes = [];
         this.music = music;
         this.tuning = music.getTuningAsC1Offset();
-        console.log(Player.loaded);
+        //console.log(Player.loaded);
         for (var nn of Player.loaded) {
             this.notes[nn] = game.add.audio(nn.toString());
             //console.log(this.notes[nn]);
@@ -23,6 +23,9 @@ class Player {
         for (var n = 0;n < Configuration.strings;n++) {
             this.current.push(null);
         }
+    }
+
+    destroy(): void {        
     }
 
     public update(bar:number,qBeat:number): void {

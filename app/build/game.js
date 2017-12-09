@@ -29,7 +29,7 @@ var MainState = (function (_super) {
         _this.pos = 0;
         _this.lastQBeat = -1;
         _this.lastBar = -1;
-        _this.managerIndex = 0;
+        _this.managerIndex = 1;
         return _this;
     }
     MainState.prototype.init = function () {
@@ -42,9 +42,9 @@ var MainState = (function (_super) {
     };
     MainState.prototype.create = function () {
         this.background = new Background(this.game, this);
+        this.lyricDisplay = new LyricBar(this.game);
         this.speedControl = new SpeedArrow(this.game);
         this.positionControl = new PositionBar(this.game, this.music, 32, Configuration.width - Configuration.lyricSize - Configuration.controlHeight - 32, Configuration.height - Configuration.controlHeight / 2);
-        this.lyricDisplay = new LyricBar(this.game);
         this.metronome = new Metronome(this.game, this.music);
         this.player = new Player(this.game, this.music);
         this.nextManager();
@@ -56,15 +56,26 @@ var MainState = (function (_super) {
         }
         if (this.managerIndex == 0)
             this.manager = new ScrollingTabRenderManager(this.game, this.music);
+        if (this.managerIndex == 1)
+            this.manager = new ProjectedRenderManager(this.game, this.music);
         this.manager.create();
         this.manager.moveTo(0);
         this.pos = 0;
         this.lastBar = this.lastQBeat = -1;
         this.managerIndex++;
-        if (this.managerIndex == 1)
+        if (this.managerIndex == 2)
             this.managerIndex = 0;
     };
     MainState.prototype.destroy = function () {
+        this.background.destroy();
+        this.speedControl.destroy();
+        this.positionControl.destroy();
+        this.lyricDisplay.destroy();
+        this.metronome.destroy();
+        this.player.destroy();
+        this.background = this.speedControl = this.positionControl = null;
+        this.lyricDisplay = this.metronome = this.player = null;
+        this.background = null;
     };
     MainState.prototype.update = function () {
         var elapsedMS = this.game.time.elapsedMS;
@@ -97,6 +108,8 @@ var Metronome = (function () {
     function Metronome(game, music) {
         this.metronome = game.add.audio("metronome");
     }
+    Metronome.prototype.destroy = function () {
+    };
     Metronome.prototype.update = function (bar, qBeat) {
         if (qBeat % 4 == 0) {
             this.metronome.volume = (qBeat == 0) ? 1 : 0.2;
@@ -111,7 +124,6 @@ var Player = (function () {
         this.notes = [];
         this.music = music;
         this.tuning = music.getTuningAsC1Offset();
-        console.log(Player.loaded);
         for (var _i = 0, _a = Player.loaded; _i < _a.length; _i++) {
             var nn = _a[_i];
             this.notes[nn] = game.add.audio(nn.toString());
@@ -121,6 +133,8 @@ var Player = (function () {
             this.current.push(null);
         }
     }
+    Player.prototype.destroy = function () {
+    };
     Player.prototype.update = function (bar, qBeat) {
         var cBar = this.music.getBar(bar);
         for (var s = 0; s < cBar.getStrumCount(); s++) {
@@ -180,13 +194,17 @@ var Background = (function () {
         this.bgr.inputEnabled = true;
         this.bgr.events.onInputDown.add(function () { state.nextManager(); }, state);
     }
+    Background.prototype.destroy = function () {
+        this.bgr.destroy();
+        this.bgr = null;
+    };
     return Background;
 }());
 var LyricBar = (function () {
     function LyricBar(game) {
         var w = Configuration.width - Configuration.lyricSize -
             Configuration.controlHeight;
-        var t = game.add.bitmapText(w / 2, Configuration.yBase, "font", "xxxx", Configuration.lyricSize * 0.9);
+        var t = game.add.bitmapText(Configuration.width / 2, Configuration.yBase, "dfont", "xxxx", Configuration.lyricSize * 0.9);
         t.tint = 0xFFFF00;
         t.anchor.x = 0.5;
         this.textBox = t;
@@ -698,6 +716,83 @@ var BaseRenderManager = (function () {
         0x6495ED, 0x87CEEB, 0xFFB6C1, 0xFAEBD7, 0x708090
     ];
     return BaseRenderManager;
+}());
+var ProjectedRenderer = (function (_super) {
+    __extends(ProjectedRenderer, _super);
+    function ProjectedRenderer() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    ProjectedRenderer.prototype.moveNonStrumItemsTo = function (barPosition) {
+    };
+    ProjectedRenderer.prototype.createNonStrumItems = function () {
+    };
+    ProjectedRenderer.prototype.destroyNonStrumItems = function () {
+    };
+    ProjectedRenderer.prototype.createStrumRenderer = function (renderer, game, strum) {
+        return new ProjectedStrumRenderer(this, this.game, strum);
+    };
+    ProjectedRenderer.prototype.isVisible = function (pos) {
+        return true;
+    };
+    return ProjectedRenderer;
+}(BaseRenderer));
+var ProjectedRenderManager = (function (_super) {
+    __extends(ProjectedRenderManager, _super);
+    function ProjectedRenderManager(game, music) {
+        var _this = _super.call(this, game, music) || this;
+        ProjectedRenderManager.yFront = Configuration.yBase - 10;
+        return _this;
+    }
+    ProjectedRenderManager.prototype.createRenderer = function (manager, game, bar) {
+        return new ProjectedRenderer(this, this.game, bar);
+    };
+    ProjectedRenderManager.prototype.createFixed = function (game) {
+        this.fixed = new Phaser.Group(game);
+        for (var s = 0; s < Configuration.strings; s++) {
+            var dbl = Configuration.instrument.isDoubleString(s);
+            var dx = ProjectedRenderManager.xPos(s, 0) -
+                ProjectedRenderManager.xPos(s, 1000);
+            var dy = ProjectedRenderManager.yPos(s, 0) -
+                ProjectedRenderManager.yPos(s, 1000);
+            var adj = Math.atan2(dy, dx);
+            var rail = game.add.image(0, 0, "sprites", dbl ? "dstring" : "string", this.fixed);
+            rail.x = ProjectedRenderManager.xPos(s, 0);
+            rail.y = ProjectedRenderManager.yPos(s, 0);
+            rail.width = game.height * 3 / 2;
+            rail.height = dbl ? 20 : 10;
+            rail.anchor.x = 1;
+            rail.anchor.y = 0.5;
+            rail.rotation = adj;
+        }
+    };
+    ProjectedRenderManager.prototype.destroyFixed = function () {
+        this.fixed.destroy();
+    };
+    ProjectedRenderManager.xPos = function (str, yl) {
+        yl = ProjectedRenderManager.yPos(str, yl);
+        var xs = 0.1 * (str - (Configuration.strings - 1) / 2) *
+            Configuration.width / (Configuration.strings - 1);
+        xs = xs * (1 + yl / 120);
+        return xs + Configuration.width / 2;
+    };
+    ProjectedRenderManager.yPos = function (str, y) {
+        var camera = 500;
+        y = ProjectedRenderManager.yFront -
+            (1 - camera / (y + camera)) * (ProjectedRenderManager.yFront - 200) * 2.1;
+        return y;
+    };
+    return ProjectedRenderManager;
+}(BaseRenderManager));
+var ProjectedStrumRenderer = (function () {
+    function ProjectedStrumRenderer(renderer, game, strum) {
+    }
+    ProjectedStrumRenderer.prototype.moveTo = function (pos) {
+    };
+    ProjectedStrumRenderer.prototype.highlightStrumObjects = function (highlight, percent) {
+    };
+    ProjectedStrumRenderer.prototype.destroy = function () {
+    };
+    return ProjectedStrumRenderer;
 }());
 var SineCurveBaseStrumRenderer = (function () {
     function SineCurveBaseStrumRenderer(renderer, game, strum) {
