@@ -46,4 +46,22 @@ class Music implements IMusic {
         return this.json[""];
     }
 
+    getTuningAsC1Offset():number[] {
+        var c1tuning:number[] = [];
+        for (var s of this.getTuning().split(",")) {
+            c1tuning.push(Music.nameToNoteID(s));
+        }
+        //console.log(this.getTuning(),c1tuning);
+        return c1tuning;
+    }
+
+    public static nameToNoteID(s:string):number {
+        var n:number = (s.charCodeAt(s.length-1)-49)*12;
+        n = n + Music.noteToID[s.substr(0,s.length-1)];
+        return n;
+    }
+
+    private static noteToID:any = {
+        "c":0,"c#":1,"d":2,"d#":3,"e":4,"f":5,"f#":6,"g":7,"g#":8,"a":9,"a#":10,"b":11
+    }
 }

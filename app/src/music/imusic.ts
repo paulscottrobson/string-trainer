@@ -63,7 +63,18 @@ interface IMusic {
 	 * @memberof IMusic
 	 */
 	getCapo():number ;
-	
+	/**
+	 * Get the composer name
+	 * 
+	 * @returns {string} 
+	 * @memberof IMusic
+	 */
 	getComposer():string ;
-        
+	/**
+	 * Get tuning as offset from C1.
+	 * 
+	 * @returns {number[]} 
+	 * @memberof IMusic
+	 */
+	getTuningAsC1Offset():number[];        
 }

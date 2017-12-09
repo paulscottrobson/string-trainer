@@ -26,6 +26,8 @@ var MainState = (function (_super) {
     function MainState() {
         var _this = _super !== null && _super.apply(this, arguments) || this;
         _this.pos = 0;
+        _this.lastQBeat = -1;
+        _this.lastBar = -1;
         return _this;
     }
     MainState.prototype.init = function () {
@@ -38,10 +40,10 @@ var MainState = (function (_super) {
     };
     MainState.prototype.create = function () {
         this.speedControl = new SpeedArrow(this.game);
-        var i = this.game.add.image(0, Configuration.yBase, "sprites", "rectangle");
-        i.width = Configuration.width - Configuration.lyricSize - Configuration.controlHeight;
-        i.height = Configuration.lyricSize;
-        i.tint = 0xFFFF00;
+        this.positionControl = new PositionBar(this.game, this.music, 32, Configuration.width - Configuration.lyricSize - Configuration.controlHeight - 32, Configuration.height - Configuration.controlHeight / 2);
+        this.lyricDisplay = new LyricBar(this.game);
+        this.metronome = new Metronome(this.game, this.music);
+        this.player = new Player(this.game, this.music);
         this.manager = new ScrollingTabRenderManager(this.game, this.music);
         this.manager.create();
         this.manager.moveTo(0);
@@ -53,18 +55,203 @@ var MainState = (function (_super) {
         var bpms = this.music.getTempo() / 60 / 1000;
         bpms = bpms / this.music.getBeats() * this.speedControl.getScalar();
         this.pos = Math.min(this.music.getBarCount(), this.pos + bpms * elapsedMS);
+        this.pos = this.positionControl.updatePosition(this.pos);
         this.speedControl.updateRotate(elapsedMS);
         this.manager.moveTo(this.pos);
+        var bar = Math.floor(this.pos);
+        var qBeat = Math.floor((this.pos - bar) * 4 * this.music.getBeats());
+        if (bar != this.lastBar || qBeat != this.lastQBeat) {
+            if (bar < this.music.getBarCount()) {
+                if (qBeat == 0) {
+                    this.lyricDisplay.setLyric(this.music.getBar(bar).getLyric());
+                }
+                this.player.update(bar, qBeat);
+                this.metronome.update(bar, qBeat);
+                this.lastBar = bar;
+                this.lastQBeat = qBeat;
+            }
+        }
     };
     MainState.VERSION = "0.01 06-Dec-17 Phaser-CE 2.8.7 (c) PSR 2017";
     return MainState;
 }(Phaser.State));
+var Metronome = (function () {
+    function Metronome(game, music) {
+        this.metronome = game.add.audio("metronome");
+    }
+    Metronome.prototype.update = function (bar, qBeat) {
+        if (qBeat % 4 == 0) {
+            this.metronome.volume = (qBeat == 0) ? 1 : 0.2;
+            this.metronome.play();
+            this.metronome.volume = (qBeat == 0) ? 1 : 0.2;
+        }
+    };
+    return Metronome;
+}());
+var Player = (function () {
+    function Player(game, music) {
+        this.notes = [];
+        this.music = music;
+        this.tuning = music.getTuningAsC1Offset();
+        console.log(Player.loaded);
+        for (var _i = 0, _a = Player.loaded; _i < _a.length; _i++) {
+            var nn = _a[_i];
+            this.notes[nn] = game.add.audio(nn.toString());
+        }
+        this.current = [];
+        for (var n = 0; n < Configuration.strings; n++) {
+            this.current.push(null);
+        }
+    }
+    Player.prototype.update = function (bar, qBeat) {
+        var cBar = this.music.getBar(bar);
+        for (var s = 0; s < cBar.getStrumCount(); s++) {
+            var str = cBar.getStrum(s);
+            if (qBeat == str.getQBStart()) {
+                this.playStrum(str.getStrum());
+            }
+        }
+    };
+    Player.prototype.playStrum = function (strum) {
+        for (var s = 0; s < Configuration.strings; s++) {
+            if (strum[s] != Strum.NOSTRUM) {
+                var nc = this.tuning[s] + strum[s];
+                nc = nc - Player.BASENOTE;
+                this.notes[nc].play();
+            }
+        }
+    };
+    Player.preload = function (game, music) {
+        var preloads = {};
+        var tuning = music.getTuningAsC1Offset();
+        for (var n = 0; n < music.getBarCount(); n++) {
+            var b = music.getBar(n);
+            for (var s = 0; s < b.getStrumCount(); s++) {
+                var fret = b.getStrum(s).getStrum();
+                for (var fn = 0; fn < fret.length; fn++) {
+                    if (fret[fn] != Strum.NOSTRUM) {
+                        var nc = fret[fn] + tuning[fn];
+                        preloads[nc] = nc;
+                    }
+                }
+            }
+        }
+        Player.loaded = [];
+        for (var nn in preloads) {
+            var sn = preloads[nn] - Player.BASENOTE;
+            Player.loaded.push(sn);
+            var sns = sn.toString();
+            game.load.audio(sns, ["assets/sounds/" + sns + ".mp3",
+                "assets/sounds/" + sns + ".ogg"]);
+        }
+    };
+    Player.BASENOTE = 24;
+    return Player;
+}());
 var InstrumentInfo = (function () {
     function InstrumentInfo() {
     }
     InstrumentInfo.encodedInfo = "merlin.Seagull Merlin.d3,a3,d4.3.n.S.S.D.0=0.1=2.2=4.3=5.4=7.5=9.6=11.7=12:ukulele.Ukulele.g4,c4,a4,e4.4.n.S.S.S.S.0=0.1=1.2=2.3=3.4=4.5=5.6=6.7=7.8=8.9=9.10=10.11=11.12=12.13=13.14=14:strumstick.McNally Strumstick.d3,a3,d4.3.n.S.S.D.0=0.1=2.2=4.3=5.4=7.5=9.6=10.7=11.8=12.9=14.10=16.11=17.12=19.13=21.14=22:dulcimer.Mountain Dulcimer.d3,a3,d4.3.y.S.S.D.0=0.1=2.2=4.3=5.4=7.5=9.6=10.6+=11.7=12.8=14.9=16.10=17.11=19.12=21.13=22.13+=23.14=24:loog.Loog Guitar.g3,b3,e4.3.n.S.S.S.0=0.1=1.2=2.3=3.4=4.5=5.6=6.7=7.8=8.9=9.10=10.11=11.12=12.13=13.14=14.15=15.16=16.17=17.18=18";
     return InstrumentInfo;
 }());
+var LyricBar = (function () {
+    function LyricBar(game) {
+        var w = Configuration.width - Configuration.lyricSize -
+            Configuration.controlHeight;
+        var t = game.add.bitmapText(w / 2, Configuration.yBase, "font", "xxxx", Configuration.lyricSize * 0.9);
+        t.tint = 0xFFFF00;
+        t.anchor.x = 0.5;
+        this.textBox = t;
+    }
+    LyricBar.prototype.setLyric = function (txt) {
+        this.textBox.text = txt;
+    };
+    LyricBar.prototype.destroy = function () {
+        this.textBox.destroy();
+        this.textBox = null;
+    };
+    return LyricBar;
+}());
+var DraggableSphere = (function () {
+    function DraggableSphere(game, owner, xStart, yStart, colour, reduce) {
+        this.sphere = game.add.image(xStart, yStart, "sprites", "sp" + colour, owner);
+        this.sphere.anchor.x = this.sphere.anchor.y = 0.5;
+        this.sphere.height = this.sphere.width = 70 + reduce;
+        this.sphere.inputEnabled = true;
+        this.sphere.input.enableDrag();
+        this.sphere.input.setDragLock(true, false);
+        this.sphere.events.onDragStop.add(owner.updatePositionsOnDrop, owner);
+    }
+    DraggableSphere.prototype.setBounds = function (xStart, xEnd, y) {
+        this.sphere.input.boundsRect = new Phaser.Rectangle(xStart - this.sphere.width / 2, y - 100, xEnd - xStart + this.sphere.width, y + 100);
+    };
+    DraggableSphere.prototype.moveTo = function (x, y) {
+        this.sphere.x = x;
+        this.sphere.y = y;
+    };
+    DraggableSphere.prototype.destroy = function () {
+        this.sphere.destroy();
+        this.sphere = null;
+    };
+    DraggableSphere.prototype.getX = function () {
+        return this.sphere.x;
+    };
+    DraggableSphere.prototype.isDragging = function () {
+        return this.sphere.input.isDragged;
+    };
+    return DraggableSphere;
+}());
+var PositionBar = (function (_super) {
+    __extends(PositionBar, _super);
+    function PositionBar(game, music, xLeft, xRight, y) {
+        var _this = _super.call(this, game) || this;
+        var bar = _this.game.add.image(xLeft, y, "sprites", "rectangle", _this);
+        bar.width = xRight - xLeft;
+        bar.height = 16;
+        bar.tint = 0x0040FF;
+        bar.anchor.y = 0.5;
+        _this.xLeft = xLeft;
+        _this.xRight = xRight;
+        _this.yPos = y;
+        _this.music = music;
+        _this.spheres = [];
+        _this.spheres.push(new DraggableSphere(game, _this, xLeft, y, "red", 0));
+        _this.spheres.push(new DraggableSphere(game, _this, xRight, y, "green", 0));
+        _this.spheres.push(new DraggableSphere(game, _this, (xLeft + xRight) / 2, y, "yellow", -10));
+        for (var _i = 0, _a = _this.spheres; _i < _a.length; _i++) {
+            var sphere = _a[_i];
+            sphere.setBounds(xLeft, xRight, y);
+        }
+        return _this;
+    }
+    PositionBar.prototype.updatePosition = function (barFractionalPosition) {
+        if (!this.spheres[2].isDragging()) {
+            var frac = barFractionalPosition / this.music.getBarCount();
+            frac = Math.min(1, frac);
+            this.spheres[2].moveTo(this.xLeft + (this.xRight - this.xLeft) * frac, this.yPos);
+        }
+        var xPos = this.spheres[2].getX();
+        xPos = Math.max(xPos, this.spheres[0].getX());
+        if (xPos > this.spheres[1].getX())
+            xPos = this.spheres[0].getX();
+        barFractionalPosition = this.music.getBarCount() *
+            (xPos - this.xLeft) / (this.xRight - this.xLeft);
+        return barFractionalPosition;
+    };
+    PositionBar.prototype.updatePositionsOnDrop = function () {
+        if (this.spheres[0].getX() + 50 >= this.spheres[1].getX()) {
+            this.spheres[0].moveTo(Math.max(this.spheres[1].getX() - 50, 0), this.yPos);
+        }
+    };
+    PositionBar.prototype.destroy = function () {
+        for (var _i = 0, _a = this.spheres; _i < _a.length; _i++) {
+            var ds = _a[_i];
+            ds.destroy();
+        }
+        _super.prototype.destroy.call(this);
+    };
+    return PositionBar;
+}(Phaser.Group));
 var SpeedArrow = (function (_super) {
     __extends(SpeedArrow, _super);
     function SpeedArrow(game) {
@@ -249,6 +436,22 @@ var Music = (function () {
     Music.prototype.getComposer = function () {
         return this.json[""];
     };
+    Music.prototype.getTuningAsC1Offset = function () {
+        var c1tuning = [];
+        for (var _i = 0, _a = this.getTuning().split(","); _i < _a.length; _i++) {
+            var s = _a[_i];
+            c1tuning.push(Music.nameToNoteID(s));
+        }
+        return c1tuning;
+    };
+    Music.nameToNoteID = function (s) {
+        var n = (s.charCodeAt(s.length - 1) - 49) * 12;
+        n = n + Music.noteToID[s.substr(0, s.length - 1)];
+        return n;
+    };
+    Music.noteToID = {
+        "c": 0, "c#": 1, "d": 2, "d#": 3, "e": 4, "f": 5, "f#": 6, "g": 7, "g#": 8, "a": 9, "a#": 10, "b": 11
+    };
     return Music;
 }());
 var Strum = (function () {
@@ -357,6 +560,7 @@ var PreloadState = (function (_super) {
             var fontName = _a[_i];
             this.game.load.bitmapFont(fontName, "assets/fonts/" + fontName + ".png", "assets/fonts/" + fontName + ".fnt");
         }
+        Player.preload(this.game, new Music(this.game.cache.getJSON("music")));
         this.game.load.audio("metronome", ["assets/sounds/metronome.mp3",
             "assets/sounds/metronome.ogg"]);
         this.game.load.onLoadComplete.add(function () { _this.game.state.start("Main", true, false); }, this);

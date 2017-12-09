@@ -34,7 +34,7 @@ class PreloadState extends Phaser.State {
                                                "assets/fonts/"+fontName+".fnt");
         }
         // Anaylse the Music to see what notes are needed and preload them.
-        //Player.preload(this.game,new Music(this.game.cache.getJSON("music")));
+        Player.preload(this.game,new Music(this.game.cache.getJSON("music")));
 
         // Load metronome sounds
         this.game.load.audio("metronome",["assets/sounds/metronome.mp3",
