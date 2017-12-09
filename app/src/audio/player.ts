@@ -39,7 +39,7 @@ class Player {
         for (var s = 0;s < Configuration.strings;s++) {
             if (strum[s] != Strum.NOSTRUM) {
                 var nc:number = this.tuning[s] + strum[s];
-                nc = nc - Player.BASENOTE;
+                nc = nc - Player.BASENOTE + 1;
                 this.notes[nc].play();
             }
         }
@@ -62,7 +62,7 @@ class Player {
         }
         Player.loaded = [];
         for (var nn in preloads) {
-            var sn:number = preloads[nn] - Player.BASENOTE;
+            var sn:number = preloads[nn] - Player.BASENOTE + 1;
             Player.loaded.push(sn);
             var sns:string = sn.toString();
             game.load.audio(sns,["assets/sounds/"+sns+".mp3",

@@ -15,11 +15,13 @@ class MainState extends Phaser.State {
     private lyricDisplay:LyricBar;
     private metronome:Metronome;
     private player:Player;
-    private manager:IRenderManager;
+    private manager:IRenderManager = null;
     private pos:number = 0;
     private lastQBeat = -1;
     private lastBar = -1;
-
+    private managerIndex:number = 0;
+    private background:Background;
+    
     init() {
         // Initialise config
         Configuration.initialise(this.game);
@@ -34,6 +36,7 @@ class MainState extends Phaser.State {
 
     create() {    
         // Add fixed entities
+        this.background = new Background(this.game,this);
         this.speedControl = new SpeedArrow(this.game);
         this.positionControl = new PositionBar(this.game,this.music,32,Configuration.width-Configuration.lyricSize - Configuration.controlHeight-32,Configuration.height-Configuration.controlHeight/2);
         this.lyricDisplay = new LyricBar(this.game);
@@ -41,12 +44,34 @@ class MainState extends Phaser.State {
         this.player = new Player(this.game,this.music);
 
         // Add manager
-        this.manager = new ScrollingTabRenderManager(this.game,this.music);
-        this.manager.create();
-        this.manager.moveTo(0);
+        //this.manager = new ScrollingTabRenderManager(this.game,this.music);
+        //this.manager.create();
+        //this.manager.moveTo(0);
         //this.manager.destroy();
+        this.nextManager();
     }
     
+    nextManager() : void {
+        // Delete old one.
+        if (this.manager != null) {
+            this.manager.destroy();
+            this.manager = null;
+        }
+        // Create new one.
+        if (this.managerIndex == 0) 
+            this.manager = new ScrollingTabRenderManager(this.game,this.music);
+
+        // Restart position
+        this.manager.create();
+        this.manager.moveTo(0);
+        this.pos = 0;this.lastBar = this.lastQBeat = -1;
+        // Advance counter
+        this.managerIndex++;
+        if (this.managerIndex == 1) 
+            this.managerIndex = 0;
+                    
+    }
+
     destroy() : void {
     }
 
@@ -60,6 +85,8 @@ class MainState extends Phaser.State {
         // Work out new position.
         this.pos = Math.min(this.music.getBarCount(),this.pos + bpms * elapsedMS);
         this.pos = this.positionControl.updatePosition(this.pos);
+        this.pos = Math.min(this.music.getBarCount(),this.pos);
+        this.pos = Math.max(0,this.pos);
         this.speedControl.updateRotate(elapsedMS);
         this.manager.moveTo(this.pos);
         // Work out new bar / quarterbeat
