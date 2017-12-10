@@ -27,6 +27,7 @@ abstract class BaseRenderManager implements IRenderManager {
 
     moveTo(barPosition: number): void {
         if (barPosition < this.music.getBarCount()) {
+            //console.log(barPosition);
             var cBar:IBar = this.music.getBar(Math.floor(barPosition));
             var qbPos:number = (barPosition-Math.floor(barPosition))*4*this.music.getBeats();
             for (var s = 0;s < cBar.getStrumCount();s++) {

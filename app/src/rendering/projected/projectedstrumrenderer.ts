@@ -3,6 +3,7 @@
 class ProjectedStrumRenderer  implements IStrumRenderer {
 
     constructor(renderer:IRenderer,game:Phaser.Game,strum:IStrum) {
+        console.log("PSRC");
         // TODO:
     }   
 

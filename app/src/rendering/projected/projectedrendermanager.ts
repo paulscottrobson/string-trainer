@@ -3,11 +3,14 @@
 class ProjectedRenderManager extends BaseRenderManager implements IRenderManager {
  
     public static yFront:number;
+    public static yPerBar:number;
+
     public fixed:Phaser.Group;
 
     constructor(game:Phaser.Game,music:IMusic) {
         super(game,music);
         ProjectedRenderManager.yFront = Configuration.yBase - 10;        
+        ProjectedRenderManager.yPerBar = 150;
     }
 
     createRenderer(manager: IRenderManager, game: Phaser.Game, bar: IBar): IRenderer {
@@ -45,6 +48,13 @@ class ProjectedRenderManager extends BaseRenderManager implements IRenderManager
     destroyFixed(): void {
         this.fixed.destroy();
     }
+
+    moveTo(barPosition: number): void {
+        super.moveTo(barPosition);
+        for (var bn:number = 0;bn < this.music.getBarCount();bn++) {
+            this.renderers[bn].moveTo((bn-barPosition) * ProjectedRenderManager.yPerBar);
+        }
+    }    
 
     public static xPos(str:number,yl:number): number {
         yl = ProjectedRenderManager.yPos(str,yl);

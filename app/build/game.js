@@ -723,15 +723,39 @@ var ProjectedRenderer = (function (_super) {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     ProjectedRenderer.prototype.moveNonStrumItemsTo = function (barPosition) {
+        for (var b = 0; b < this.beatLines.length; b++) {
+            var y = barPosition + ProjectedRenderManager.yPerBar * b / this.beatLines.length;
+            this.beatLines[b].visible = (y >= 0);
+            this.beatLines[b].y = ProjectedRenderManager.yPos(0, y);
+            this.beatLines[b].width = ProjectedRenderManager.xPos(0, y) -
+                ProjectedRenderManager.xPos(Configuration.strings - 1, y);
+        }
     };
     ProjectedRenderer.prototype.createNonStrumItems = function () {
+        this.beatLines = [];
+        for (var b = 0; b < this.bar.getMusic().getBeats(); b++) {
+            var bi = this.game.add.image(Configuration.width / 2, 32, "sprites", "rectangle");
+            bi.anchor.x = bi.anchor.y = 0.5;
+            bi.height = 2;
+            bi.tint = (b == 0) ? 0xFFD700 : 0x000000;
+            this.beatLines[b] = bi;
+        }
     };
     ProjectedRenderer.prototype.destroyNonStrumItems = function () {
+        for (var _i = 0, _a = this.beatLines; _i < _a.length; _i++) {
+            var bi = _a[_i];
+            bi.destroy();
+        }
+        this.beatLines = [];
     };
     ProjectedRenderer.prototype.createStrumRenderer = function (renderer, game, strum) {
         return new ProjectedStrumRenderer(this, this.game, strum);
     };
     ProjectedRenderer.prototype.isVisible = function (pos) {
+        if (pos < -ProjectedRenderManager.yPerBar)
+            return false;
+        if (pos > 1000)
+            return false;
         return true;
     };
     return ProjectedRenderer;
@@ -741,6 +765,7 @@ var ProjectedRenderManager = (function (_super) {
     function ProjectedRenderManager(game, music) {
         var _this = _super.call(this, game, music) || this;
         ProjectedRenderManager.yFront = Configuration.yBase - 10;
+        ProjectedRenderManager.yPerBar = 150;
         return _this;
     }
     ProjectedRenderManager.prototype.createRenderer = function (manager, game, bar) {
@@ -768,6 +793,12 @@ var ProjectedRenderManager = (function (_super) {
     ProjectedRenderManager.prototype.destroyFixed = function () {
         this.fixed.destroy();
     };
+    ProjectedRenderManager.prototype.moveTo = function (barPosition) {
+        _super.prototype.moveTo.call(this, barPosition);
+        for (var bn = 0; bn < this.music.getBarCount(); bn++) {
+            this.renderers[bn].moveTo((bn - barPosition) * ProjectedRenderManager.yPerBar);
+        }
+    };
     ProjectedRenderManager.xPos = function (str, yl) {
         yl = ProjectedRenderManager.yPos(str, yl);
         var xs = 0.1 * (str - (Configuration.strings - 1) / 2) *
@@ -785,6 +816,7 @@ var ProjectedRenderManager = (function (_super) {
 }(BaseRenderManager));
 var ProjectedStrumRenderer = (function () {
     function ProjectedStrumRenderer(renderer, game, strum) {
+        console.log("PSRC");
     }
     ProjectedStrumRenderer.prototype.moveTo = function (pos) {
     };

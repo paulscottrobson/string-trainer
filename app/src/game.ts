@@ -93,6 +93,7 @@ class MainState extends Phaser.State {
         var bpms:number = this.music.getTempo() / 60 / 1000;
         // Bars per millisecond
         bpms = bpms / this.music.getBeats() * this.speedControl.getScalar();
+        //bpms = 0;
         // Work out new position.
         this.pos = Math.min(this.music.getBarCount(),this.pos + bpms * elapsedMS);
         this.pos = this.positionControl.updatePosition(this.pos);
