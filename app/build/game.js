@@ -765,7 +765,7 @@ var ProjectedRenderManager = (function (_super) {
     function ProjectedRenderManager(game, music) {
         var _this = _super.call(this, game, music) || this;
         ProjectedRenderManager.yFront = Configuration.yBase - 10;
-        ProjectedRenderManager.yPerBar = 150;
+        ProjectedRenderManager.yPerBar = 550;
         return _this;
     }
     ProjectedRenderManager.prototype.createRenderer = function (manager, game, bar) {
@@ -816,14 +816,60 @@ var ProjectedRenderManager = (function (_super) {
 }(BaseRenderManager));
 var ProjectedStrumRenderer = (function () {
     function ProjectedStrumRenderer(renderer, game, strum) {
-        console.log("PSRC");
+        this.label = [];
+        this.spheres = [];
+        this.strum = strum;
+        var fretting = strum.getStrum();
+        for (var s = 0; s < Configuration.strings; s++) {
+            this.label[s] = null;
+            this.spheres[s] = null;
+            if (fretting[s] != Strum.NOSTRUM) {
+                var col = ProjectedStrumRenderer.COLOURS[fretting[s] % ProjectedStrumRenderer.COLOURS.length];
+                this.spheres[s] = game.add.image(0, 0, "sprites", col);
+                this.spheres[s].anchor.x = 0.5;
+                this.spheres[s].anchor.y = 1;
+                var t = Configuration.instrument.getDisplayName(fretting[s]);
+                this.label[s] = game.add.bitmapText(0, 0, "dfont", t, 32);
+                this.label[s].anchor.x = 0.5;
+                this.label[s].anchor.y = 0.5;
+            }
+        }
     }
     ProjectedStrumRenderer.prototype.moveTo = function (pos) {
+        var beats = this.strum.getBar().getMusic().getBeats();
+        var y = pos + this.strum.getQBStart() / (beats * 4) * ProjectedRenderManager.yPerBar;
+        var size = Math.abs(ProjectedRenderManager.xPos(0, y) - ProjectedRenderManager.xPos(1, y));
+        for (var s = 0; s < Configuration.strings; s++) {
+            if (this.label[s] != null) {
+                this.spheres[s].x = ProjectedRenderManager.xPos(s, y);
+                this.spheres[s].y = ProjectedRenderManager.yPos(s, y);
+                this.spheres[s].width = this.spheres[s].height = size * 0.37;
+                this.label[s].x = this.spheres[s].x;
+                this.label[s].y = this.spheres[s].y - this.spheres[s].height / 2;
+                this.spheres[s].visible = this.label[s].visible = (y > 0);
+                this.label[s].fontSize = this.spheres[s].height * 0.6;
+            }
+        }
     };
     ProjectedStrumRenderer.prototype.highlightStrumObjects = function (highlight, percent) {
     };
     ProjectedStrumRenderer.prototype.destroy = function () {
+        for (var _i = 0, _a = this.label; _i < _a.length; _i++) {
+            var s = _a[_i];
+            if (s != null)
+                s.destroy();
+        }
+        for (var _b = 0, _c = this.spheres; _b < _c.length; _b++) {
+            var s = _c[_b];
+            if (s != null)
+                s.destroy();
+        }
+        this.spheres = this.strum = this.label = null;
     };
+    ProjectedStrumRenderer.COLOURS = [
+        "spcyan", "spgrey", "spred", "spblue", "spdarkgreen",
+        "spmagenta", "spyellow", "spbrown", "spgreen", "sporange"
+    ];
     return ProjectedStrumRenderer;
 }());
 var SineCurveBaseStrumRenderer = (function () {

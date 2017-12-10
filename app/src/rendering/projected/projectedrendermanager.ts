@@ -10,7 +10,7 @@ class ProjectedRenderManager extends BaseRenderManager implements IRenderManager
     constructor(game:Phaser.Game,music:IMusic) {
         super(game,music);
         ProjectedRenderManager.yFront = Configuration.yBase - 10;        
-        ProjectedRenderManager.yPerBar = 150;
+        ProjectedRenderManager.yPerBar = 550;
     }
 
     createRenderer(manager: IRenderManager, game: Phaser.Game, bar: IBar): IRenderer {
