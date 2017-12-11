@@ -31,8 +31,8 @@ abstract class BaseRenderer implements IRenderer {
         this.isDrawn = true;
         this.createNonStrumItems();
         this.strumRenders = [];
-        for (var sn:number = 0;sn < this.bar.getStrumCount();sn++) {
-            this.strumRenders.push(this.createStrumRenderer(this,this.game,this.bar.getStrum(sn)));
+        for (var sn:number = this.bar.getStrumCount()-1;sn >= 0;sn--) {
+            this.strumRenders[sn] = this.createStrumRenderer(this,this.game,this.bar.getStrum(sn));
         }
     }
 

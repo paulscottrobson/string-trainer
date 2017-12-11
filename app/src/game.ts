@@ -19,7 +19,7 @@ class MainState extends Phaser.State {
     private pos:number = 0;
     private lastQBeat = -1;
     private lastBar = -1;
-    private managerIndex:number = 1;
+    private managerIndex:number = 0;
     private background:Background;
     
     init() {
@@ -62,6 +62,8 @@ class MainState extends Phaser.State {
             this.manager = new ScrollingTabRenderManager(this.game,this.music);
         if (this.managerIndex == 1) 
             this.manager = new ProjectedRenderManager(this.game,this.music);
+        if (this.managerIndex == 2) 
+            this.manager = new TabRenderManager(this.game,this.music);
 
         // Restart position
         this.manager.create();
@@ -69,7 +71,7 @@ class MainState extends Phaser.State {
         this.pos = 0;this.lastBar = this.lastQBeat = -1;
         // Advance counter
         this.managerIndex++;
-        if (this.managerIndex == 2) 
+        if (this.managerIndex == 3) 
             this.managerIndex = 0;
                     
     }

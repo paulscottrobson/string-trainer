@@ -29,7 +29,7 @@ var MainState = (function (_super) {
         _this.pos = 0;
         _this.lastQBeat = -1;
         _this.lastBar = -1;
-        _this.managerIndex = 1;
+        _this.managerIndex = 0;
         return _this;
     }
     MainState.prototype.init = function () {
@@ -58,12 +58,14 @@ var MainState = (function (_super) {
             this.manager = new ScrollingTabRenderManager(this.game, this.music);
         if (this.managerIndex == 1)
             this.manager = new ProjectedRenderManager(this.game, this.music);
+        if (this.managerIndex == 2)
+            this.manager = new TabRenderManager(this.game, this.music);
         this.manager.create();
         this.manager.moveTo(0);
         this.pos = 0;
         this.lastBar = this.lastQBeat = -1;
         this.managerIndex++;
-        if (this.managerIndex == 2)
+        if (this.managerIndex == 3)
             this.managerIndex = 0;
     };
     MainState.prototype.destroy = function () {
@@ -626,8 +628,8 @@ var BaseRenderer = (function () {
         this.isDrawn = true;
         this.createNonStrumItems();
         this.strumRenders = [];
-        for (var sn = 0; sn < this.bar.getStrumCount(); sn++) {
-            this.strumRenders.push(this.createStrumRenderer(this, this.game, this.bar.getStrum(sn)));
+        for (var sn = this.bar.getStrumCount() - 1; sn >= 0; sn--) {
+            this.strumRenders[sn] = this.createStrumRenderer(this, this.game, this.bar.getStrum(sn));
         }
     };
     BaseRenderer.prototype.destroyRendering = function () {
@@ -843,7 +845,7 @@ var ProjectedStrumRenderer = (function () {
             if (this.label[s] != null) {
                 this.spheres[s].x = ProjectedRenderManager.xPos(s, y);
                 this.spheres[s].y = ProjectedRenderManager.yPos(s, y);
-                this.spheres[s].width = this.spheres[s].height = size * 0.37;
+                this.spheres[s].width = this.spheres[s].height = (1000 - y) / 8 + 10;
                 this.label[s].x = this.spheres[s].x;
                 this.label[s].y = this.spheres[s].y - this.spheres[s].height / 2;
                 this.spheres[s].visible = this.label[s].visible = (y > 0);
@@ -860,9 +862,9 @@ var ProjectedStrumRenderer = (function () {
                 s.destroy();
         }
         for (var _b = 0, _c = this.spheres; _b < _c.length; _b++) {
-            var s = _c[_b];
-            if (s != null)
-                s.destroy();
+            var s1 = _c[_b];
+            if (s1 != null)
+                s1.destroy();
         }
         this.spheres = this.strum = this.label = null;
     };
@@ -1232,3 +1234,139 @@ var ScrollingTabRenderManager = (function (_super) {
     };
     return ScrollingTabRenderManager;
 }(BaseRenderManager));
+var TabRenderer = (function (_super) {
+    __extends(TabRenderer, _super);
+    function TabRenderer() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    TabRenderer.prototype.moveNonStrumItemsTo = function (barPosition) {
+        var bn = this.bar.getBarNumber();
+        this.fixed.x = (bn % TabRenderManager.renderPerLine) *
+            TabRenderManager.renderWidth;
+        this.fixed.y = Math.floor(bn / TabRenderManager.renderPerLine) *
+            TabRenderManager.renderHeight;
+    };
+    TabRenderer.prototype.createNonStrumItems = function () {
+        this.fixed = new Phaser.Group(this.game);
+        for (var s = 0; s < Configuration.strings; s++) {
+            var str = this.game.add.image(0, 0, "sprites", "rectangle", this.fixed);
+            str.width = TabRenderManager.renderWidth;
+            str.height = Math.max(1, TabRenderManager.renderHeight / 64);
+            str.anchor.y = 0.5;
+            str.tint = 0;
+            str.alpha = 0.5;
+            str.x = 0;
+            str.y = TabRenderer.yString(s);
+        }
+        for (var be = 0; be < 2; be++) {
+            var ben = this.game.add.image((be == 0) ? 0 : TabRenderManager.renderWidth, TabRenderManager.renderHeight / 2, "sprites", "rectangle", this.fixed);
+            ben.width = Math.max(2, TabRenderManager.renderWidth / 32);
+            ben.height = TabRenderer.yString(0) - TabRenderer.yString(Configuration.strings - 1);
+            ben.anchor.x = ben.anchor.y = 0.5;
+            ben.tint = 0;
+        }
+    };
+    TabRenderer.prototype.destroyNonStrumItems = function () {
+        this.fixed.destroy();
+        this.fixed = null;
+    };
+    TabRenderer.prototype.createStrumRenderer = function (renderer, game, strum) {
+        return new TabStrumRenderer(this, this.game, strum);
+    };
+    TabRenderer.prototype.isVisible = function (pos) {
+        return true;
+    };
+    TabRenderer.xNote = function (strum) {
+        var prop = strum.getQBStart() /
+            (strum.getBar().getMusic().getBeats() * 4);
+        prop = prop * 0.9 + 0.1;
+        return Math.round(prop * TabRenderManager.renderWidth);
+    };
+    TabRenderer.yString = function (str) {
+        if (!Configuration.instrument.isTabInverted()) {
+            str = Configuration.strings - 1 - str;
+        }
+        return TabRenderManager.renderHeight / 2 +
+            TabRenderManager.renderHeight *
+                (str - (Configuration.strings - 1) / 2) / (Configuration.strings + 1);
+    };
+    TabRenderer.prototype.getXBox = function () { return this.fixed.x; };
+    TabRenderer.prototype.getYBox = function () { return this.fixed.y; };
+    return TabRenderer;
+}(BaseRenderer));
+var TabRenderManager = (function (_super) {
+    __extends(TabRenderManager, _super);
+    function TabRenderManager(game, music) {
+        var _this = _super.call(this, game, music) || this;
+        TabRenderManager.renderPerLine = 4;
+        TabRenderManager.renderWidth = Configuration.width / TabRenderManager.renderPerLine;
+        TabRenderManager.renderHeight = TabRenderManager.renderWidth / 2;
+        return _this;
+    }
+    TabRenderManager.prototype.createRenderer = function (manager, game, bar) {
+        return new TabRenderer(this, this.game, bar);
+    };
+    TabRenderManager.prototype.createFixed = function (game) {
+        var marker = game.add.image(0, 0, "sprites", "rectangle");
+        marker.anchor.x = marker.anchor.y = 0.5;
+        marker.width = TabRenderManager.renderWidth / 7;
+        marker.height = TabRenderManager.renderHeight * 0.9;
+        marker.tint = 0x808080;
+        marker.alpha = 0.5;
+        TabRenderManager.marker = marker;
+        this.background = game.add.image(0, 0, "sprites", "rectangle");
+        this.background.width = Configuration.width;
+        this.background.height = Configuration.yBase;
+    };
+    TabRenderManager.prototype.destroyFixed = function () {
+        TabRenderManager.marker.destroy();
+        TabRenderManager.marker = null;
+        this.background.destroy();
+        this.background = null;
+    };
+    TabRenderManager.prototype.moveTo = function (barPosition) {
+        _super.prototype.moveTo.call(this, barPosition);
+        if (barPosition == 0) {
+            for (var bn = 0; bn < this.music.getBarCount(); bn++) {
+                this.renderers[bn].moveTo(0);
+            }
+        }
+    };
+    return TabRenderManager;
+}(BaseRenderManager));
+var TabStrumRenderer = (function () {
+    function TabStrumRenderer(renderer, game, strum) {
+        this.renderer = renderer;
+        this.sGroup = new Phaser.Group(game);
+        var x = TabRenderer.xNote(strum);
+        this.xOffset = x;
+        var fretting = strum.getStrum();
+        for (var s = 0; s < Configuration.strings; s++) {
+            if (fretting[s] != Strum.NOSTRUM) {
+                var y = TabRenderer.yString(s);
+                var stxt = Configuration.instrument.getDisplayName(fretting[s]);
+                var txt = game.add.bitmapText(x, y, "font", stxt, 0.7 * TabRenderManager.renderHeight / Configuration.strings, this.sGroup);
+                txt.anchor.x = 0.5;
+                txt.anchor.y = 0.42;
+                txt.tint = 0x000080;
+            }
+        }
+    }
+    TabStrumRenderer.prototype.moveTo = function (pos) {
+        this.sGroup.x = this.renderer.getXBox();
+        this.sGroup.y = this.renderer.getYBox();
+    };
+    TabStrumRenderer.prototype.highlightStrumObjects = function (highlight, percent) {
+        var marker = TabRenderManager.marker;
+        marker.bringToTop();
+        if (highlight) {
+            marker.x = this.xOffset + this.sGroup.x;
+            marker.y = this.sGroup.y + TabRenderManager.renderHeight / 2;
+        }
+    };
+    TabStrumRenderer.prototype.destroy = function () {
+        this.sGroup.destroy();
+        this.sGroup = this.renderer = null;
+    };
+    return TabStrumRenderer;
+}());

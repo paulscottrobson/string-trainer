@@ -32,7 +32,7 @@ class ProjectedStrumRenderer  implements IStrumRenderer {
             if (this.label[s] != null) {
                 this.spheres[s].x = ProjectedRenderManager.xPos(s,y);
                 this.spheres[s].y = ProjectedRenderManager.yPos(s,y);
-                this.spheres[s].width = this.spheres[s].height = size*0.37;
+                this.spheres[s].width = this.spheres[s].height = (1000-y)/8+10;
                 this.label[s].x = this.spheres[s].x;
                 this.label[s].y = this.spheres[s].y - this.spheres[s].height/2;
                 this.spheres[s].visible = this.label[s].visible = (y > 0);
@@ -48,8 +48,8 @@ class ProjectedStrumRenderer  implements IStrumRenderer {
         for (var s of this.label) {
             if (s != null) s.destroy();
         }
-        for (var s of this.spheres) {
-            if (s != null) s.destroy();
+        for (var s1 of this.spheres) {
+            if (s1 != null) s1.destroy();
         }
         this.spheres = this.strum = this.label = null;
     }
