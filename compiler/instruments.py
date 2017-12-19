@@ -108,6 +108,26 @@ class Loog(BaseInstrument):
 		return False 
 
 # ******************************************************************************************
+#								  	Mandolin
+# ******************************************************************************************
+
+class Mandolin(BaseInstrument):
+	def getName(self):
+		return "Mandolin"
+	def getShortName(self):
+		return "mandolin"
+	def getStringCount(self):
+		return 4
+	def getDefaultTuning(self):
+		return "g3,d4,a4,e5"
+	def getFretInfo(self,fretNumber):
+		return None if fretNumber > 18 else [str(fretNumber),fretNumber]
+	def isTabInverted(self):
+		return False 		
+	def isStringDoubled(self,str):
+		return True
+
+# ******************************************************************************************
 #								  	Ukulele (Standard)
 # ******************************************************************************************
 
@@ -119,7 +139,7 @@ class Ukulele(BaseInstrument):
 	def getStringCount(self):
 		return 4
 	def getDefaultTuning(self):
-		return "g4,c4,a4,e4"
+		return "g4,c4,e4,a4"
 	def getFretInfo(self,fretNumber):
 		return None if fretNumber > 14 else [str(fretNumber),fretNumber]
 	def isTabInverted(self):
@@ -142,10 +162,12 @@ class InstrumentFactory:
 			return Loog()
 		if name == "ukulele":
 			return Ukulele()
+		if name == "mandolin":
+			return Mandolin()
 		raise Exception("Unknown instrument type "+name)
 	@staticmethod
 	def getList():
-		return "merlin,ukulele,strumstick,dulcimer,loog"
+		return "merlin,ukulele,strumstick,dulcimer,loog,mandolin"
 #
 #	Note this creates the encoded instrument information.
 #

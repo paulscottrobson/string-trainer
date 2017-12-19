@@ -12,6 +12,7 @@ class Player {
     constructor(game:Phaser.Game,music:IMusic) {
         this.notes = [];
         this.music = music;
+        console.log(music.getTuning());
         this.tuning = music.getTuningAsC1Offset();
         //console.log(Player.loaded);
         for (var nn of Player.loaded) {
@@ -39,6 +40,7 @@ class Player {
     }
 
     private playStrum(strum:number[]) : void {
+        console.log(strum,this.tuning);
         for (var s = 0;s < Configuration.strings;s++) {
             if (strum[s] != Strum.NOSTRUM) {
                 var nc:number = this.tuning[s] + strum[s];
