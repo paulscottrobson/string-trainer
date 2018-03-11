@@ -43,11 +43,9 @@ class MainState extends Phaser.State {
         this.metronome = new Metronome(this.game,this.music);
         this.player = new Player(this.game,this.music);
 
-        // Add manager
-        //this.manager = new ScrollingTabRenderManager(this.game,this.music);
-        //this.manager.create();
-        //this.manager.moveTo(0);
-        //this.manager.destroy();
+        // Go to first render manager.
+        this.nextManager();
+        this.nextManager();
         this.nextManager();
     }
     

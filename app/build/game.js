@@ -48,6 +48,8 @@ var MainState = (function (_super) {
         this.metronome = new Metronome(this.game, this.music);
         this.player = new Player(this.game, this.music);
         this.nextManager();
+        this.nextManager();
+        this.nextManager();
     };
     MainState.prototype.nextManager = function () {
         if (this.manager != null) {
@@ -1300,7 +1302,7 @@ var TabRenderManager = (function (_super) {
     __extends(TabRenderManager, _super);
     function TabRenderManager(game, music) {
         var _this = _super.call(this, game, music) || this;
-        TabRenderManager.renderPerLine = 4;
+        TabRenderManager.renderPerLine = 3;
         TabRenderManager.renderWidth = Configuration.width / TabRenderManager.renderPerLine;
         TabRenderManager.renderHeight = TabRenderManager.renderWidth / 2;
         return _this;

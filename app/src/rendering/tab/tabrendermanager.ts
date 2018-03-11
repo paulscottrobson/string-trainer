@@ -10,7 +10,7 @@ class TabRenderManager extends BaseRenderManager implements IRenderManager {
 
     constructor(game:Phaser.Game,music:IMusic) {
         super(game,music);
-        TabRenderManager.renderPerLine = 4;
+        TabRenderManager.renderPerLine = 3;
         TabRenderManager.renderWidth = Configuration.width/TabRenderManager.renderPerLine;
         TabRenderManager.renderHeight = TabRenderManager.renderWidth / 2;
     }
