@@ -8,7 +8,7 @@
  */
 class MainState extends Phaser.State {
 
-    public static VERSION:string="0.01 06-Dec-17 Phaser-CE 2.8.7 (c) PSR 2017";
+    public static VERSION:string="0.02 08-Jun-18 Phaser-CE 2.8.7 (c) PSR 2017,8";
     private music:IMusic;
     private speedControl:SpeedArrow;
     private positionControl:PositionBar;    
@@ -39,14 +39,14 @@ class MainState extends Phaser.State {
         this.background = new Background(this.game,this);
         this.lyricDisplay = new LyricBar(this.game);
         this.speedControl = new SpeedArrow(this.game);
-        this.positionControl = new PositionBar(this.game,this.music,32,Configuration.width-Configuration.lyricSize - Configuration.controlHeight-32,Configuration.height-Configuration.controlHeight/2);
+        this.positionControl = new PositionBar(this.game,this.music,40,Configuration.width-Configuration.lyricSize - Configuration.controlHeight-32,Configuration.height-Configuration.controlHeight/2);
         this.metronome = new Metronome(this.game,this.music);
         this.player = new Player(this.game,this.music);
 
         // Go to first render manager.
         this.nextManager();
-        this.nextManager();
-        this.nextManager();
+        //this.nextManager();
+        //this.nextManager();
     }
     
     nextManager() : void {

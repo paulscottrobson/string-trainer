@@ -173,8 +173,8 @@ class InstrumentFactory:
 #
 if __name__ == '__main__':
 	w = Loog()
-	for i in range(0,20):
-		print(i,w.getFretInfo(i))
+#	for i in range(0,20):
+#		print(i,w.getFretInfo(i))
 
 	# Get list of the types
 	types = InstrumentFactory.getList().split(",")
@@ -190,4 +190,4 @@ if __name__ == '__main__':
 	classDef +=  'class InstrumentInfo {\n'
 	classDef += 'public static encodedInfo:string = "'+defn+'";\n}\n'
 	# which is written to /tmp
-	h = open("/tmp/instrumentinfo.ts","w").write(classDef)
+	h = open("../app/src/generated/instrumentinfo.ts","w").write(classDef)

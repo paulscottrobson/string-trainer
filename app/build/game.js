@@ -44,11 +44,9 @@ var MainState = (function (_super) {
         this.background = new Background(this.game, this);
         this.lyricDisplay = new LyricBar(this.game);
         this.speedControl = new SpeedArrow(this.game);
-        this.positionControl = new PositionBar(this.game, this.music, 32, Configuration.width - Configuration.lyricSize - Configuration.controlHeight - 32, Configuration.height - Configuration.controlHeight / 2);
+        this.positionControl = new PositionBar(this.game, this.music, 40, Configuration.width - Configuration.lyricSize - Configuration.controlHeight - 32, Configuration.height - Configuration.controlHeight / 2);
         this.metronome = new Metronome(this.game, this.music);
         this.player = new Player(this.game, this.music);
-        this.nextManager();
-        this.nextManager();
         this.nextManager();
     };
     MainState.prototype.nextManager = function () {

@@ -1,6 +1,11 @@
 #
 #	Script to rebuild and update sound, graphics and fonts in application.
 #
+echo "Making instrument code"
+cd compiler
+python instruments.py
+cd ..
+
 echo "Making Graphics"
 cd graphics
 python3 makeatlas.py

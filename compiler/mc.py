@@ -253,5 +253,5 @@ if __name__ == '__main__':
 	mc.write("../app/music2.json")
 
 	#print(instruments.InstrumentFactory().get("merlin"))
-	mc.compile("oh danny boy.music")				# chords, music, lyrics, merlin
+	mc.compile("silent-night.ukulele")				# chords, music, lyrics, merlin
 	mc.write("../app/music.json")

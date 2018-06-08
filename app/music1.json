@@ -1,12 +1,13 @@
 {
-"tuning":"g3,c4,e4,a4",
 "title":"",
 "tempo":"80",
-"instrument":"ukulele",
 "beats":"4",
-"capo":"0",
 "composer":"zoe-anne wadey",
+"capo":"0",
+"instrument":"ukulele",
+"tuning":"g3,c4,e4,a4",
 "bars":[
+    "---m,16",
     "----,04;----,04;----,04;----,04",
     "a-d-,04;--d-,04;-cd-,04;--ca,04",
     "a-d-,04;--d-,04;ec--,08",
