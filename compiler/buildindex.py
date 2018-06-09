@@ -20,15 +20,23 @@ class IndexGenerator:
 		titles = [self.ccase(f.replace("-"," ").replace("_"," ").replace(".json","")) for f in songs]
 
 		h = open(pathToMusic+"/index.html","w")
-		h.write("<html>\n<head>\n</head>\n<body>\n")
+		h.write("<html>\n")
+		h.write("<style>\nbody { background-color:#FF8000; }</style>\n")
+		h.write("<head>\n</head>\n<body>\n")
 
-		for p in range(0,2):
-			h.write("<h1>{0}</h1>\n".format("Complete" if p == 0 else "Melody Only"))
+		for p in range(0,3):
+			title = "Complete" if p == 0 else "Melody Only"
+			title = title if p != 2 else "Bass only"
+			h.write("<h1>{0}</h1>\n".format(title))
+			h.write("<ul>\n")
 			for n in range(0,len(songs)):
 				url = musicToApp+"?music={0}/{1}".format(subtree,songs[n])
 				if p == 1:
 					url = url + "&options=melody"
-				h.write('<h2><a href="{0}">{1}</a></h2>\n'.format(url,titles[n]))	
+				if p == 1:
+					url = url + "&options=bass"
+				h.write('<li><h3><a href="{0}">{1}</a></h3></li>\n'.format(url,titles[n]))	
+			h.write("</ul>\n")
 		h.write("</body>\n</html>\n")
 		h.close()
 
@@ -37,4 +45,3 @@ class IndexGenerator:
 
 if __name__ == '__main__':
 	w = IndexGenerator("../app","../app/music/zawcarols")
-	

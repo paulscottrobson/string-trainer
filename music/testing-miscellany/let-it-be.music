@@ -1,0 +1,26 @@
+
+instrument := merlin
+title := let it be
+composer := the beatles
+tempo := 60
+beats := 4
+
+//chord.c := 0003
+//chord.f := 2010
+//chord.g := 0232
+//chord.am := 2000
+
+chord.c := 200 		// d
+chord.f := 310 		// g
+chord.g := 111		// a
+chord.am := 012 	// bm
+
+"when i"|{d-dud-du}[C][G:3]"find myself in times of trouble"|[Am][F:3] "mother mary comes to me"
+[C][G:3]"speaking words of wisdom let it"|[F][C:3]"be and"
+
+[C][G:3]"in my hour of darkness she is"|[Am][F:3]"standing right in front of me"
+[C][G:3]"speaking words of wisdom let it"|[F][C:3]"be .. let it "
+
+[Am][G:3]"be .... let it be"|[F][C]"let it be, ah let it be"
+[Am][G:3]"whisper words of wisdom let it"|[F][C:3]"be"
+

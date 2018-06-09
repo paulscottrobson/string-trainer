@@ -16,10 +16,10 @@ class MusicCompiler:
 	#	Compile a single piece of music.
 	#
 	def compile(self,sourceFile):
-		print("Compiling "+sourceFile)
+		#print("Compiling "+sourceFile)
 		self.sourceFile = sourceFile
 		self.lineNumber = 0
-		self.fretMapping = "0123456789tvwhuisv"
+		self.fretMapping = "0123456789tlwhuisv"
 		# Read and tidy
 		self.preProcess()
 		# Figure out instrument, create json store
