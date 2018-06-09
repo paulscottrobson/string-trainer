@@ -2,6 +2,7 @@
 //		Tomorrow / Dancing Day
 //
 
+instrument := ukulele
 tuning := g3,c4,e4,a4
 tempo := 100
 composer := zoe-anne wadey

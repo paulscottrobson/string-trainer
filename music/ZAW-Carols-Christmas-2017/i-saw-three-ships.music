@@ -2,6 +2,7 @@
 //		I saw three ships (ZAW)
 //
 
+instrument := ukulele
 tuning := g3,c4,e4,a4
 tempo := 140
 beats := 3

@@ -2,6 +2,7 @@
 //		In the Bleak Midwinter (ZAW)
 //
 
+instrument := ukulele
 tuning := g3,c4,e4,a4
 tempo := 80
 composer := zoe-anne wadey

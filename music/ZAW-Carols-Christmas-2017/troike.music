@@ -2,9 +2,10 @@
 //		Troike
 //
 
+instrument := ukulele
 tuning := g3,c4,e4,a4
 tempo := 80
-composer := zoe-anne wadey (additonal material by prokofiev)
+composer := zoe-anne wadey (additional material by prokofiev)
 beats := 2
 
  & & | & 0 | 5- 4- 2- 4- | 5 2 
