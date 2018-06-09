@@ -47,6 +47,12 @@ var MainState = (function (_super) {
         this.positionControl = new PositionBar(this.game, this.music, 40, Configuration.width - Configuration.lyricSize - Configuration.controlHeight - 32, Configuration.height - Configuration.controlHeight / 2);
         this.metronome = new Metronome(this.game, this.music);
         this.player = new Player(this.game, this.music);
+        this.title = this.game.add.bitmapText(0, 0, "font", MainState.VERSION, Configuration.controlHeight / 4);
+        this.title.x = Configuration.width / 2;
+        this.title.y = Configuration.height;
+        this.title.anchor.x = 0.5;
+        this.title.anchor.y = 1;
+        this.title.tint = 0xFFC000;
         this.nextManager();
     };
     MainState.prototype.nextManager = function () {
@@ -103,7 +109,7 @@ var MainState = (function (_super) {
             }
         }
     };
-    MainState.VERSION = "0.01 06-Dec-17 Phaser-CE 2.8.7 (c) PSR 2017";
+    MainState.VERSION = "0.02 08-Jun-18 Phaser-CE 2.8.7 (c) PSR 2017,8";
     return MainState;
 }(Phaser.State));
 var Metronome = (function () {
@@ -148,7 +154,6 @@ var Player = (function () {
         }
     };
     Player.prototype.playStrum = function (strum) {
-        console.log(strum, this.tuning);
         for (var s = 0; s < Configuration.strings; s++) {
             if (strum[s] != Strum.NOSTRUM) {
                 var nc = this.tuning[s] + strum[s];
@@ -1300,9 +1305,13 @@ var TabRenderManager = (function (_super) {
     __extends(TabRenderManager, _super);
     function TabRenderManager(game, music) {
         var _this = _super.call(this, game, music) || this;
-        TabRenderManager.renderPerLine = 3;
-        TabRenderManager.renderWidth = Configuration.width / TabRenderManager.renderPerLine;
-        TabRenderManager.renderHeight = TabRenderManager.renderWidth / 2;
+        TabRenderManager.renderPerLine = 3 - 1;
+        do {
+            TabRenderManager.renderPerLine++;
+            TabRenderManager.renderWidth = Configuration.width / TabRenderManager.renderPerLine;
+            TabRenderManager.renderHeight = TabRenderManager.renderWidth / 2;
+            var vertCount = Math.floor(Configuration.yBase / TabRenderManager.renderHeight);
+        } while (TabRenderManager.renderPerLine * vertCount < music.getBarCount());
         return _this;
     }
     TabRenderManager.prototype.createRenderer = function (manager, game, bar) {

@@ -21,7 +21,7 @@ class MainState extends Phaser.State {
     private lastBar = -1;
     private managerIndex:number = 0;
     private background:Background;
-    
+    private title:Phaser.BitmapText;
     init() {
         // Initialise config
         Configuration.initialise(this.game);
@@ -42,7 +42,10 @@ class MainState extends Phaser.State {
         this.positionControl = new PositionBar(this.game,this.music,40,Configuration.width-Configuration.lyricSize - Configuration.controlHeight-32,Configuration.height-Configuration.controlHeight/2);
         this.metronome = new Metronome(this.game,this.music);
         this.player = new Player(this.game,this.music);
-
+        this.title = this.game.add.bitmapText(0,0,"font",MainState.VERSION,Configuration.controlHeight/4);
+        this.title.x = Configuration.width/2;this.title.y = Configuration.height;
+        this.title.anchor.x = 0.5;this.title.anchor.y = 1;
+        this.title.tint = 0xFFC000;
         // Go to first render manager.
         this.nextManager();
         //this.nextManager();

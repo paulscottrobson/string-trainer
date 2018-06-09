@@ -10,9 +10,13 @@ class TabRenderManager extends BaseRenderManager implements IRenderManager {
 
     constructor(game:Phaser.Game,music:IMusic) {
         super(game,music);
-        TabRenderManager.renderPerLine = 3;
-        TabRenderManager.renderWidth = Configuration.width/TabRenderManager.renderPerLine;
-        TabRenderManager.renderHeight = TabRenderManager.renderWidth / 2;
+        TabRenderManager.renderPerLine = 3 - 1;
+        do {
+            TabRenderManager.renderPerLine++;
+            TabRenderManager.renderWidth = Configuration.width/TabRenderManager.renderPerLine;        
+            TabRenderManager.renderHeight = TabRenderManager.renderWidth / 2;
+            var vertCount:number = Math.floor(Configuration.yBase / TabRenderManager.renderHeight)
+        } while (TabRenderManager.renderPerLine * vertCount < music.getBarCount());
     }
 
     createRenderer(manager: IRenderManager, game: Phaser.Game, bar: IBar): IRenderer {

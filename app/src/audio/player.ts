@@ -40,7 +40,7 @@ class Player {
     }
 
     private playStrum(strum:number[]) : void {
-        console.log(strum,this.tuning);
+        //console.log(strum,this.tuning);
         for (var s = 0;s < Configuration.strings;s++) {
             if (strum[s] != Strum.NOSTRUM) {
                 var nc:number = this.tuning[s] + strum[s];
