@@ -1,0 +1,16 @@
+//
+//		Morning has Broken
+
+instrument := ukulele
+tuning := g3,c4,e4,a4
+tempo := 118
+composer := trad arr. zoe-anne wadey
+beats := 3
+& & &
+
+xx0 x0 x3 | 3xx5 x34 x34 | 5xx7 x55 x55 | 2320 0 x3 | 0xx2 x10 x10 | x3x0 xx00 xx00
+xx00 xx24 xx45 | x3x4 xx4 xx4 | 0xx2 x00 x00 | x34 xx45 xx02 | xx20 xxx0 xxx2 | xx24 xxx5 xxx7
+x34 xx45 x34 | 3xx2 x10 x10 | 0xx2 x10 x10 | x300 xx4 xx0 | xx02 xxx4 xxx5 | xx20 xxx2 xxx4 | x0x5 xx24 x0x2
+x3x0 xx0 xx0 | 0xx2 x10 x10 | xx20 x0 xx2 | xx05 xxx9 xxxw | xx0t xxx9 xxx7 | xx05
+
+// 0123456789tlwhuisv

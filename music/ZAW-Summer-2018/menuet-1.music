@@ -1,0 +1,31 @@
+//
+//		Menuet 1 (Bach)
+//
+instrument := ukulele
+tuning := g3,c4,e4,a4
+tempo := 80
+composer := Bach arr. zoe-anne wadey
+beats := 3
+
+& & & 
+
+2 2- 0- 2 | x3 0- x2- x3 | xx2 x0 x2 | x3- x2- x3- 0- x3- 0- | 2 0 0- 2= 3= | 2- 0- 2- 3- 5- 2- 
+
+x3 3 2 | 0oo |5 5- 4- 5 | x2 x3- x0- x2 | 5 5- 4- 5 | 0 x2o | 3 2 0
+
+x3 x3- 0- 2- | 2- 0- 3  2 | 0- x3- 0- x2- x3- 0- | 2 x0 xx3 | x0. x3- x2- 0- | &- xx0- x2- x0- x1
+
+
+// Bar 20
+
+&- xxx0- x1- xx2- x0- xx0- | xxx2- xxx4- xx0- xx2- x0- xxx2- | &- x2- x0- xx0- xx2- xxx4-
+
+// Bar 23
+
+xxx0- xxx2- xxx4- xx0- xx2- xxx4- | xx0- xxx0- xxx2- xx0- x2- xxx2- | xxx4- xx2- x0- x3- 0- 3-
+
+x3- x2- x3- x2- x0- xx2- | 2 2- 0- 2 | x3 0- x2- x3 | &- &- &- xxx4- xx2- x1-
+
+&- xxx0- x1- xx2- x0- xx0- | &- x3- x2- 0- 3- &- | &- xx2- 0- 3- 2 | 0 xx2 x2 | x3oo
+
+// 0123456789tlwhuisv

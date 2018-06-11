@@ -1,0 +1,22 @@
+//
+//		Minuet in G (Bach)
+//
+instrument := ukulele
+tuning := g3,c4,e4,a4
+tempo := 80
+composer := Bach arr. zoe-anne wadey
+beats := 3
+
+& & & 
+
+x3 xx0- xx2- x0- x1- | x3 xx0 xx0 | 0 x1- x3- 0- 2-|3 xx0 xx0 | x1 x3- x1- x0- xx2- | x0 x1- x0- xx2- xx0-
+
+xxx4 xx0- xx2- x0- xx0- | xx2oo | x3 xx0- xx2- x0- x1- | x3 xx0 xx0 | 0 x1- x3- 0- 2- | 3 xx0 xx0
+
+x1 x3- x1- x0- xx2- | x0 x1- x0- xx2- xx0- | xx2 x0- xx2- xx0- xxx4- | xx0oo | 7 x8- 5- 7- x8- | 5 x3- 0- 2- x3-
+
+3 0- 2- 3- x3- | x2 x0- x2- xx2 | xx2- x0- x2- x3- 0- 2- | 3 2 0 | 2 xx2 x2 | x3oo | x3 xx0- xxx4- xx0
+
+0 xx0- xxx4- xx0 | x3 x1 x0 | xx2- xx0- xxx4- xx0- xx2 | xxx0- xxx2- xxx4- xx0- xx2- x0- | x1 x0 xx2 | x0- x3- xx0 xxx4 | xx00oo
+
+// 0123456789tlwhuisv
