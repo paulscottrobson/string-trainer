@@ -12,7 +12,7 @@ class Compiler:
 		self.infoKeys = { "strings":"4", \
 						  "string0": "G4", "string1":"C4","string2":"E4","string3":"A4", \
 						  "beats":"4","tempo":"100","title":"","composer":"unknown", \
-						  "version":"1","capo":"0","options":"" }
+						  "version":"1","capo":"0" }
 
 	def compile(self,sourceFile,targetFile = None):
 		self.infoKeys["title"] = sourceFile
@@ -48,17 +48,17 @@ class Compiler:
 		notes = [x for x in ("xxxx"+(m.group(1)[::-1]))[-4:]]
 		# convert from x digit to - letter format
 		notes = ["-" if x == "x" else self.convertNote(x) for x in notes]
-		# work out note length in twelfthbeats
-		qb = 12
+		# work out note length in quarterbeats
+		qb = 4
 		for mod in m.group(2):
 			if mod == 'o':
-				qb = qb + 12
+				qb = qb + 4
 			elif mod == ".":
 				qb = int(qb * 3 / 2)
 			elif mod == "-":
-				qb = qb - 6
+				qb = int(qb / 2)
 			else:
-				qb = qb - 9
+				qb = int(qb / 4)
 		# reconstruct and exit.
 		return "".join(notes)+"{0:02}".format(qb)
 

@@ -12,7 +12,7 @@ class IndexGenerator:
 	def __init__(self,pathToApp,pathToMusic):
 		assert pathToMusic[:len(pathToApp)+1] == pathToApp+"/","music should be under app path"
 		subtree = pathToMusic[len(pathToApp)+1:]
-		musicToApp = ("/".join([".." for x in subtree.split("/")]))+"/index.html"
+		musicToApp = (os.sep.join([".." for x in subtree.split(os.sep)]))+os.sep+"index.html"
 
 		songs = [f for f in os.listdir(pathToMusic) if os.path.isfile(os.path.join(pathToMusic, f))]
 		songs = [f for f in songs if f[-5:] == ".json"]

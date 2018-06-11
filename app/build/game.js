@@ -109,7 +109,7 @@ var MainState = (function (_super) {
             }
         }
     };
-    MainState.VERSION = "0.92 08-Jun-18 Phaser-CE 2.8.7 (c) PSR 2017,8";
+    MainState.VERSION = "0.93 11-Jun-18 Phaser-CE 2.8.7 (c) PSR 2017,8";
     return MainState;
 }(Phaser.State));
 var Metronome = (function () {
