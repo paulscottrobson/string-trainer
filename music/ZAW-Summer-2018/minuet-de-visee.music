@@ -1,0 +1,17 @@
+//
+//		Minuet (De Visee)
+//
+instrument := ukulele
+tuning := g3,c4,e4,a4
+tempo := 80
+composer := Robert DeVisee arr. zoe-anne wadey
+beats := 3
+
+& & & 
+
+2320 3- 2- 0- 2- | x3x0 556o | 2320o 200- 3- | 0220o 0
+2320 3- 2- 0- 2- | x3x0 556o | 232 2 200- 3- | 0220oo
+0222 0- 2- 3 | 2320 xxx4- xx0- xx2 | 000- 2- 3- 2- 0- x3- | 0220 x0- x2- x32
+0222 0- 2- 3 | 2320 3- 2- 0- x3- | 022 2- 0- x3- x2- | x220 x3o
+
+// 0123456789tlwhuisv

@@ -1,0 +1,20 @@
+//
+//		Prelude (De Visee)
+//
+instrument := ukulele
+tuning := g3,c4,e4,a4
+tempo := 60
+composer := Robert DeVisee arr. zoe-anne wadey
+beats := 4
+
+& & & &
+
+&- 5- 3- 5- 0- 3- 1- 0- | 13- 1- 01- 1- x34- x3- x33- 0- 
+	x22- xx2- xxx2- xx0- xxx3- x3- x2x3-. x3x0= | 02- 3- 1x2- 0- 13- 31- 333-. 5=
+
+5222- 5- 02- 3- 2xx0- x3- xx2- x1- | x0- 3- x30- x1- 01- x1- xx0- xx3-
+											xx2- 1123- 1123- 0- x33- 6- 630- 5-
+
+
+3x0- 1- 0x1-. 0= 022 xx2= 3= 1= 0= | x33= xx5= xx3= xx2= x30= 1= 0= x3= x222. x3- | x320ooo
+// 0123456789tlwhuisv
