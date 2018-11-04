@@ -1,0 +1,21 @@
+//
+//		Swan Lake (top Line)
+//
+
+instrument := ukulele
+tuning := g3,c4,e4,a4
+tempo := 80
+composer := zoe-anne wadey
+beats := 4
+
+& & & &
+
+ 0o xx2- x0- x1- x3- | 0. x1- 0. x1- | 0. xx2- x1- xx2- xxx3- x1- | xx2oo- x3- x1- x0-
+
+ 0o xx2- x0- x1- x3- | 0. x1- 0. x1- | 0. xx2- x1- xx2- xxx3- x1- | xx2oo xx2 | x0 x1 x3 0- 1-
+
+3. 1- 0 1- 3- | 5. 3- x6 3- 5- | 7. 5- x5- xx5- xx4- xx2- | x0 x1 x3 0- 1- | 3. 1- 0 1- 3-
+
+5. 3- x6 3- 5- | 6. x6- xx7 x6- 6- | 7. x7- 7. 0- 
+
+0o xx2- x0- x1- x3- | 0. x1- 0. x1- | 0. xx2- x1- xx2- xxx3- x1- | xx2ooo
