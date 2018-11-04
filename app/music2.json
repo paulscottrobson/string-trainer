@@ -1,0 +1,28 @@
+{
+"title":"let it be",
+"tempo":"60",
+"beats":"4",
+"composer":"the beatles",
+"capo":"0",
+"instrument":"merlin",
+"tuning":"d3,a3,d4",
+"chord.c":"200",
+"chord.f":"310",
+"chord.g":"111",
+"chord.am":"012",
+"bars":[
+    "<when i>;---,16",
+    "<find myself in times of trouble>;eaa[c],04;eaa[c],02;eaa[c],02;ccc[g],04;ccc[g],02;ccc[g],02",
+    "<mother mary comes to me>;ace[am],04;ace[am],02;ace[am],02;fca[f],04;fca[f],02;fca[f],02",
+    "<speaking words of wisdom let it>;eaa[c],04;eaa[c],02;eaa[c],02;ccc[g],04;ccc[g],02;ccc[g],02",
+    "<be and>;fca[f],04;fca[f],02;fca[f],02;eaa[c],04;eaa[c],02;eaa[c],02",
+    "<in my hour of darkness she is>;eaa[c],04;eaa[c],02;eaa[c],02;ccc[g],04;ccc[g],02;ccc[g],02",
+    "<standing right in front of me>;ace[am],04;ace[am],02;ace[am],02;fca[f],04;fca[f],02;fca[f],02",
+    "<speaking words of wisdom let it>;eaa[c],04;eaa[c],02;eaa[c],02;ccc[g],04;ccc[g],02;ccc[g],02",
+    "<be .. let it>;fca[f],04;fca[f],02;fca[f],02;eaa[c],04;eaa[c],02;eaa[c],02",
+    "<be .... let it be>;ace[am],04;ace[am],02;ace[am],02;ccc[g],04;ccc[g],02;ccc[g],02",
+    "<let it be, ah let it be>;eaa[c],04;eaa[c],02;eaa[c],02;eaa[c],04;eaa[c],02;eaa[c],02",
+    "<whisper words of wisdom let it>;ace[am],04;ace[am],02;ace[am],02;ccc[g],04;ccc[g],02;ccc[g],02",
+    "<be>;fca[f],04;fca[f],02;fca[f],02;eaa[c],04;eaa[c],02;eaa[c],02"
+]
+}

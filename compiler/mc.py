@@ -247,11 +247,5 @@ class MusicCompiler:
 
 if __name__ == '__main__':
 	mc = MusicCompiler()
-	mc.compile("good-king-wenceslas.music")			# music only, no chords, uke
-	mc.write("../app/music1.json")
-	mc.compile("let-it-be.music") 					# chords and lyrics only, loog
-	mc.write("../app/music2.json")
-
-	#print(instruments.InstrumentFactory().get("merlin"))
-	mc.compile("silent-night.ukulele")				# chords, music, lyrics, merlin
+	mc.compile("g-scales-2.music")				# chords, music, lyrics, merlin
 	mc.write("../app/music.json")
