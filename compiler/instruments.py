@@ -141,7 +141,7 @@ class Ukulele(BaseInstrument):
 	def getDefaultTuning(self):
 		return "g4,c4,e4,a4"
 	def getFretInfo(self,fretNumber):
-		return None if fretNumber > 14 else [str(fretNumber),fretNumber]
+		return None if fretNumber > 17 else [str(fretNumber),fretNumber]
 	def isTabInverted(self):
 		return False 
 

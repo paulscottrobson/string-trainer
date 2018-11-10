@@ -1,0 +1,17 @@
+//
+// 		Swan (Carnival of the animals)
+//
+
+instrument := ukulele
+tuning := g3,c4,e4,a4
+tempo := 70
+composer := traditional
+beats := 3
+
+// t 9 x7 | 7 xt xx7 | 0oo- 2- | 3oo | x0o x2- x3- | 0- 2- 3- 5- 7- 9-
+
+// uoo | &oo | t 9 x7 | 7 xt xx7 | 1oo- 2- | 4oo
+
+xx6. xx8- xxt- xxl- | x9- xt- xw- 9- l- h- | v
+
+&oo | &oo | 7 9 xt | too
