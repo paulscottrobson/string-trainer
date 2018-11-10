@@ -1,0 +1,20 @@
+//
+//		Jupiter
+//
+
+instrument := ukulele
+tuning := g3,c4,e4,a4
+tempo := 80
+composer := holst
+beats := 3
+
+& & x00- x3- | 01. 3- 21-. x3= |33- 5- 3 23 | 01- 2- 0 x3| x0o x0- x3-
+
+0. 3- 21-. x3= | 33- 5- 7 7 | 7- 5- 3 5 | 33o x30- x0- | xx2 xx2 xx0- x0-
+
+xx2 xxx0 x30- x0- | xx2 xx2 x0- x3- | 01o 01- 2- | 30 2 01 
+
+x30 31 x00 | xx22- xx0- xx2 x0x2 | x32o x00- x3- | 01. 3- 21-. x3= |33- 5- 3 23 | 01- 2- 0 x3| x0o x0- x3-
+
+0. 3- 21-. x3= | 33- 5- 7 7 | 7- 5- 3 5 | 33oo
+

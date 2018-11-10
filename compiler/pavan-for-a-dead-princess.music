@@ -1,0 +1,17 @@
+//
+// Pavel / Dead Princess
+//
+
+instrument := ukulele
+tuning := g3,c4,e4,a4
+tempo := 70
+composer := traditional
+beats := 4
+
+// x3.o 0- x2- x0- | xx2 x0- x2- x2- x0- x0 | 2.o 3- 0- x3-
+
+// x2 x3- 0 x2- x3- x2- | x0 x2- x3 0- x2- x0- | x2 &- 0x0- x2x4- x00-
+
+// x2x4 2o 2 | 2345= 2=oo 0- 5- 2- | 222 x5 x3x4 x5x2
+
+xx44oo- xx2- x3x0- x2- | xx4- xxx4- 2x2- xx4- x221 x0x5- xxx2- | x224ooo
