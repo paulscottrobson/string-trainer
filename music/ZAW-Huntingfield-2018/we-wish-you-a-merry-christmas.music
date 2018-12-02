@@ -1,0 +1,17 @@
+//
+//		Merry Christmas
+//
+
+instrument := ukulele
+tuning := g3,c4,e4,a4
+tempo := 100
+composer := debussy
+beats := 3
+
+& & xx2 | x3 x3- 0-  x3- x2- | x0 x0 x0 | 0 0- 2- 0- x3- 
+
+x2 x2 x2 | 2 2- 3- 2- 0- | x3 x0 xx2- xx2- | x0 0 x2 
+
+x3o xx2 | x3 x3 x3 | x2o x2 | x3 x2 x0 | xx2o 0
+
+2 0- 0- x3- x3- | 5 xx2 xx2- xx2- | x0 0 x2 | x3oo

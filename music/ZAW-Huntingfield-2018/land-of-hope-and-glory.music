@@ -1,0 +1,17 @@
+//
+// Land of Hope and Glory
+//
+
+instrument := ukulele
+tuning := g3,c4,e4,a4
+tempo := 80
+composer := traditional
+beats := 4
+
+3 3 2- 3- 5 | 0o x3o | x1 x1 x0- x1- x3 | xx2ooo | x0 x0 x2- x3 0- 
+
+5o x3o | 3 3 3- 2 0- | x3ooo | 3 3 2- 3- 5 | 0o x3o
+
+x1 x1 x0- x1- x3 | xx2o xxx4o | x0 x0 x2- x3 0- | 5o x3o | 8 8 8- 7 5-
+
+7 3 2 1 | 0. 0- 2- 3 5- | x3o 30o | xx0 xx0 x1- x0 xx2- | xx0ooo

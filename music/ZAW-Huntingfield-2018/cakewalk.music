@@ -1,0 +1,20 @@
+//
+//		Golliwog's Cakewalk
+//
+
+instrument := ukulele
+tuning := g3,c4,e4,a4
+tempo := 60
+composer := debussy
+beats := 2
+
+& & 
+5= 3- 5= 0- 5- | 3= 0- x3= xx3- x3- | xx2= xx2- x0=  xx2- 5- | xx2o | xx2= xx0- xx2= x0- xx0-
+
+xx2= xx0- xx2= xx3- xx0- | 5= 2- 0= x3- x2- | x0 & | 5= 3- 5= 0- 5- | 3= 0- x3= xx3- x3-
+
+xx2= xx2- x0=  xx2- 5- | xx2o | xx2= xx0- xx2= x0- xx0-
+
+xx2= xx0- xx2= xx3- xx0- | xx2= xxx4- xxx2= xxx0-
+
+

@@ -1,0 +1,23 @@
+//
+//		Gran Vals
+//
+
+instrument := ukulele
+tuning := g3,c4,e4,a4
+tempo := 100
+composer := tarrega arr ZAW
+beats := 3
+
+& & &
+
+xx2oo | x0oo | x0oo | x2oo | x2o x3 | x3o x2 | x2= x0=oo
+
+& & & | x0oo | x2o x3 | 2oo | 0oo | 5- 3- x0 x2 | 2- 0- xx0 xx2
+
+0- x3- xxx4 xx2 | xxx0oo | xx2oo | x0oo | x0oo | x2oo | x2oo
+
+x3oo| 5oo | 3oo | 0oo | 3oo | 2oo
+
+xx2oo | x0oo | 0oo | x324oo
+
+
