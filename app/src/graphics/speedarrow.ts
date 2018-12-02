@@ -22,7 +22,7 @@ class SpeedArrow extends Phaser.Group {
 
     updateRotate(elapsedMS:number): void {
         var ptr:Phaser.Pointer = this.game.input.activePointer;
-        if (ptr.leftButton.isDown && 
+        if (ptr.isDown && 
             Math.abs(ptr.x-this.arrow.x) < this.arrow.width/2 && 
             Math.abs(ptr.y-this.arrow.y) < this.arrow.height/2) {
                 this.arrow.rotation = this.arrow.rotation + elapsedMS / 1000;

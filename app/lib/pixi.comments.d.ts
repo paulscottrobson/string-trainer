@@ -352,17 +352,6 @@ declare module PIXI {
 
     }
 
-    export class CanvasPool {
-
-        static create(parent: HTMLElement, width?: number, height?: number): HTMLCanvasElement;
-        static getFirst(): HTMLCanvasElement;
-        static remove(parent: HTMLElement): void;
-        static removeByCanvas(canvas: HTMLCanvasElement): HTMLCanvasElement;
-        static getTotal(): number;
-        static getFree(): number;
-
-    }
-
 
     /**
     * A set of functions used to handle masking.
@@ -658,12 +647,15 @@ declare module PIXI {
 
         /**
         * The visibility of this DisplayObject. A value of `false` makes the object invisible.
-        * A value of `true` makes it visible. Please note that an object with a visible value of
-        * `false` is skipped during the render pass. Equally a DisplayObject with visible false will
-        * not render any of its children.
+        * A value of `true` makes it visible.
+        * 
+        * An object with a visible value of `false` is skipped during the render pass.
+        * Equally a DisplayObject with visible `false` will not render any of its children.
         * 
         * The value of this property does not reflect any visible values set further up the display list.
-        * To obtain that value please see the `worldVisible` property.
+        * To obtain that value please see the {@link PIXI.DisplayObject#worldVisible worldVisible} property.
+        * 
+        * Objects that are not {@link PIXI.DisplayObject#worldVisible worldVisible} do not update their {@link PIXI.DisplayObject#worldPosition worldPosition}.
         * Default: true
         */
         visible: boolean;
@@ -816,6 +808,12 @@ declare module PIXI {
         */
         updateTransform(parent?: DisplayObjectContainer): void;
 
+        /**
+        * If this DisplayObject has a cached Sprite, this method generates and updates it.
+        * @return - A reference to this DisplayObject.
+        */
+        updateCache(): void;
+
     }
 
 
@@ -837,7 +835,15 @@ declare module PIXI {
         * [read-only] The array of children of this container.
         */
         children: DisplayObject[];
+
+        /**
+        * The height of the displayObjectContainer, setting this will actually modify the scale to achieve the value set
+        */
         height: number;
+
+        /**
+        * The width of the displayObjectContainer, setting this will actually modify the scale to achieve the value set
+        */
         width: number;
 
         /**
@@ -1326,10 +1332,28 @@ declare module PIXI {
 
         constructor(x?: number, y?: number, width?: number, height?: number);
 
+        bottom: number;
+        bottomRight: Phaser.Point;
+        bottomLeft: Phaser.Point;
+        centerX: number;
+        centerY: number;
+        empty: boolean;
+        halfHeight: number;
+        halfWidth: number;
+        height: number;
+        left: number;
+        perimeter: number;
+        randomX: number;
+        randomY: number;
+        right: number;
+        top: number;
+        topLeft: Phaser.Point;
+        topRight: Phaser.Point;
+        type: number;
+        volume: number;
+        width: number;
         x: number;
         y: number;
-        width: number;
-        height: number;
 
         clone(): Rectangle;
         contains(x: number, y: number): boolean;
@@ -1400,7 +1424,7 @@ declare module PIXI {
         texture: Texture;
 
         /**
-        * The tint applied to the sprite. This is a hex value. A value of 0xFFFFFF will remove any tint effect.
+        * The tint applied to the sprite. This is a hex value. A value of 0xFFFFFF (Phaser.Color.WHITE) will remove any tint effect.
         * Default: 0xFFFFFF
         */
         tint: number;

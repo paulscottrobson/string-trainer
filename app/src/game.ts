@@ -8,7 +8,7 @@
  */
 class MainState extends Phaser.State {
 
-    public static VERSION:string="0.93 11-Jun-18 Phaser-CE 2.8.7 (c) PSR 2017,8";
+    public static VERSION:string="0.94 02-Dec-18 Phaser-CE 2.11.1 (c) PSR 2017,8";
     private music:IMusic;
     private speedControl:SpeedArrow;
     private positionControl:PositionBar;    

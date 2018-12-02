@@ -1,0 +1,3 @@
+2-12-18
+Upgraded to 2.11.1
+Changed touch pointer to use isdown rather than specific button.

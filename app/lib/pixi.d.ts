@@ -214,17 +214,6 @@ declare module PIXI {
 
     }
 
-    export class CanvasPool {
-
-        static create(parent: HTMLElement, width?: number, height?: number): HTMLCanvasElement;
-        static getFirst(): HTMLCanvasElement;
-        static remove(parent: HTMLElement): void;
-        static removeByCanvas(canvas: HTMLCanvasElement): HTMLCanvasElement;
-        static getTotal(): number;
-        static getFree(): number;
-
-    }
-
     export class CanvasMaskManager {
 
         pushMask(maskData: MaskData, renderSession: RenderSession): void;
@@ -320,6 +309,7 @@ declare module PIXI {
         touchstart(e: InteractionData): void;
         touchmove(e: InteractionData): void;
         updateTransform(parent?: DisplayObjectContainer): void;
+        updateCache(): void;
 
     }
 
@@ -538,10 +528,28 @@ declare module PIXI {
 
         constructor(x?: number, y?: number, width?: number, height?: number);
 
+        bottom: number;
+        bottomRight: Phaser.Point;
+        bottomLeft: Phaser.Point;
+        centerX: number;
+        centerY: number;
+        empty: boolean;
+        halfHeight: number;
+        halfWidth: number;
+        height: number;
+        left: number;
+        perimeter: number;
+        randomX: number;
+        randomY: number;
+        right: number;
+        top: number;
+        topLeft: Phaser.Point;
+        topRight: Phaser.Point;
+        type: number;
+        volume: number;
+        width: number;
         x: number;
         y: number;
-        width: number;
-        height: number;
 
         clone(): Rectangle;
         contains(x: number, y: number): boolean;
