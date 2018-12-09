@@ -1,0 +1,21 @@
+//
+//		Pavane
+//
+
+instrument := ukulele
+tuning := g3,c4,e4,a4
+tempo := 80
+composer := tarrega arr ZAW
+beats := 4
+
+& & & &
+
+x0. x2- x3. x5- | x3- x2- x3- x0- x2. x3-
+
+x2- x0- x2- xx2- x0. xx3- | xxx4ooo | x7. x8- 5. 7- | 5- x8- 5- x7- x8. 5-
+
+x8- x7- x8- x5- x7. x6- | x768ooo | x0. x2- x3. x5- | x3- x2- x3- x0- x2. x3-
+
+x2- x0- x2- xx2- x0. xx3- | xxx4ooo | x34. 01- 23. 35- 
+
+23- 012- 23- x00- 01. 23- | x34- x23- x34- x34- x34 x23 | x0ooo
