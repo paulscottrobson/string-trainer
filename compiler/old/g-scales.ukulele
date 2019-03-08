@@ -1,0 +1,18 @@
+//
+//		G-Scales (Part 1)
+//
+
+instrument := ukulele
+tuning := g3,c4,e4,a4
+tempo := 80
+composer := zoe-anne wadey
+beats := 4
+
+& & &
+
+xxx0 xxx4 xxx2 xx0 | xxx4 xx2 xx0 x0 | xx2 x2 x0 x3 | x2 0 x3 2 | 0 3 2 5 | 3 7 5 9
+
+7 t 9 w | t 7 9 5 | 7 3 5 2 | 3 0 2 x3
+
+0 x2 x3 x0 | x2 xx2 x0 xx0 | xx2 xxx4 xx0 xxx2 | xxx0 xxx4 xx2 xxx4 | xxx0ooo
+

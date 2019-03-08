@@ -1,0 +1,17 @@
+//
+//		Theme Vannetaise
+//
+
+instrument := ukulele
+tuning := g3,c4,e4,a4
+tempo := 80
+beats := 4
+
+x0 2 2 0- 2- | x3 x0 x0 | 0 0- x3- x2 x2- x0- | xx2- x0- x2- 0- x3 x0
+
+x0 2 2 0- 2- | x3 x0 x0 | 0 0- x3- x2 x2- x0- | xx2- x0- x2- xx2- x0
+
+x0- x2- x3- x2- x0- x2- x3- x2- | x0- x2- x3- 0- 2 x3 | xx2- x0- x2- x0- xx2. x0-
+
+x2 0 x3 x2  | x0- x2- x3- x2- x0- x2- x3- x2- | x0- x2- x3- 0- 2 x3| xx2- x0- x2- x0- xx2. 0- | x3 x2 x0
+

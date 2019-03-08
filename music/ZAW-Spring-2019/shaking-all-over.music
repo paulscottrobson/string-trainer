@@ -1,0 +1,21 @@
+//
+//		Shaking All Over (B Part)
+//
+
+instrument := ukulele
+tuning := g3,c4,e4,a4
+tempo := 100
+beats := 4
+
+
+& & & & | xx4- xx4- 7- 7- 5- 5- x7- x7- | xx4- xx4- 7- 7- 5- 5- x7- x7- | xx4- xx4- 7- 7- 5- 5- x7- x7- 
+
+xx4- xx4- 7- 7- 5- 5- x7- x7- | xx4- xx4- 7- 7- 5- 5- x7- x7- | xx4- xx4- 7- 7- 5- 5- x7- x7- | xx4- xx4- 7- 7- 5- 5- x7- x7- 
+
+xx4- xx4- 7- 7- 5- 5- x7- x7- | xx4- xx4- 7- 7- 5- 5- x7- x7- | xx4- xx4- 7- 7- 5- 5- x7- x7- | xx4- xx4- 7- 7- 5- 5- x7- x7- 
+
+xx4- xx4- 7- 7- 5- 5- x7- x7- | 2340ooo | & & & w | xx9- xx9- w- w- t- t- xw- xw-
+
+xx4- xx4- 7- 7- 5- 5- x7- x7- | xx4- xx4- 7- 7- 5- 5- x7- x7- | xx9- xx9- w- w- t- t- xw- xw-
+
+xx9- xx9- w- w- t- t- xw- xw- | x0 & & &

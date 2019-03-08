@@ -1,0 +1,17 @@
+//
+//		Lollipop Man
+//
+
+instrument := ukulele
+tuning := g3,c4,e4,a4
+tempo := 80
+beats := 4
+
+& & & 2- 0- | x3- 2- xx2 xx2 x0- x2- | x3 x3 x3. 0- | 2- 0- x3- 0- 2- 0- x3- 0- | 2 x0 x0 2- 0-
+
+x3- 2- xx2 xx2 x0- x2- | x3 x3 x3. xt- | 7- xt- 7- 9- t xt- x8- | x7 xx7 xx7
+
+xt xt t- 9- 7- xt- | x7 xt xt. 2- | 0- x3- 0- 2- 3- 2- 0- x3- | 0 x0 x0 x2- x0-
+
+x3- 2- xx2 xx2 x0- x2- | x3 x3 x3. xt- | 7- xt- 7- 9- t xt- x8- | x7 xx7 xx7
+

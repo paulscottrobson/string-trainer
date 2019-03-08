@@ -1,0 +1,18 @@
+//
+//		Solveig's Song (Peer Gynt)
+//
+
+instrument := ukulele
+tuning := g3,c4,e4,a4
+tempo := 80
+beats := 4
+
+
+& & & xxx2 | xx2 x0- x1- x3 0- 1- | 1- 0- 0- x1- xx2 xx2- x1- | x1- x0- x0- xx1- xx1= xxx2- 
+
+& & & xxx2 | xx2- xx2- x0- x1- x3 0- 1- | 1- 0- 0- x1- xx2 xx2- x1- | x1- x0- x0- xx0- xx0= xxx2-
+
+& & & &- xxx2- | xxx2- xx1- x0- x1- xx2 0- x4- | x02 x31- x2- xx2. xx2- | x1x4- x0- x0x3- xx2- 0. xxx2-
+
+xxx2- xx1- x0- x1- xx2- 0- 0- x4- | x0- x0- x3- x2- xx2. xx2- | x1. x0= x1= x0. xx2- | xx2.
+

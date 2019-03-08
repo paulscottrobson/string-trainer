@@ -247,5 +247,5 @@ class MusicCompiler:
 
 if __name__ == '__main__':
 	mc = MusicCompiler()
-	mc.compile("swan-carnival.music")				# chords, music, lyrics, merlin
+	mc.compile("spring.music")
 	mc.write("../app/music.json")

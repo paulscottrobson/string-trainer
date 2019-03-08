@@ -1,0 +1,14 @@
+//
+//		Not for Joe
+//
+
+instrument := ukulele
+tuning := g3,c4,e4,a4
+tempo := 100
+beats := 4
+
+& & & & | xx2 x3 xx2 x3 | x2 x0 x2 x0 | xx2 x3 xx2 x3 | x2 x3 0 
+xx2 x3 xx2 x3 | x2 x0 x2 x0 | xx2o 2. 0- | x3 x2 x3
+
+2. 0- x3 2 | 3o 0o | 2. 0- x3 2 | 0 x2 xx2
+2. 0- x3 2 | 3o 0o | xx2o 2. 0- | x3 x2 x3

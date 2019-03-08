@@ -1,0 +1,21 @@
+//
+// 		Spring (Four Seasons)
+//
+
+instrument := ukulele
+tuning := g3,c4,e4,a4
+tempo := 80
+beats := 4
+
+& & & &- xx2- | x22- x22- x22- x0= xx2= 02. 0= x3= | x22- x22- x22- x0= xx2= 02. 0= x3= | x22- x3= 0= x34- x22- x01- xx1- xxx2- xx2-
+
+x22- x22- x22- x0= xx2= 02. 0= x3= | x22- x22- x22- x0= xx2= 02. 0= x3= | x22- x3= 0= x34- x22- x01. xx2-
+
+02- x34= x22= x34- 02- 23- 02 xx2- | 02- x34= x22= x34- 02- 23- 02 xx2- | 23- 02 x34- x22- x0= xx2= x01
+
+xx2. xx2- 02- x34= x22= x34- 02- | 23- 02 x2- 02- x34= x22= x34- 02- | 23- 02 xx2- 23- 02 x34- | x22- x0= xx2= x01 xx2
+
+
+
+
+

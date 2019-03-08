@@ -1,0 +1,18 @@
+//
+//		Good King Wenceslas (ZAW)
+//
+
+instrument := ukulele
+tuning := g3,c4,e4,a4
+tempo := 80
+composer := zoe-anne wadey
+
+& & & &
+
+x3x0 x3 x32 02 | x3x0 x3 xx24o | x00 xx24 x0x2 x20 | x3x0 xx0 x3x4 xxx2
+
+x3x0 x3 x32 02 | x3x0 x3 xx24o | x00x xx2 x0x2 x2 | x3x0 xx4 x32o
+
+5xx4 3xx2 23 02 | 20 0x2 x30o | x00x xx24 x00x x2x2 | x3x0 xxx2 x3x4 xxx0
+
+xx24 xx2 x00 x2 | x34 x3 0x2o | 5xx4 3x0 2x2 02 | x34 xxx4 x30 xxx4- xxx2- | x3x0ooo
