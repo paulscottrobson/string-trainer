@@ -1,7 +1,0 @@
-#
-#		Go tell Aunt Rhody. ALfred Mandolin 1 page 38. First part only.
-#
-type := mandolin 					# compiler directive saying what this is for.
-
-A 0320o 0320 5 | 3o 3o | 5o 5 1200 | 0320 5 3o
-E 3o 3 1 | 0320 A  3 3- 3- | 5 ^1 ^0 5 | 3o 0320 3
