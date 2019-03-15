@@ -1,7 +1,7 @@
+@echo off
 rem
 rem	Script to rebuild and update sound, graphics and fonts in application.
 rem
-@echo off
 
 echo "Making instrument code"
 cd compiler

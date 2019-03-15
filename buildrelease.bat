@@ -8,4 +8,5 @@ cd ..
 del /Q release.zip
 cd app
 zip -q -r ..\release.zip .
+move ..\release.zip c:\temp
 cd ..
