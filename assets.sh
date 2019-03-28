@@ -4,16 +4,16 @@
 
 echo "Making instrument code"
 cd compiler
-python instruments.py
+python3 instruments.py
 cd ..
 
 echo "Making Graphics"
 cd resources/graphics
-python makeatlas.py
-python makecurves.py
-python makeframes.py
+python3 makeatlas.py
+python3 makecurves.py
+python3 makeframes.py
 
-echo "cping to assets"
+echo "copying to assets"
 cp sprites.* ../../app/assets/sprites 
 cp loader.png ../../app/assets/sprites 
 cd ..
